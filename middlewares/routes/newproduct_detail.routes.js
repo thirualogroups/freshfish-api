@@ -1,0 +1,267 @@
+var express = require('express');
+var router = express.Router();
+var bodyParser = require('body-parser');
+const mongoose = require("mongoose");
+router.use(bodyParser.urlencoded({ extended: false }));
+router.use(bodyParser.json());
+var newproduct_detailModel = require('./../models/newproduct_detailModel');
+var product_detailsModel = require('./../models/product_detailsModel');
+const storesModel = require('./../models/storesModel');
+const stockModel = require("./../models/stockModel");
+const fav_listModel=require("./../models/fav_listModel");
+const cart_detailsModel = require('../models/cart_detailsModel');
+
+
+
+////////////////// Admin User /////////////////////////
+
+router.post('/vendor_product_create', async function (req, res) {
+  // var new_product_detail = await newproduct_detailModel.findOne({_id: req.body._id});
+  // console.log(new_product_detail);
+  req.body.cost = +req.body.cost;
+  const stores = await storesModel.find({delete_status:false});
+  const stocks = await stockModel.findOne({fish_combo_id: new mongoose.Types.ObjectId(req.body.fish_combo_id),store:new mongoose.Types.ObjectId(req.body.store)});
+  
+  try {
+    if(req.body.fish_combo_id==null) throw "fish_combo_id cannot be null";
+    let price = stocks?.price || 0; price = (price == null) ? 0 : price;
+    let params = [];
+    for(const store of stores){
+     params.push({
+      user_id: req.body.vendor_id,
+      cat_id: req.body.cat_id,
+      thumbnail_image: req.body.thumbnail_image,
+      product_img: req.body.product_img || [],
+      fish_combo_id: req.body.fish_combo_id,
+      store: store._id,
+      cost: stocks?.price || 0,
+      product_discription: req.body.product_discription || "",
+      condition: req.body.condition || "",
+      price_type: req.body.price_type,
+      variation: req.body.variation,
+      addition_detail: req.body.addition_detail || "",
+      date_and_time: req.body.date_and_time || "",
+      mobile_type: req.body.mobile_type || "",
+      related: "",
+      count: 0,
+      status: "true",
+      verification_status: "Not Verified",
+      delete_status: false,
+      fav_status: false,
+      today_deal: false,
+      discount: req.body.discount,
+      discount_amount: req.body.discount_amount,
+      discount_status: false,
+      discount_cal: 0,
+      discount_start_date: "",
+      discount_end_date: "",
+      product_rating: 5,
+      product_review: 0,
+      gross_weight: req.body.gross_weight,
+      min_net_weight: req.body.min_net_weight,
+      max_net_weight: req.body.max_net_weight,
+      unit: stocks?.unit || "kg",
+      customer_information: req.body.customer_information
+    });
+  }
+    product_detailsModel.create(params,
+      function (err, user) {
+        console.log(user)
+        console.log(err);
+        console.log("Product_details***********1", user);
+        if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
+        res.json({ Status: "Success", Message: "product details added successfully", Data: user, Code: 200 });
+      });
+  }
+  catch (e) {
+    console.log(e);
+    res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
+  }
+});
+
+router.get('/getlist', function (req, res) {
+  newproduct_detailModel.find({}, function (err, Functiondetails) {
+    res.json({ Status: "Success", Message: "product details screen  Details", Data: Functiondetails, Code: 200 });
+  }).populate('cat_id sub_cat_id cat_type fish_type');
+});
+
+
+
+
+router.post('/delete', function (req, res) {
+  let c = {
+    delete_status: true
+  }
+  newproduct_detailModel.findByIdAndUpdate(req.body._id, c, { new: true }, function (err, UpdatedDetails) {
+    if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
+    res.json({ Status: "Success", Message: "Location Deleted successfully", Data: UpdatedDetails, Code: 200 });
+  });
+});
+
+router.get('/deletes', function (req, res) {
+  newproduct_detailModel.remove({}, function (err, user) {
+    if (err) return res.status(500).send("There was a problem deleting the user.");
+    res.json({ Status: "Success", Message: "Details Deleted", Data: {}, Code: 200 });
+  });
+});
+
+
+router.post('/edit', function (req, res) {
+  product_detailsModel.findByIdAndUpdate(req.body._id, req.body, { new: true }, function (err, UpdatedDetails) {
+    if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
+    res.json({ Status: "Success", Message: "product details screen  Updated", Data: UpdatedDetails, Code: 200 });
+  });
+});
+
+// // DELETES A USER FROM THE DATABASE
+router.post('/admin_delete', function (req, res) {
+  newproduct_detailModel.findByIdAndRemove(req.body._id, function (err, user) {
+    if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
+    res.json({ Status: "Success", Message: "product details screen Deleted successfully", Data: {}, Code: 200 });
+  });
+});
+
+
+////////////////////////////////////////////////////////////////////////
+router.post('/mobile/favlist', async function (req, res) {
+  const fav_lists = await fav_listModel.findOne({product_details_id: new mongoose.Types.ObjectId(req.body.product_details_id),user_id: new mongoose.Types.ObjectId(req.body.user_id)});
+  try {
+    console.log("Value 1",fav_lists);
+    if(fav_lists == null){
+      fav_listModel.create({user_id: req.body.user_id,product_details_id:req.body.product_details_id,fav_status:true}, function (err, user) {
+        if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
+        res.json({ Status: "Success", Message: "new Fav added successfully", Data: user, Code: 200 });
+      });
+    } else {
+      fav_listModel.findByIdAndUpdate(fav_lists._id, { fav_status:req.body.fav_status },{new:true}, function (err, UpdatedDetails) {
+        if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
+        res.json({ Status: "Success", Message: "true added successfully", Data: UpdatedDetails, Code: 200 });
+      });
+    }
+
+ }
+ catch (e) {
+  console.log(e);
+  res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
+ }
+});
+
+
+
+router.post('/mobile/get_favlist', async function (req, res) {
+  let params = {user_id:req.body.user_id,fav_status:true};
+  let fav_list= await fav_listModel.find(params).populate('product_details_id');
+  // console.log("******fav_list********",fav_list);
+  var stock_list=[];
+  for(let a = 0; a < fav_list.length ; a++){  
+  fav_list[a].product_details_id.soldout  = false;
+  fav_list[a].product_details_id.related  = "";
+  let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(fav_list[a].product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false, store:req.body.store_id };
+  let stock = await stockModel.findOne(stock_params);
+  console.log(stock);
+  if(stock == null){
+    fav_list[a].product_details_id.soldout  = true;
+    fav_list[a].product_details_id.related  = "Sold Out";
+  }else if(stock.soldout == true){
+    fav_list[a].product_details_id.soldout  = true;
+        fav_list[a].product_details_id.related  = "Sold Out";
+  }else if(stock.gross_weight == 0){
+    fav_list[a].product_details_id.soldout  = true;
+    fav_list[a].product_details_id.related  = "NO Available";
+  }
+  console.log("Stock Value Status",fav_list[a].product_details_id.soldout);
+  stock_list.push(fav_list[a].product_details_id);
+  if(a == fav_list.length - 1){
+    res.json({ Status: "Success", Message: "Your Fav_list Details", Data: stock_list, Code: 200 });
+  }
+  }
+});
+
+
+
+
+
+
+router.post('/mobile/cart/create', async function (req, res){
+  try {
+  if((req.body.user_id!=="") && (req.body.product_details_id!=="") && req.body.user_id && req.body.product_details_id){
+  const cart_details = await cart_detailsModel.findOne({product_details_id: new mongoose.Types.ObjectId(req.body.product_details_id),user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false});
+    if(cart_details== null){
+      cart_detailsModel.create({user_id: req.body.user_id,product_details_id:req.body.product_details_id,gross_weight:req.body.gross_weight,customer_info:req.body.customer_info,category:req.body.category,disamount:req.body.disamount,max_net:req.body.max_net,min_net:req.body.min_net,product_price:req.body.product_price,product_quantity:req.body.product_quantity,product_title:req.body.product_title,store:req.body.store,total_amt:req.body.total_amt,unit:req.body.unit,value:req.body.value},
+      function (err, user) {
+        if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
+        res.json({ Status: "Success", Message: "cart product added successfully", Data: user, Code: 200 });
+      });
+    }else{
+      res.status(400).json({ Status: "Failed", Message: "Data Already exist", Code: 400 });
+    }
+  }else{
+    res.status(400).json({ Status: "Failed", Message: "Data Not Found", Code: 400 });
+  }
+    }catch(e) {
+     console.log(e);
+     res.json({ Status: "Failed", Message: "Internal Server Error", Data: e, Code: 500 });
+    }
+});
+
+router.post('/mobile/cart/update', async function (req, res){
+  try {
+     if(req.body._id!=="" && req.body._id){
+  cart_detailsModel.findByIdAndUpdate(req.body._id,{gross_weight:req.body.gross_weight,customer_info:req.body.customer_info,category:req.body.category,disamount:req.body.disamount,max_net:req.body.max_net,min_net:req.body.min_net,product_price:req.body.product_price,product_quantity:req.body.product_quantity,product_title:req.body.product_title,store:req.body.store,total_amt:req.body.total_amt,unit:req.body.unit,value:req.body.value},
+    function (err, user) {
+      if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
+      res.json({ Status: "Success", Message: "cart product updated successfully", Data: user, Code: 200 });
+    });
+  }else{
+    res.status(400).json({ Status: "Failed", Message: "Data Not Found", Code: 400 });
+  }
+}catch(e) {
+  console.log(e);
+  res.json({ Status: "Failed", Message: "Internal Server Error", Data: e, Code: 500 });
+ }
+});
+
+router.post('/mobile/cart/delete', async function (req, res){
+  cart_detailsModel.findByIdAndUpdate(req.body._id,{delete_status:true},
+    function (err, user) {
+      if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
+      res.json({ Status: "Success", Message: "cart product deleted successfully", Data: user, Code: 200 });
+    });
+});
+
+router.post('/mobile/cart/getlist', async function (req, res){
+  const cart_details = await cart_detailsModel.find({user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false}).populate('product_details_id');
+  console.log("cart_details",cart_details);
+  if(cart_details.length == 0){
+    res.json({ Status: "Success", Message: "Your Card Details is Empty", Data: [], Code: 200 });
+  }
+  var cart_final_value = [];
+  for(let a = 0; a < cart_details.length ; a++){ 
+  cart_details[a].product_details_id.soldout  = false;
+  cart_details[a].product_details_id.related  = "";
+  let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(cart_details[a].product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false, store:req.body.store_id };
+  let stock = await stockModel.findOne(stock_params);
+  console.log(stock);
+
+   if(stock == null){
+    cart_details[a].product_details_id.soldout  = true;
+    cart_details[a].product_details_id.related  = "Sold Out";
+  }else if(stock.soldout == true){
+    cart_details[a].product_details_id.soldout  = true;
+    cart_details[a].product_details_id.related  = "Sold Out";
+  }else if(stock.gross_weight == 0){
+    cart_details[a].product_details_id.soldout  = true;
+    cart_details[a].product_details_id.related  = "NO Available";
+  }else if(stock.gross_weight <= +cart_details[a].gross_weight){
+    cart_details[a].product_details_id.soldout  = true;
+    cart_details[a].product_details_id.related  = "Stock is less";
+  }
+  console.log("Stock Value Status",cart_details[a].product_details_id.soldout);
+  cart_final_value.push(cart_details[a]);
+  if(a == cart_details.length - 1){
+    res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
+  }
+ }
+
+});
+module.exports = router;
