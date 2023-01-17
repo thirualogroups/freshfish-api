@@ -491,7 +491,6 @@ router.post("/payment_initiate", async function (req, res) {
  
  
  router.post("/payment_initiate_one", async function (req, res) {
-    req.body.amount = 1;
    try {
        const https = require('https');
        const PaytmChecksum = require('paytmchecksum');

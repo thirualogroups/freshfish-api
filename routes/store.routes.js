@@ -14,6 +14,8 @@ const product_detailsModel = require('./../models/product_detailsModel');
 
 
 router.post("/create", async function (req, res) {
+    let store  =  await storesModel.findOne({name:req.body.name,delete_status:false});
+    if(store == null){
     try {
         const counter = await counterMasterModel.findByIdAndUpdate({ _id: 'store' }, { $inc: { seq: 1 } });
         storesModel.create({
@@ -81,6 +83,9 @@ router.post("/create", async function (req, res) {
         console.log(ex);
         res.json({ Status: "Failed", Message: ex.message, Code: 500 });
     }
+}else{
+    res.status(400).json({Status:"Failed",Message:"Store Name Already Exist", Data : {} ,Code:400});
+}
 });
 
 
@@ -114,8 +119,10 @@ router.get('/getlist_counter', function (req, res) {
 
 });
 
-router.post('/edit', function (req, res) {
+router.post('/edit', async function (req, res) {
          console.log(req.body);
+         let store  =  await storesModel.findOne({name:req.body.name,delete_status:false});
+         if(store == null){
     storesModel.findByIdAndUpdate(req.body._id, req.body, { new: true }, function (err, UpdatedDetails) {
         if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
            
@@ -144,6 +151,9 @@ router.post('/edit', function (req, res) {
           // var datas_two = stockModel.updateMany({ store:req.body._id },{status: req.body.status});
         res.json({ Status: "Success", Message: "Vendor Updated", Data: UpdatedDetails, Code: 200 });
     });
+}else{
+    res.status(400).json({Status:"Failed",Message:"Store Name Already Exist", Data : {} ,Code:400});
+}
 });
 
 

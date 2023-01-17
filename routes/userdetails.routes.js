@@ -21,6 +21,8 @@ const product_vendorModel = require('./../models/product_vendorModel');
 ///////////////New Admin Rework//////////////////
 router.post('/create', async function (req, res){
   console.log("Create",req.body);
+  let user = await userdetailsModel.findOne({user_type:1,user_phone: req.body.user_phone, delete_status: false});
+  if (user == null) {
   try {
     if (req.body.ref_code && req.body.ref_code !== '') {
       var ref_code_details = await userdetailsModel.findOne({ my_ref_code: req.body.ref_code });
@@ -118,6 +120,9 @@ router.post('/create', async function (req, res){
   catch (e) {
     res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
   }
+}else{
+  res.status(400).json({Status:"Failed",Message:"User Phone Number Already Exist", Data : {} ,Code:400});
+}
 });
 
 
@@ -441,7 +446,7 @@ router.get('/getlist_count', function (req, res) {
     let random = Math.floor(100000 + Math.random()*900000);
     const message = `Dear ${req.body.first_name}, your login One Time Password is ${random}.-We Know How To Choose Fresh Fish`;;
     global.send_sms(req.body.user_phone, message,"1607100000000220483").then(response=>{
-      res.json({ Status: "Success", Data: random, Code: 200 });
+      res.json({ Status: "Success", Data: random,user_phone:req.body.user_phone, Code: 200 });
     }).catch(err=>{
       res.status(500).send(err);
     });

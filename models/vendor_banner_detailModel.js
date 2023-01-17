@@ -10,7 +10,6 @@ var vendorbannerSchema = new mongoose.Schema({
   show_status : Boolean,
   date_and_time : String,
   delete_status : Boolean,
-  delete_status : Boolean,
 });
 vendorbannerSchema.plugin(timestamps);
 mongoose.model('vendorbanner', vendorbannerSchema);

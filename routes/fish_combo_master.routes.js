@@ -27,6 +27,8 @@ router.post('/createcounter', async function (req, res) {
 });
 
 router.post('/create', async function (req, res) {
+  let fresh_fish_master  =  await fresh_fish_masterModel.findOne({product_name:req.body.product_name,delete_status:false});
+  if(fresh_fish_master == null){
   try {
     const counter = await counterMasterModel.findByIdAndUpdate({ _id:'fishComboMaster'},{$inc:{seq:1}});
     fresh_fish_masterModel.create({
@@ -42,6 +44,10 @@ router.post('/create', async function (req, res) {
     console.log(e);
     res.json({ Status: "Failed", Message: "Internal Server Error", Data: e, Code: 500 });
   }
+}else{
+  res.status(400).json({Status:"Failed",Message:"fish combo already exist", Data : {} ,Code:400});
+
+}
 });
 
 router.post('/getlist_id', function (req, res) {
@@ -83,11 +89,17 @@ router.post('/delete', function (req, res) {
   });
 });
 
-router.post('/edit', function (req, res) {
+router.post('/edit', async function (req, res) {
+  let fresh_fish_master  =  await fresh_fish_masterModel.findOne({product_name:req.body.product_name,delete_status:false});
+  if(fresh_fish_master == null){
   fresh_fish_masterModel.findByIdAndUpdate(req.body._id, req.body, { new: true }, function (err, UpdatedDetails) {
     if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
     res.json({ Status: "Success", Message: "Product Details  Updated", Data: UpdatedDetails, Code: 200 });
   });
+}else{
+  res.status(400).json({Status:"Failed",Message:"fish combo already exist", Data : {} ,Code:400});
+
+}
 });
 
 router.post('/admin_delete', function (req, res) {

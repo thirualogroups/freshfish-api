@@ -58,7 +58,7 @@ var mongoose = require('mongoose');
 
 router.post('/create', async function(req, res) {
 console.log("shippling Address creae",req.body)
-var shipping_addres = await shipping_addressModel.findOne({user_id:req.body.user_id,city:req.body.city});
+var shipping_addres = await shipping_addressModel.findOne({user_id:req.body.user_id,address:req.body.address});
 console.log("shippling Address creae_one",shipping_addres)
 if(shipping_addres == null){    
   try{
@@ -91,6 +91,8 @@ catch(e){
     console.log(e);
       res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
 }
+  }else {
+    res.json({Status:"Failed",Message:"Address are duplicated, try with another location", Data : {} ,Code:400}); 
   }
 });
 

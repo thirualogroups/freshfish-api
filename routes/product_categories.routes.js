@@ -9,7 +9,7 @@ var product_categoriesModel = require('./../models/product_categoriesModel');
 ////////////////// Admin User ////////////////
 
 router.post('/create', async function(req, res) {
-   let userdetails  =  await product_categoriesModel.findOne({product_cate:req.body.product_cate});
+   let userdetails  =  await product_categoriesModel.findOne({product_cate:req.body.product_cate,delete_status:false});
    console.log(userdetails);
    if(userdetails == null){
   try{
@@ -23,7 +23,7 @@ router.post('/create', async function(req, res) {
         }, 
         function (err, user) {
           console.log(user)
-        res.json({Status:"Success",Message:"product categories screen Added successfully", Data : user ,Code:200}); 
+        res.json({Status:"Success",Message:"product categories  Added successfully", Data : user ,Code:200}); 
         });
 }
 catch(e){
@@ -31,7 +31,7 @@ catch(e){
 }
    }
    else{
-            res.json({Status:"Failed",Message:"This Service already added", Data : {} ,Code:404}); 
+            res.status(400).json({Status:"Failed",Message:"Product Categories Already Exist", Data : {} ,Code:400}); 
    }
 });
 
@@ -77,11 +77,18 @@ router.get('/getlist', function (req, res) {
 });
 
 
-router.post('/edit', function (req, res) {
+router.post('/edit', async function (req, res) {
+  let userdetails  =  await product_categoriesModel.findOne({product_cate:req.body.product_cate,delete_status:false});
+   console.log(userdetails);
+   if(userdetails == null){
         product_categoriesModel.findByIdAndUpdate(req.body._id, req.body, {new: true}, function (err, UpdatedDetails) {
             if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
              res.json({Status:"Success",Message:"product categories screen  Updated", Data : UpdatedDetails ,Code:200});
         });
+      }
+      else{
+               res.status(400).json({Status:"Failed",Message:"Product Categories Already Exist", Data : {} ,Code:400}); 
+      }
 });
 // // DELETES A USER FROM THE DATABASE
 router.post('/delete', function (req, res) {
