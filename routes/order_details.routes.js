@@ -147,19 +147,20 @@ router.post('/getlist', async function (req, res) {
   orders_filter_api(req.body, res);
 });
 
-async function orders_filter_api(params,res){
+async function orders_filter_api(params,res,req){
   
 
 
 
   let filter_params = { delete_status: false };
+  filter_params.order_status=req.body.order_status;
   if (params.userid && params.userid !== "") {
     filter_params.user_id = new mongoose.Types.ObjectId(params.userid);
   }
   /*else if(!params.id){
     return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
    }*/
-let skip = 0, limit = 50, sort = { _id: -1 };
+let skip = 0, limit = 50, sort = {slot_date:1,slot_time:1};
 if (params.skip) {
   skip = params.skip;
 }
