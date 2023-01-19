@@ -58,7 +58,7 @@ var mongoose = require('mongoose');
 
 router.post('/create', async function(req, res) {
 console.log("shippling Address creae",req.body)
-var shipping_addres = await shipping_addressModel.findOne({user_id:req.body.user_id,address:req.body.address});
+var shipping_addres = await shipping_addressModel.findOne({user_id:req.body.user_id,address:req.body.address,delete_status : false});
 console.log("shippling Address creae_one",shipping_addres)
 if(shipping_addres == null){    
   try{
@@ -235,15 +235,15 @@ function edit(_id, req,res){
 });
 }
 
-// router.post('/delete', function (req, res) {
-//  let c = {
-//     delete_status : true
-//   }
-//   shipping_addressModel.findByIdAndUpdate(req.body._id, c, {new: true}, function (err, UpdatedDetails) {
-//             if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
-//              res.json({Status:"Success",Message:"Location Deleted successfully", Data : UpdatedDetails ,Code:200});
-//   });
-// });
+router.post('/mobile/delete_address', function (req, res) {
+ let c = {
+    delete_status : true
+  }
+  shipping_addressModel.findByIdAndUpdate(req.body._id, c, {new: true}, function (err, UpdatedDetails) {
+            if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
+             res.json({Status:"Success",Message:"Location Deleted successfully", Data : UpdatedDetails ,Code:200});
+  });
+});
 
 
 
