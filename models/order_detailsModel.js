@@ -72,6 +72,10 @@ var order_detailSchema = new mongoose.Schema({
     type: String,
     default: "Booked"
   },
+  out_for_delivery: {
+    type: Boolean,
+    default:false
+  },
   delete_status: {
     type: Boolean,
     default: false
@@ -94,6 +98,7 @@ var order_detailSchema = new mongoose.Schema({
     status: String,
     datetime: Date
   })]
+
 });
 
 order_detailSchema.plugin(timestamps);
