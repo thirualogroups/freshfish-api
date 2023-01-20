@@ -316,11 +316,12 @@ router.post('/mobile/product_list', async function (req, res) {
             }
             
             Product_details.filter(x=>x.cat_id.toString()==product_list[f].cat_id._id.toString())[0]?.product_list.push(k)
+            product_details.push(vendors);
           }
       }
-      if(product_list.length !== 0){
+      if(Product_details.length !== 0){
       res.json({
-        Status: "Success", Message: "Product_details List", Data: {"Product_details": product_list}, Code: 200
+        Status: "Success", Message: "Product_details List", Data: {"Product_details": Product_details}, Code: 200
       });
     }else{
       res.status(400).json({ Status: "Product Request Failed", Code: 400 });
