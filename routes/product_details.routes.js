@@ -314,14 +314,22 @@ router.post('/mobile/product_list', async function (req, res) {
               "stock_price": stock[0]?.price,
               "category": product_list[f].cat_id
             }
-            
+            if(product_list[f].cat_id){
             Product_details.filter(x=>x.cat_id.toString()==product_list[f].cat_id._id.toString())[0]?.product_list.push(k)
-            product_details.push(vendors);
+            }
           }
       }
-      if(Product_details.length !== 0){
+      if(product_list.length !== 0){
+        let vendor;
+    if (req.body.pincode && req.body.pincode !== "") {
+      vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: req.body.pincode } }, status: true, delete_status: false }, { _id: 1, store: 1 });
+    }
       res.json({
-        Status: "Success", Message: "Product_details List", Data: {"Product_details": Product_details}, Code: 200
+        Status: "Success", Message: "Product_details List", 
+        Data: {
+          "Product_details": product_list,
+          "vendor":vendor
+      }, Code: 200
       });
     }else{
       res.status(400).json({ Status: "Product Request Failed", Code: 400 });
