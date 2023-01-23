@@ -67,6 +67,7 @@ router.post('/getproductdetails_list', async function (req, res) {
       params.fish_combo_id = { $in: fish_combo_ids };
       params.store = { $in: vendors.map(x => x.store) };
       params.status=true;
+      params.soldout=false;
       
 
 
@@ -252,6 +253,7 @@ router.post('/mobile/product_list', async function (req, res) {
     params.store = { $in: vendors.map(x => x.store) };
     params.delete_status=false;
     params.status=true;
+    params.soldout=false;
 
     var product_list = await product_detailsModel.find(params).sort({ _id: -1 }).populate([{ path: "fish_combo_id", select: ["product_name", "code"] }, { path: "cat_id", select: ["product_cate"] }]);
       for (let f = 0; f < product_list.length; f++) {
@@ -428,6 +430,7 @@ router.post('/mobile/recommendation', async function (req, res) {
     params.fish_combo_id = { $in: fish_combo_ids };
     params.store = { $in: vendors.map(x => x.store) };
     params.status=true;
+    params.soldout=false;
 
     var product_list = await product_detailsModel.find(params).sort({ _id: -1 }).populate([{ path: "fish_combo_id", select: ["product_name", "code"] }, { path: "cat_id", select: ["product_cate"] }]);
       for (let f = 0; f < product_list.length; f++) {
