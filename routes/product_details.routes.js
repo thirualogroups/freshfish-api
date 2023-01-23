@@ -488,13 +488,18 @@ router.post('/mobile/recommendation', async function (req, res) {
             }
           }
             if(f == product_list.length - 1){
+
+              let vendor;
+    if (req.body.pincode && req.body.pincode !== "") {
+      vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: req.body.pincode } }, status: true, delete_status: false }, { _id: 1, store: 1 });
+    }
                if(recommendation.length == 0){
                 res.status(400).json({
               Status: "Failed", Message: "No Data Found", Data: {"Recommented": recommendation}, Code: 400
               });
                }else {
                 res.json({
-              Status: "Success", Message: "Recommendation List", Data: {"Recommented": recommendation}, Code: 200
+              Status: "Success", Message: "Recommendation List", Data: {"Recommented": recommendation,"vendor":vendor}, Code: 200
               });
                }
             }
