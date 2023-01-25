@@ -153,7 +153,7 @@ async function orders_filter_api(params,res){
 
 
   let filter_params = { delete_status: false };
-  filter_params.order_status=params.order_status;
+  
   if (params.userid && params.userid !== "") {
     filter_params.user_id = new mongoose.Types.ObjectId(params.userid);
   }
@@ -166,6 +166,9 @@ if (params.skip) {
 }
 if (params.limit) {
   limit = params.limit;
+}
+if(params.order_status){
+  filter_params.order_status=params.order_status;
 }
 if (params.status) {
   filter_params.order_status = { $in: params.status.split(",") };
