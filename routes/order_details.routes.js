@@ -209,6 +209,9 @@ if(params.delivery_status){
 if(params.payment_method){
   filter_params.payment_method = params.payment_method;
 }
+if(params.user_id){
+  filter_params.user_id = params.user_id;
+}
 let count = 0;
 if (skip == 0) {
  count = await order_detailsModel.countDocuments({ params: filter_params });
