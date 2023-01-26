@@ -77,7 +77,7 @@ router.post('/create', async function (req, res) {
              }
 
              stockModel.findByIdAndUpdate(stock_values[0]._id, datas, {new: true}, function (err, UpdatedDetails) {
-            if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
+            if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
              // res.json({Status:"Success",Message:"product categories screen  Updated", Data : UpdatedDetails ,Code:200});
             });
 
@@ -103,7 +103,7 @@ router.post('/create', async function (req, res) {
   }
   catch (e) {
     console.log(e);
-    res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
+    res.status(500).json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
   }
 });
 
