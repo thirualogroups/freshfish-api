@@ -10,6 +10,7 @@ const storesModel = require('./../models/storesModel');
 const stockModel = require("./../models/stockModel");
 const fav_listModel=require("./../models/fav_listModel");
 const cart_detailsModel = require('../models/cart_detailsModel');
+const product_vendorModel = require('./../models/product_vendorModel');
 
 
 
@@ -224,9 +225,7 @@ router.post('/mobile/cart/getlist1', async function (req, res){
   if (req.body.pincode && req.body.pincode !== "") {
     var vendors = await product_vendorModel.find({ pincodes: { $elemMatch: { $eq: req.body.pincode } }, status: true }, { _id: 1, store: 1 });
     if (vendors.length === 0) {
-      let a = {
-        "recommendation": recommendation,
-      }
+    
       res.status(400).json({
         Status: "Failed", Message: "Pincode Not Found", Code: 400
         });
