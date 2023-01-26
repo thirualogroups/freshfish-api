@@ -221,7 +221,17 @@ router.post('/mobile/cart/delete', async function (req, res){
 });
 
 router.post('/mobile/cart/getlist1', async function (req, res){
-
+  if (req.body.pincode && req.body.pincode !== "") {
+    var vendors = await product_vendorModel.find({ pincodes: { $elemMatch: { $eq: req.body.pincode } }, status: true }, { _id: 1, store: 1 });
+    if (vendors.length === 0) {
+      let a = {
+        "recommendation": recommendation,
+      }
+      res.status(400).json({
+        Status: "Failed", Message: "Pincode Not Found", Code: 400
+        });
+      return;
+    }
   let params = { delete_status: false };
     let stock_params = { delete_status: false, status: true, soldout: false, store: { $in: vendors.map(x => x.store) }, gross_weight: { $gte: 0 }, fish_combo_id: {$ne: null} };
     let stocks = await stockModel.find(stock_params, { fish_combo_id: 1, gross_weight: 1, unit: 1, price: 1 });
@@ -286,6 +296,13 @@ console.log(params);
     //         }
           // }
         // }
+  }else{
+    res.status(400).json({
+     
+     Status: "Failed", Message: "Pincode Not Found", Code: 400
+ 
+     });
+   }
       });
 
 router.post('/mobile/cart/getlist', async function (req, res){
