@@ -222,86 +222,10 @@ router.post('/mobile/cart/delete', async function (req, res){
 });
 
 router.post('/mobile/cart/getlist1', async function (req, res){
-  if (req.body.pincode && req.body.pincode !== "") {
-    var vendors = await product_vendorModel.find({ pincodes: { $elemMatch: { $eq: req.body.pincode } }, status: true }, { _id: 1, store: 1 });
-    if (vendors.length === 0) {
-    
-      res.status(400).json({
-        Status: "Failed", Message: "Pincode Not Found", Code: 400
-        });
-      return;
-    }
-  let params = { delete_status: false };
-    let stock_params = { delete_status: false, status: true, soldout: false, store: { $in: vendors.map(x => x.store) }, gross_weight: { $gte: 0 }, fish_combo_id: {$ne: null} };
-    let stocks = await stockModel.find(stock_params, { fish_combo_id: 1, gross_weight: 1, unit: 1, price: 1 });
-    let fish_combo_ids = [];
-    for (let stock of stocks) {
-      fish_combo_ids.push(stock.fish_combo_id);
-    }
-    params.fish_combo_id = { $in: fish_combo_ids };
-    params.store = { $in: vendors.map(x => x.store) };
-    params.status=true;
-    params.soldout=false;
-console.log(params);
-    // var product_list = await product_detailsModel.find(params).sort({ _id: -1 }).populate([{ path: "fish_combo_id", select: ["product_name", "code"] }, { path: "cat_id", select: ["product_cate"] }]);
-    //   for (let f = 0; f < product_list.length; f++) {
+  
+  const cart_details = await cart_detailsModel.find({user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false}).populate('product_details_id');
+  console.log("cart_details",cart_details);
 
-    //         var pro_fav = await Product_favModel.findOne({ user_id: req.body.user_id, product_id: product_list[f]._id, delete_status: false });
-    //         var temp_fav = (pro_fav !== null);
-    //         var stock = [];
-    //         stocks.forEach(element => {
-    //         if(""+element.fish_combo_id == ""+product_list[f].fish_combo_id._id){
-    //          stock.push(element);
-    //         }
-    //         });  
-
-    //         let variation_list = [];
-    //         product_list[f].variation_list.forEach(element => {
-    //         if(element.gross_weight <= stock[0].gross_weight){
-    //          variation_list.push(element);
-    //         }
-    //         }); 
-    //      if(variation_list.length !== 0){
-             
-
-
-
-    //         let k = {
-    //           "_id": product_list[f]._id,
-    //           "fish_combo_id": product_list[f].fish_combo_id,
-    //           "product_img": product_list[f].product_img,
-    //           "product_title": product_list[f].fish_combo_id.product_name,
-    //           'thumbnail_image': product_list[f].thumbnail_image || 'https://weknowfreshfish.com/api/uploads/Pic_empty.jpg',
-    //           "product_price": +product_list[f].cost.toFixed(0),
-    //           "product_discount": product_list[f].discount,
-    //           "product_discount_price": +product_list[f].discount_amount.toFixed(0) || 0,
-    //           "product_fav": temp_fav,
-    //           "product_rating": product_list[f].product_rating || 5,
-    //           "product_review": product_list[f].product_review || 0,
-    //           "product_quantity": 0,
-    //           "net_weight": product_list[f].net_weight,
-    //           "gross_weight": product_list[f].gross_weight,
-    //           "addition_detail": product_list[f].addition_detail,
-    //           "discription": product_list[f].product_discription,
-    //           "condition": product_list[f].condition,
-    //           "unit": product_list[f].unit,
-    //           "variation_list": variation_list,
-    //           "customer_information": product_list[f].customer_information,
-    //           "price_type": product_list[f].price_type,
-    //           "stock_gross_weight": stock[0]?.gross_weight,
-    //           "stock_unit": stock[0]?.unit,
-    //           "stock_price": stock[0]?.price,
-    //           "category": product_list[f].cat_id
-    //         }
-          // }
-        // }
-  }else{
-    res.status(400).json({
-     
-     Status: "Failed", Message: "Pincode Not Found", Code: 400
- 
-     });
-   }
       });
 
 router.post('/mobile/cart/getlist', async function (req, res){
