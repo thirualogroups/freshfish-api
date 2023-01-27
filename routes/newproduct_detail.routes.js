@@ -252,7 +252,7 @@ router.post('/mobile/cart/getlist1', async function (req, res){
                 "product_img": cart_details[a].product_img,
                 "product_title": cart_details[a].fish_combo_id,
                 'thumbnail_image': cart_details[a].thumbnail_image || 'https://weknowfreshfish.com/api/uploads/Pic_empty.jpg',
-                "product_price": +cart_details[a].cost,
+                "product_price": cart_details[a].cost,
                 "product_discount": cart_details[a].discount,
                 "product_discount_price": +cart_details[a].discount_amount|| 0,
                 "product_rating": cart_details[a].product_rating || 5,
