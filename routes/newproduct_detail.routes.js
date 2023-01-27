@@ -242,7 +242,7 @@ router.post('/mobile/cart/getlist1', async function (req, res){
             }
             });
             if(variation_list.length !== 0){
-              cart_details[a].product_details_id.push(variation_list)
+              cart_details[a].product_details_id.variation_list = variation_list
             }
           
              if(stock == null){
