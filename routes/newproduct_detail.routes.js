@@ -238,7 +238,7 @@ router.post('/mobile/cart/getlist1', async function (req, res){
           
             let variation_list = [];
             //console.log(cart_details[a].product_details_id.variation_list);
-            console.log(stock[0].gross_weight);
+            console.log(stock[a].gross_weight);
             // .forEach(element => {
             // if(element.gross_weight <= stock[0].gross_weight){
             // variation_list.push(element);
