@@ -248,20 +248,21 @@ router.post('/mobile/cart/getlist1', async function (req, res){
             }else if(stock.gross_weight <= +cart_details[a].gross_weight){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Stock is less";
-            }
-            // let variation_list = [];
-  // cart_details[a].product_details_id.variation_list.forEach(element => {
+            }else{
+            let variation_list = [];
+  cart_details[a].product_details_id.variation_list.forEach(element => {
           
-  //           if(element.gross_weight <= stock[0].gross_weight){
-  //            variation_list.push(element);
+            if(element.gross_weight <= stock[0].gross_weight){
+             variation_list.push(element);
              
-  //           }
-  //           });
-  //           if(variation_list.length !== 0){
-  //             cart_details[a].push(variation_list)
+            }
+            });
+            if(variation_list.length !== 0){
+              cart_details[a].product_details_id.push(variation_list)
 
-  //           }
-            console.log("Stock Value Status",cart_details[a].product_details_id.soldout);
+            }
+            }
+            console.log("Stock Value Status",cart_details[a].product_details_id.variation_list);
             cart_final_value.push(cart_details[a]);
             if(a == cart_details.length - 1){
               res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
