@@ -241,8 +241,10 @@ router.post('/mobile/cart/getlist1', async function (req, res){
             cart_details[a].product_details_id.variation_list.forEach((element,index) => {
             if(element.gross_weight <= stock.gross_weight){
             variation_list.push(element);
+            console.log(element);
             }else{
-              cart_details[a].product_details_id.variation_list.splice(index, 1);
+              var ks=cart_details[a].product_details_id.variation_list.splice(index, 1);
+              console.log(ks);
             }
             });
              console.log(variation_list);
