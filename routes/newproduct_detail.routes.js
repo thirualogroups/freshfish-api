@@ -255,7 +255,6 @@ router.post('/mobile/cart/getlist1', async function (req, res){
                 "product_price": +cart_details[a].cost,
                 "product_discount": cart_details[a].discount,
                 "product_discount_price": +cart_details[a].discount_amount|| 0,
-                "product_fav": temp_fav,
                 "product_rating": cart_details[a].product_rating || 5,
                 "product_review": cart_details[a].product_review || 0,
                 "product_quantity": 0,
