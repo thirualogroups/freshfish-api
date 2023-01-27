@@ -246,7 +246,8 @@ router.post('/mobile/cart/getlist1', async function (req, res){
              console.log(variation_list);
 
             if(variation_list.length !== 0){
-              cart_details[a].product_details_id.variation_list = variation_list;
+              cart_details[a].product_details_id.variation_list = [];
+              cart_details[a].product_details_id.variation_list.push(variation_list);
             }
           }else if(stock == null){
               cart_details[a].product_details_id.soldout  = true;
