@@ -237,7 +237,6 @@ router.post('/mobile/cart/getlist1', async function (req, res){
   console.log(stock);
 
   if(stock !== null){
-    console.log("aaa");
             let variation_list = [];
             cart_details[a].product_details_id.variation_list.forEach(element => {
             if(element.gross_weight <= stock.gross_weight){
@@ -247,22 +246,18 @@ router.post('/mobile/cart/getlist1', async function (req, res){
              console.log(variation_list);
 
             if(variation_list.length !== 0){
-              cart_details[a].product_details_id = variation_list
+              cart_details[a].product_details_id.variation_list = variation_list;
             }
           }else if(stock == null){
-            console.log("bbb");
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Sold Out";
             }else if(stock.soldout == true){
-              console.log("ccc");
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Sold Out";
             }else if(stock.gross_weight == 0){
-              console.log("ddd");
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "NO Available";
             }else if(stock.gross_weight <= +cart_details[a].gross_weight){
-              console.log("eee");
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Stock is less";
             }
