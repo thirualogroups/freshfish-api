@@ -235,7 +235,8 @@ router.post('/mobile/cart/getlist1', async function (req, res){
   let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(cart_details[a].product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false, store:req.body.store_id };
   let stock = await stockModel.find(stock_params);
   console.log(stock);
-if(stock[0] !== null){
+  
+  if(stock !== null){
             let variation_list = [];
             cart_details[a].product_details_id.variation_list.forEach(element => {
             if(element.gross_weight <= stock[0].gross_weight){
@@ -247,17 +248,17 @@ if(stock[0] !== null){
             if(variation_list.length !== 0){
               cart_details[a].product_details_id = variation_list
             }
-}
-             if(stock[0] == null){
+  }
+             if(stock == null){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Sold Out";
-            }else if(stock[0].soldout == true){
+            }else if(stock.soldout == true){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Sold Out";
-            }else if(stock[0].gross_weight == 0){
+            }else if(stock.gross_weight == 0){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "NO Available";
-            }else if(stock[0].gross_weight <= +cart_details[a].gross_weight){
+            }else if(stock.gross_weight <= +cart_details[a].gross_weight){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Stock is less";
             }
