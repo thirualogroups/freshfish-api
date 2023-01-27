@@ -236,7 +236,7 @@ router.post('/mobile/cart/getlist1', async function (req, res){
   let stock = await stockModel.find(stock_params);
   console.log(stock);
 
-  if(stock !== null){
+  if(stock !== []){
             let variation_list = [];
             cart_details[a].product_details_id.variation_list.forEach(element => {
             if(element.gross_weight <= stock[0].gross_weight){
@@ -257,7 +257,7 @@ router.post('/mobile/cart/getlist1', async function (req, res){
             }else if(stock.gross_weight == 0){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "NO Available";
-            }else if(stock[0].gross_weight <= +cart_details[a].gross_weight){
+            }else if(stock.gross_weight <= +cart_details[a].gross_weight){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Stock is less";
             }
