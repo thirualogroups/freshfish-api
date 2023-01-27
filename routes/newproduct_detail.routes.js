@@ -249,15 +249,15 @@ router.post('/mobile/cart/getlist1', async function (req, res){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Stock is less";
             }else{
-            let variation_list = [];
+            let variation_list1 = [];
             cart_details[a].product_details_id.variation_list.forEach(element => {
           
             if(element.gross_weight <= stock[0].gross_weight){
-             variation_list.push(element);
+             variation_list1.push(element);
              
             }
             });
-            console.log(variation_list);
+            console.log(variation_list1);
             if(variation_list.length !== 0){
               cart_details[a].product_details_id.push(variation_list)
 
