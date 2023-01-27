@@ -234,24 +234,24 @@ router.post('/mobile/cart/getlist1', async function (req, res){
   cart_details[a].product_details_id.related  = "";
   let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(cart_details[a].product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false, store:req.body.store_id };
   let stock = await stockModel.findOne(stock_params);
-  console.log(stock);
+  console.log("stock",stock);
 
   if(stock !== null){
             let variation_list = [];
             cart_details[a].product_details_id.variation_list.forEach((element,index) => {
             if(element.gross_weight <= stock.gross_weight){
             variation_list.push(element);
-            console.log(element);
+            console.log("element",element);
             }else{
               var ks=cart_details[a].product_details_id.variation_list.splice(index, 1);
-              console.log(ks);
+              console.log("ks",ks);
             }
             });
-             console.log(variation_list);
+             console.log("variation",variation_list);
 
             if(variation_list.length !== 0){
               // cart_details[a].product_details_id.variation_list = [];
-              console.log(  cart_details[a].product_details_id.variation_list)
+              console.log("cart",cart_details[a].product_details_id.variation_list)
               // variation_list.forEach(element => {
               //   cart_details[a].product_details_id.variation_list.push(variation_list);
               // });
