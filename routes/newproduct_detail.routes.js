@@ -243,14 +243,15 @@ router.post('/mobile/cart/getlist1', async function (req, res){
             variation_list.push(element);
             console.log("element",element);
             }else{
-              var ks=cart_details[a].product_details_id.variation_list.splice(index, 1);
-              console.log("ks",ks);
+              // var ks=cart_details[a].product_details_id.variation_list.splice(index, 1);
+              // console.log("ks",ks);
+              var index = cart_details[a].product_details_id.variation_list.indexOf(element.gross_weight);
+              cart_details[a].product_details_id.variation_list.splice(index, 1);
             }
             });
              console.log("variation",variation_list);
 
             if(variation_list.length !== 0){
-              cart_details[a].product_details_id.variation_list
               cart_details[a].product_details_id.variation_list= [...new Set([...variation_list])];
               // cart_details[a].product_details_id.variation_list = [];
               console.log("cart",cart_details[a].product_details_id.variation_list)
