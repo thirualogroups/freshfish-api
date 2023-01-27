@@ -238,7 +238,7 @@ router.post('/mobile/cart/getlist1', async function (req, res){
   console.log("stock",stock);
             let variation_list = [];
             console.log("cart_details[a].product_details_id.variation_list",cart_details[a].product_details_id.variation_list);
-            console.log("gross_weight",stock[0].gross_weight);
+            console.log("gross_weight",stock[a].gross_weight);
             
 
             // cart_details[a].product_details_id.variation_list.forEach(element => {
