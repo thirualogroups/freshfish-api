@@ -235,38 +235,35 @@ router.post('/mobile/cart/getlist1', async function (req, res){
   let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(cart_details[a].product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false, store:req.body.store_id };
   let stock = await stockModel.findOne(stock_params);
   
-          console.log("stock",stock);
-            // let variation_list = [];
-            //console.log(cart_details[a].product_details_id.variation_list);
-            //console.log(stock[0].gross_weight);
-            // .forEach(element => {
-            // if(element.gross_weight <= stock[0].gross_weight){
-            // variation_list.push(element);
-            // }
-            // });
-            //console.log(variation_list);
-            // if(variation_list.length !== 0){
-            //   cart_details[a].product_details_id.push(variation_list)
-            // }
           
-            //  if(stock == null){
-            //   cart_details[a].product_details_id.soldout  = true;
-            //   cart_details[a].product_details_id.related  = "Sold Out";
-            // }else if(stock.soldout == true){
-            //   cart_details[a].product_details_id.soldout  = true;
-            //   cart_details[a].product_details_id.related  = "Sold Out";
-            // }else if(stock.gross_weight == 0){
-            //   cart_details[a].product_details_id.soldout  = true;
-            //   cart_details[a].product_details_id.related  = "NO Available";
-            // }else if(stock.gross_weight <= +cart_details[a].gross_weight){
-            //   cart_details[a].product_details_id.soldout  = true;
-            //   cart_details[a].product_details_id.related  = "Stock is less";
-            // }
-            // //console.log("Stock Value Status",cart_details[a].product_details_id.variation_list);
-            // cart_final_value.push(cart_details[a]);
-            // if(a == cart_details.length - 1){
-            //   res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
-            // }
+            let variation_list = [];
+            cart_details[a].product_details_id.variation_list.forEach(element => {
+            if(element.gross_weight <= stock[0].gross_weight){
+            variation_list.push(element);
+            }
+            });
+            if(variation_list.length !== 0){
+              cart_details[a].product_details_id.push(variation_list)
+            }
+          
+             if(stock == null){
+              cart_details[a].product_details_id.soldout  = true;
+              cart_details[a].product_details_id.related  = "Sold Out";
+            }else if(stock.soldout == true){
+              cart_details[a].product_details_id.soldout  = true;
+              cart_details[a].product_details_id.related  = "Sold Out";
+            }else if(stock.gross_weight == 0){
+              cart_details[a].product_details_id.soldout  = true;
+              cart_details[a].product_details_id.related  = "NO Available";
+            }else if(stock.gross_weight <= +cart_details[a].gross_weight){
+              cart_details[a].product_details_id.soldout  = true;
+              cart_details[a].product_details_id.related  = "Stock is less";
+            }
+            //console.log("Stock Value Status",cart_details[a].product_details_id.variation_list);
+            cart_final_value.push(cart_details[a]);
+            if(a == cart_details.length - 1){
+              res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
+            }
 }
 
 
