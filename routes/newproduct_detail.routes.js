@@ -235,7 +235,7 @@ router.post('/mobile/cart/getlist1', async function (req, res){
   let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(cart_details[a].product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false, store:req.body.store_id };
   let stock = await stockModel.find(stock_params);
   console.log(stock);
-  
+
   if(stock !== null){
             let variation_list = [];
             cart_details[a].product_details_id.variation_list.forEach(element => {
@@ -248,8 +248,7 @@ router.post('/mobile/cart/getlist1', async function (req, res){
             if(variation_list.length !== 0){
               cart_details[a].product_details_id = variation_list
             }
-  }
-             if(stock == null){
+          }else if(stock == null){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Sold Out";
             }else if(stock.soldout == true){
