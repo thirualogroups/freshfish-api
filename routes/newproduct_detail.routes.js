@@ -233,14 +233,14 @@ router.post('/mobile/cart/getlist1', async function (req, res){
   cart_details[a].product_details_id.soldout  = false;
   cart_details[a].product_details_id.related  = "";
   let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(cart_details[a].product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false, store:req.body.store_id };
-  let stock = await stockModel.find(stock_params);
+  let stock = await stockModel.findone(stock_params);
   console.log(stock);
 
-  if(stock !== []){
+  if(stock !== null){
     console.log("aaa");
             let variation_list = [];
             cart_details[a].product_details_id.variation_list.forEach(element => {
-            if(element.gross_weight <= stock[0].gross_weight){
+            if(element.gross_weight <= stock.gross_weight){
             variation_list.push(element);
             }
             });
