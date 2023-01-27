@@ -250,20 +250,8 @@ router.post('/mobile/cart/getlist1', async function (req, res){
              console.log("variation",variation_list);
 
             if(variation_list.length !== 0){
-              cart_details[a].product_details_id.variation_list.map((ele,i)=>{
-                if(ele.gross_weight == variation_list[i].gross_weight){
-                  ele.title=variation_list[i].title
-                  ele.min_net_weight=variation_list[i].min_net_weight,
-                  ele.net_weight=variation_list[i].net_weight,
-                  ele.gross_weight=variation_list[i].gross_weight,
-                  ele.cost=variation_list[i].cost,
-                  ele.discount=variation_list[i].discount
-                  
-                }
-                else{
-                  ele=[];
-                }
-              });
+              cart_details[a].product_details_id.variation_list
+              cart_details[a].product_details_id.variation_list= [...new Set([...variation_list])];
               // cart_details[a].product_details_id.variation_list = [];
               console.log("cart",cart_details[a].product_details_id.variation_list)
               // variation_list.forEach(element => {
