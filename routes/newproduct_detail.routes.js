@@ -246,55 +246,23 @@ router.post('/mobile/cart/getlist1', async function (req, res){
              console.log(variation_list);
 
             if(variation_list.length !== 0){
-              let k = {
-                "_id": cart_details[a]._id,
-                "fish_combo_id": cart_details[a].fish_combo_id,
-                "product_img": cart_details[a].product_img,
-                "product_title": cart_details[a].fish_combo_id,
-                'thumbnail_image': cart_details[a].thumbnail_image || 'https://weknowfreshfish.com/api/uploads/Pic_empty.jpg',
-                "product_price": cart_details[a].cost,
-                "product_discount": cart_details[a].discount,
-                "product_discount_price": +cart_details[a].discount_amount|| 0,
-                "product_rating": cart_details[a].product_rating || 5,
-                "product_review": cart_details[a].product_review || 0,
-                "product_quantity": 0,
-                "net_weight": cart_details[a].net_weight,
-                "gross_weight": cart_details[a].gross_weight,
-                "addition_detail": cart_details[a].addition_detail,
-                "discription": cart_details[a].product_discription,
-                "condition": cart_details[a].condition,
-                "unit": cart_details[a].unit,
-                "variation_list": variation_list,
-                "customer_information": cart_details[a].customer_information,
-                "price_type": cart_details[a].price_type,
-                "stock_gross_weight": stock?.gross_weight,
-                "stock_unit": stock?.unit,
-                "stock_price": stock?.price,
-                "category": cart_details[a].cat_id
-              }
-              cart_final_value.push(k);
-
+              cart_details[a].product_details_id.variation_list.push(variation_list);
             }
-            
           }else if(stock == null){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Sold Out";
-              cart_final_value.push(cart_details[a]);
             }else if(stock.soldout == true){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Sold Out";
-              cart_final_value.push(cart_details[a]);
             }else if(stock.gross_weight == 0){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "NO Available";
-              cart_final_value.push(cart_details[a]);
             }else if(stock.gross_weight <= +cart_details[a].gross_weight){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Stock is less";
-              cart_final_value.push(cart_details[a]);
             }
             //console.log("Stock Value Status",cart_details[a].product_details_id.variation_list);
-            
+            cart_final_value.push(cart_details[a]);
             if(a == cart_details.length - 1){
               res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
             }
