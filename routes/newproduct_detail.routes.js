@@ -238,9 +238,11 @@ router.post('/mobile/cart/getlist1', async function (req, res){
 
   if(stock !== null){
             let variation_list = [];
-            cart_details[a].product_details_id.variation_list.forEach(element => {
+            cart_details[a].product_details_id.variation_list.forEach(element,index => {
             if(element.gross_weight <= stock.gross_weight){
             variation_list.push(element);
+            }else{
+              cart_details[a].product_details_id.variation_list.splice(index, 1);
             }
             });
              console.log(variation_list);
