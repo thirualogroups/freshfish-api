@@ -22,6 +22,7 @@ var cart_detailsSchema = new mongoose.Schema({
     total_amt:String,
     unit:String,
     value:String,
+    variation_list:Array,
     gross_weight:String,
     customer_info:String,
     delete_status:{
