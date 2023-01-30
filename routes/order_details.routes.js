@@ -907,8 +907,8 @@ const value1 = date.format(now1,'DD/MM/YYYY')
         "customerMobile": user.user_phone,
       },
       "statusCallbackUrl":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl",
-      "redirectionUrlSuccess":"https://www.paytm.com",
-      "redirectionUrlFailure":"https://www.paytm.com"
+      "redirectionUrlSuccess":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl",
+      "redirectionUrlFailure":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl"
   };
 
   console.log("*******************",paytmParams.body);
