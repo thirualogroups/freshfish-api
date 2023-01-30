@@ -458,6 +458,7 @@ router.post('/getlist/order_id', async function (req, res) {
 
 router.post('/callbackurl',async function (req, res) {
     console.log("********",req.body);
+    console.log("********9999******",req.params);
    try {
         transaction_logsModel.create({
             order_id: ""+req.body.ORDERID,
@@ -471,8 +472,8 @@ router.post('/callbackurl',async function (req, res) {
             console.log(err);
              console.log("********transaction_logsModel***********",info);
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
-                //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
-              var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
+                var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
+              //var  url = "http://localhost:4500/#/cart-page/"+""+req.body.ORDERID;
                 res.write(
                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
                     "'" +
@@ -605,7 +606,7 @@ router.post("/payment_initiate", async function (req, res) {
        const { v4: uuidv4 } = require('uuid');
        let credentials = paytm_credentials();
        let orderid = uuidv4();
-       let callbackurl = "http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl";
+       let callbackurl = "https://weknowfreshfish.com/api/order_details/callbackurl";
        var paytmParams = {};
        paytmParams.body = {
          "requestType": "Payment",
@@ -879,8 +880,6 @@ router.post("/payment-link", async (req, res) => {
   dt = new Date(dt.setHours(dt.getHours()+(5+1)));
   dt = new Date(dt.setMinutes(dt.getMinutes()+30));
   console.log(dt);
-  const { v4: uuidv4 } = require('uuid');
-  let ORDERID=uuidv4();
 const date = require('date-and-time');
 const now1  =  new Date(dt);
 now1.setDate(now1.getDate() + 1);
@@ -890,7 +889,7 @@ const value1 = date.format(now1,'DD/MM/YYYY')
 
   const user = await userdetailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.userid)});
 
-  var callbackurl = "http://localhost:4200/#/cart-agent/"+""+ORDERID;
+
   console.log("user",user);
   paytmParams.body = {
       "mid"             : credentials.mid,
@@ -898,7 +897,6 @@ const value1 = date.format(now1,'DD/MM/YYYY')
       "linkDescription" : "Order Payment",
       "linkName"        : "Order",
       "amount"          : parseFloat(req.body.amount),
-      "orderid"         :req.body.orderid,
       "invoiceId"       : new Date().getTime(),
       "expiryDate"      : value1,
       "sendSms"         : true,
@@ -907,11 +905,10 @@ const value1 = date.format(now1,'DD/MM/YYYY')
         "customerName":user.first_name,
         "customerEmail":user.user_email,
         "customerMobile": user.user_phone,
-        
       },
-      "statusCallbackUrl":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl",
-      "redirectionUrlSuccess":callbackurl,
-      "redirectionUrlFailure":callbackurl
+      "statusCallbackUrl":"https://weknowfreshfish.com/api/order_details/callbackurl",
+      "redirectionUrlSuccess":"https://www.paytm.com",
+      "redirectionUrlFailure":"https://www.paytm.com"
   };
 
   console.log("*******************",paytmParams.body);
