@@ -906,9 +906,7 @@ const value1 = date.format(now1,'DD/MM/YYYY')
         "customerEmail":user.user_email,
         "customerMobile": user.user_phone,
       },
-      "statusCallbackUrl":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl",
-      "redirectionUrlSuccess":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl",
-      "redirectionUrlFailure":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl"
+      "statusCallbackUrl":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl_link"
   };
 
   console.log("*******************",paytmParams.body);
@@ -985,8 +983,8 @@ router.post('/callbackurl_link',async function (req, res) {
             console.log(err);
              console.log("********transaction_logsModel***********",info);
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
-                var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
-              //var  url = "http://localhost:4500/#/cart-page/"+""+req.body.ORDERID;
+                //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
+              var  url = "http://localhost:4200/#/cart-agent/"+""+req.body.ORDERID;
                 res.write(
                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
                     "'" +
