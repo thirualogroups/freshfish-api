@@ -35,7 +35,7 @@ var shippingdetails = require('./routes/shippingdetails.routes');
 
 /*Database connectivity*/
 
-var BaseUrl = "https://weknowfreshfish.com/api";
+var BaseUrl = "http://ec2-44-208-166-141.compute-1.amazonaws.com/api";
 
 
 mongoose.connect('mongodb://localhost:27017/freshfish_database');
