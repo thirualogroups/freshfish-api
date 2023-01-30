@@ -606,7 +606,7 @@ router.post("/payment_initiate", async function (req, res) {
        const { v4: uuidv4 } = require('uuid');
        let credentials = paytm_credentials();
        let orderid = uuidv4();
-       let callbackurl = "https://weknowfreshfish.com/api/order_details/callbackurl";
+       let callbackurl = "http://localhost:4200/api/order_details/callbackurl";
        var paytmParams = {};
        paytmParams.body = {
          "requestType": "Payment",
