@@ -258,8 +258,6 @@ router.post('/mobile/product_list', async function (req, res) {
     var product_list = await product_detailsModel.find(params).sort({ _id: -1 }).populate([{ path: "fish_combo_id", select: ["product_name", "code"] }, { path: "cat_id", select: ["product_cate"] }]);
       for (let f = 0; f < product_list.length; f++) {
             var pro_fav = await Product_favModel.findOne({ user_id: req.body.user_id, product_id: product_list[f]._id, delete_status: false });
-            
-            console.log("Fav list",pro_fav);
 
             var temp_fav = (pro_fav !== null);
             // const stock = stocks.filter(x => x.fish_combo_id === product_list[f].fish_combo_id._id);

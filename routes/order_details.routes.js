@@ -472,8 +472,8 @@ router.post('/callbackurl',async function (req, res) {
             console.log(err);
              console.log("********transaction_logsModel***********",info);
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
-                var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
-              //var  url = "http://localhost:4500/#/cart-page/"+""+req.body.ORDERID;
+                //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
+              var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
                 res.write(
                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
                     "'" +
@@ -600,6 +600,7 @@ router.post("/payment_initiate", async function (req, res) {
  
  router.post("/payment_initiate_one", async function (req, res) {
    try {
+    req.body.amount = 1;
        const https = require('https');
        const PaytmChecksum = require('paytmchecksum');
        const { v4: uuidv4 } = require('uuid');
