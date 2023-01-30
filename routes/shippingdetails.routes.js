@@ -150,6 +150,22 @@ router.post('/mark_used_address',async function (req, res) {
           });        
 });
 
+router.post('/mark_as_default',async function (req, res) {
+  console.log(req.body);
+   var shipping_addres = await shipping_addressModel.findOne({user_id:req.body.user_id,default_status:true});
+   let a  = {
+    default_status : false
+   }
+   shipping_addressModel.findByIdAndUpdate(shipping_addres._id, a, {new: true}, function (err, UpdatedDetails) {
+     if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
+     console.log("UpdatedDetails",UpdatedDetails);
+       // res.json({Status:"Success",Message:"Shipping address Updated", Data : UpdatedDetails ,Code:200});
+   });
+   shipping_addressModel.findByIdAndUpdate(req.body._id, req.body, {new: true}, function (err, UpdatedDetails) {
+     if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
+       res.json({Status:"Success",Message:"Shipping address Updated", Data : UpdatedDetails ,Code:200});
+   });        
+});
 
 router.post('/update_address', function (req, res) {
        shipping_addressModel.findByIdAndUpdate(req.body._id, req.body, {new: true}, function (err, UpdatedDetails) {
