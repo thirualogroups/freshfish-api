@@ -888,7 +888,7 @@ const value1 = date.format(now1,'DD/MM/YYYY')
 
   const user = await userdetailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.userid)});
 
-
+  var callbackurl = "https://weknowfreshfish.com/#/cart-agent/"+""+req.body.orderid;
   console.log("user",user);
   paytmParams.body = {
       "mid"             : credentials.mid,
@@ -896,7 +896,7 @@ const value1 = date.format(now1,'DD/MM/YYYY')
       "linkDescription" : "Order Payment",
       "linkName"        : "Order",
       "amount"          : parseFloat(req.body.amount),
-      "orderid"         : req.body.orderid,
+      "orderid"         :req.body.orderid,
       "invoiceId"       : new Date().getTime(),
       "expiryDate"      : value1,
       "sendSms"         : true,
@@ -905,8 +905,11 @@ const value1 = date.format(now1,'DD/MM/YYYY')
         "customerName":user.first_name,
         "customerEmail":user.user_email,
         "customerMobile": user.user_phone,
+        
       },
-      "statusCallbackUrl":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl_link"
+      "statusCallbackUrl":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl",
+      "redirectionUrlSuccess":callbackurl,
+      "redirectionUrlFailure":callbackurl
   };
 
   console.log("*******************",paytmParams.body);
@@ -983,8 +986,8 @@ router.post('/callbackurl_link',async function (req, res) {
             console.log(err);
              console.log("********transaction_logsModel***********",info);
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
-                //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
-              var  url = "http://localhost:4200/#/cart-agent/"+""+req.body.ORDERID;
+                var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
+              //var  url = "http://localhost:4500/#/cart-page/"+""+req.body.ORDERID;
                 res.write(
                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
                     "'" +
