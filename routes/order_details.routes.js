@@ -908,6 +908,7 @@ router.post("/payment-link", async (req, res) => {
         "customerEmail":user.user_email,
         "customerMobile": user.user_phone,
       },
+      "customPaymentSuccessMessage":req.body.orderid,
       "statusCallbackUrl":"https://weknowfreshfish.com/api/order_details/callbackurl",
       "redirectionUrlSuccess":"https://www.paytm.com",
       "redirectionUrlFailure":"https://www.paytm.com"
