@@ -81,6 +81,7 @@ var order_detailSchema = new mongoose.Schema({
     default: false
   },
   payment_method: String,
+  payment_status: String,
   payment_id: String,
   shippingid: {
     type: mongoose.Schema.Types.ObjectId,
