@@ -160,7 +160,7 @@ async function orders_filter_api(params,res){
   /*else if(!params.id){
     return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
    }*/
-let skip = 0, limit = 1000, sort = {slot_date:1,slot_time:1};
+let skip = 0, sort = {slot_date:1,slot_time:1};
 if (params.skip) {
   skip = params.skip;
 }
@@ -220,7 +220,7 @@ if (skip == 0) {
 
 
 
-order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, skip: skip, limit: limit }, function (err, list) {
+order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, skip: skip}, function (err, list) {
   if (err) res.json({ Status: "Fail", Message: "Some internal error", Data: err.message, Code: 500 });
   if (params.id) {
     res.json({ Status: "Success", Message: " type Details", Data: list.length > 0 ? list[0] : {}, Count: count, Code: 200 });
@@ -909,8 +909,8 @@ router.post("/payment-link", async (req, res) => {
         "customerMobile": user.user_phone,
       },
       "statusCallbackUrl":"https://weknowfreshfish.com/api/order_details/callbackurl",
-      "redirectionUrlSuccess":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?success="+req.body.orderid,
-      "redirectionUrlFailure":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?failed="+req.body.orderid
+      "redirectionUrlSuccess":"http://localhost:4200/#/billing-details?success="+req.body.orderid,
+      "redirectionUrlFailure":"http://localhost:4200/#/billing-details?failed="+req.body.orderid
   };
 
   console.log("*******************",paytmParams.body);
