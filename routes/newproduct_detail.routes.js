@@ -305,7 +305,15 @@ router.post('/mobile/cart/getlist', async function (req, res){
   }
  }
 });
+router.post('/mobile/cart/removeall', async function (req, res){
+var remove_user_cart={user_id:req.body.user_id};
+  await cart_detailsModel.remove(remove_user_cart, function (err, user) {
+    if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
+    res.json({ Status: "Success", Message: "cart products deleted successfully", Data: user, Code: 200 });
+  });
 
+
+});
 
 
 
