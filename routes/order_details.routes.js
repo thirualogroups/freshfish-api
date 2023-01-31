@@ -472,8 +472,8 @@ router.post('/callbackurl',async function (req, res) {
             console.log(err);
              console.log("********transaction_logsModel***********",info);
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
-                var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
-              //var  url = "http://localhost:4500/#/cart-page/"+""+req.body.ORDERID;
+                //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
+              var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
                 res.write(
                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
                     "'" +
@@ -606,7 +606,7 @@ router.post("/payment_initiate", async function (req, res) {
        const { v4: uuidv4 } = require('uuid');
        let credentials = paytm_credentials();
        let orderid = uuidv4();
-       let callbackurl = "https://weknowfreshfish.com/api/order_details/callbackurl";
+       let callbackurl = "http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl";
        var paytmParams = {};
        paytmParams.body = {
          "requestType": "Payment",
