@@ -910,8 +910,8 @@ router.post("/payment-link", async (req, res) => {
       },
       "customPaymentSuccessMessage":req.body.orderid,
       "statusCallbackUrl":"https://weknowfreshfish.com/api/order_details/callbackurl",
-      "redirectionUrlSuccess":"https://www.paytm.com",
-      "redirectionUrlFailure":"https://www.paytm.com"
+      "redirectionUrlSuccess":"http://localhost:4200/#/billing-details?orderid="+req.body.orderid,
+      "redirectionUrlFailure":"http://localhost:4200/#/billing-details?orderid="+req.body.orderid
   };
 
   console.log("*******************",paytmParams.body);
