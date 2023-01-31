@@ -44,6 +44,7 @@ router.post('/create', async function (req, res) {
       order_deliver_status: "Booked",
       order_final_amount: req.body.order_final_amount,
       payment_method: req.body.payment_method,
+      payment_status:req.body.payment_status,
       payment_id: req.body.payment_id,
       shippingid: req.body.shippingid,
       shipping_address: req.body.shipping_address,
