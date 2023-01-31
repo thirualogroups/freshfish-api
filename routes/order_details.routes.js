@@ -160,7 +160,7 @@ async function orders_filter_api(params,res){
   /*else if(!params.id){
     return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
    }*/
-let skip = 0, limit = 50, sort = {slot_date:1,slot_time:1};
+let skip = 0, limit = 1000, sort = {slot_date:1,slot_time:1};
 if (params.skip) {
   skip = params.skip;
 }
@@ -880,10 +880,10 @@ router.post("/payment-link", async (req, res) => {
   dt = new Date(dt.setHours(dt.getHours()+(5+1)));
   dt = new Date(dt.setMinutes(dt.getMinutes()+30));
   console.log(dt);
-const date = require('date-and-time');
-const now1  =  new Date(dt);
-now1.setDate(now1.getDate() + 1);
-const value1 = date.format(now1,'DD/MM/YYYY')
+  const date = require('date-and-time');
+  const now1  =  new Date(dt);
+  now1.setDate(now1.getDate() + 1);
+  const value1 = date.format(now1,'DD/MM/YYYY')
 
 
 
