@@ -910,8 +910,8 @@ router.post("/payment-link", async (req, res) => {
         "customerMobile": user.user_phone,
       },
       "statusCallbackUrl":"https://weknowfreshfish.com/api/order_details/callbackurl",
-      "redirectionUrlSuccess":"http://localhost:4200/#/billing-details?success="+req.body.orderid,
-      "redirectionUrlFailure":"http://localhost:4200/#/billing-details?failed="+req.body.orderid
+      "redirectionUrlSuccess":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?success="+req.body.orderid,
+      "redirectionUrlFailure":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?failed="+req.body.orderid
   };
 
   console.log("*******************",paytmParams.body);
