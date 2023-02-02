@@ -457,43 +457,86 @@ router.post('/getlist/order_id', async function (req, res) {
 
 //////Payment & Call back funcation /////
 
+// router.post('/callbackurl',async function (req, res) {
+//     console.log("********",req.body);
+//     console.log("********9999******",req.params);
+//    try {
+//         transaction_logsModel.create({
+//             order_id: ""+req.body.ORDERID,
+//             currency: ""+req.body.CURRENCY,
+//             txnamount: ""+req.body.TXNAMOUNT,
+//             txtnid: ""+req.body.TXNID,
+//             status: ""+req.body.STATUS,
+//             respcode: ""+req.body.RESPCODE,
+//             respmsg: ""+req.body.RESPMSG
+//         }, function (err, info) {
+//             console.log(err);
+//              console.log("********transaction_logsModel***********",info);
+//             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
+//                 //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
+//               //var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
+//               var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
+
+//                 res.write(
+//                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
+//                     "'" +
+//                     url +
+//                     "'" +
+//                     '"><h1>Payment Success</h1></body></html>'
+//                 );
+//                 res.end();
+//         });
+//       }
+//       catch (ex) {
+//           console.log(ex);
+//           res.json({ Status: "Failed", Message: ex.message, Code: 500 });
+//       }
+//   });
+
 router.post('/callbackurl',async function (req, res) {
-    console.log("********",req.body);
-    console.log("********9999******",req.params);
-   try {
-        transaction_logsModel.create({
-            order_id: ""+req.body.ORDERID,
-            currency: ""+req.body.CURRENCY,
-            txnamount: ""+req.body.TXNAMOUNT,
-            txtnid: ""+req.body.TXNID,
-            status: ""+req.body.STATUS,
-            respcode: ""+req.body.RESPCODE,
-            respmsg: ""+req.body.RESPMSG
-        }, function (err, info) {
-            console.log(err);
-             console.log("********transaction_logsModel***********",info);
-            if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
-                //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
-              //var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
-              var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
+  try {
+console.log("callback body",req.body);
 
-                res.write(
-                  '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
-                    "'" +
-                    url +
-                    "'" +
-                    '"><h1>Payment Success</h1></body></html>'
-                );
-                res.end();
-        });
-      }
-      catch (ex) {
-          console.log(ex);
-          res.json({ Status: "Failed", Message: ex.message, Code: 500 });
-      }
-  });
-
-
+     if(req.body.MERC_UNQ_REF && req.body.MERC_UNQ_REF.substring(0,4)==="INV_"){
+       if(req.body.STATUS === "TXN_SUCCESS"){
+         order_detailsModel.updateOne({order_id: req.body.MERC_UNQ_REF.substring(4)},{payment_status:"Paid", payment_link_response: req.body}).then((err,res)=>{
+           if (err){
+             console.error(err);
+             return res.status(500).send(err.message);
+           }
+           return res.status(200).send("Payment success");
+         });
+       }
+       else{
+         res.status(500).send("Payment failure");
+       }
+     }else{
+let respmsg = req.body.RESPMSG.toString();
+if(respmsg === "User has not completed transaction.") respmsg = "You have not completed the transaction.";
+       transaction_logsModel.create({
+           order_id: ""+req.body.ORDERID,
+           currency: ""+req.body.CURRENCY,
+           txnamount: ""+req.body.TXNAMOUNT,
+           txtnid: ""+req.body.TXNID,
+           status: ""+req.body.STATUS,
+           respcode: ""+req.body.RESPCODE,
+           respmsg: respmsg
+       }, function (err, info) {
+           if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
+               var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
+             //var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
+               res.write(
+                 `<!DOCTYPE html><html lang="en"><body><script>window.location.href='${url}';</script></body></html>`
+               );
+               res.end();
+       });
+}
+   }
+   catch (ex) {
+       console.log(ex);
+       res.json({ Status: "Failed", Message: ex.message, Code: 500 });
+   }
+});
 
 function paytm_credentials() {
   return {
