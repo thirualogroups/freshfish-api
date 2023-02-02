@@ -117,13 +117,14 @@ router.post('/getlist', async function (req, res) {
           as: "stock",
           pipeline: [
             { $match: { $expr: { $and: [{ $eq: ["$fish_combo_id", "$$id"] }, { $eq: ["$store", new mongoose.Types.ObjectId(store)] }] } } },
-            { $project: { gross_weight: 1, price: 1, unit: 1, _id: 1, status: 1, soldout: 1 } }
+            { $project: { gross_weight: 1, price: 1, unit: 1, _id: 1, status: 1, soldout: 1 } },
+            {$sortArray: { input: "$id", sortBy: { soldout: 1 } }}
           ]
         }
       },
       {
         $project: { createdAt: 0, updatedAt: 0, delete_status: 0, __v: 0 }
-      },{ soldout:true }
+      }
     ]
     
     fish_combo_masterModel.aggregate(aggr).exec(function (err, list) {
