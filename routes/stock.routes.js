@@ -118,7 +118,7 @@ router.post('/getlist', async function (req, res) {
           pipeline: [
             { $match: { $expr: { $and: [{ $eq: ["$fish_combo_id", "$$id"] }, { $eq: ["$store", new mongoose.Types.ObjectId(store)] }] } } },
             { $project: { gross_weight: 1, price: 1, unit: 1, _id: 1, status: 1, soldout: 1 } },
-            {$sort:{soldout:false}}
+            {$sort: { soldout: { $meta: false }}}
           ]
         }
       },
