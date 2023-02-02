@@ -110,7 +110,7 @@ router.post('/getlist', async function (req, res) {
     }
     const aggr = [
       { $match: params },
-      {$sort: { soldout:1}},
+      {$sort: { soldout:{$exists: true}}},
       {
         $lookup: {
           from: "stocks",
