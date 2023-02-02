@@ -607,7 +607,7 @@ router.post("/payment_initiate", async function (req, res) {
        const https = require('https');
        const PaytmChecksum = require('paytmchecksum');
        let credentials = paytm_credentials();
-       let orderid = new Date().getTime();
+       let orderid = new Date().getFullYear()+new Date().getMonth()+new Date().getDate()+new Date().getTime();
        let callbackurl = "http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl";
        var paytmParams = {};
        paytmParams.body = {
