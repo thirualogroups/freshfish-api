@@ -110,10 +110,6 @@ router.post('/getlist', async function (req, res) {
     }
     const aggr = [
       { $match: params },
-      {$sort:{$meta: soldout}},
-      //$sort:{
-        //soldout: true
-     //}  
       {
         $lookup: {
           from: "stocks",
@@ -129,7 +125,7 @@ router.post('/getlist', async function (req, res) {
         $project: { createdAt: 0, updatedAt: 0, delete_status: 0, __v: 0 }
       }
     ]
-    fish_combo_masterModel.aggregate(aggr).exec(function (err, list) {
+    fish_combo_masterModel.aggregate(aggr,{ soldout: true }).exec(function (err, list) {
       if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: err.message, Code: 500 });
       for(x of list){
         x.gross_weight = x.stock[0]?.gross_weight ?? 0;
