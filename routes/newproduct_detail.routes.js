@@ -336,7 +336,7 @@ router.post('/check_checkout_stock',async function (req, res) {
   }else if(stock.gross_weight == 0){
      soldout  = true;
      related  = "NO Available";
-  }else if(stock.gross_weight <= +temp_value.gross_wt){
+  }else if(stock.gross_weight < +temp_value.gross_wt){
      soldout  = true;
      related  = "Stock is less";
   }
