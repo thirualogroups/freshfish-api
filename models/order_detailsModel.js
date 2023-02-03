@@ -94,6 +94,7 @@ var order_detailSchema = new mongoose.Schema({
   slot_time: String,
   addl_phone_no: String,
   device_type: String,
+  user_type:Number,
   logs: [new mongoose.Schema({
     _id: false,
     status: String,
