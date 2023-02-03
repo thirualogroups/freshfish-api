@@ -49,6 +49,7 @@ router.post('/create', async function (req, res) {
       shippingid: req.body.shippingid,
       shipping_address: req.body.shipping_address,
       device_type: req.body.device_type,
+      user_type:req.body.user_type,
       slot_date: req.body.slot_date,
       slot_time: req.body.slot_time,
       logs: [
