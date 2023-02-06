@@ -920,7 +920,7 @@ router.post("/payment-link", async (req, res) => {
   var order_details =await order_detailsModel.find({_id:req.body.orderid});
 
   console.log("user",user);
-  console.log("order",order_details);
+  console.log("order",order_details.order_detials);
   paytmParams.body = {
       "mid"             : credentials.mid,
       "linkType"        : "INVOICE",
