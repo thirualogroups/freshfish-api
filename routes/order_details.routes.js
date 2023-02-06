@@ -917,10 +917,10 @@ router.post("/payment-link", async (req, res) => {
 
 
   const user = await userdetailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.userid)});
-  var order_details =await order_detailsModel.find({_id:req.body.orderid});
+  var orderdetails =await order_detailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.orderid)});
 
   console.log("user",user);
-  console.log("order",order_details.order_detials);
+  console.log("order",orderdetails);
   paytmParams.body = {
       "mid"             : credentials.mid,
       "linkType"        : "INVOICE",
