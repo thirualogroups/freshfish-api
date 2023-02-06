@@ -920,10 +920,9 @@ router.post("/payment-link", async (req, res) => {
   var orderdetails =await order_detailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.orderid)});
   let myorderprice=[];
   for(let a = 0; a < orderdetails.length ; a++){
-     myorderprice.push(orderdetails.order_details[a].price);
-    console.log("order price",myorderprice);
+     myorderprice.push({"order_prices":orderdetails.order_details[a].price});
   }
-  
+  console.log("order price",myorderprice);
   console.log("user",user);
   paytmParams.body = {
       "mid"             : credentials.mid,
