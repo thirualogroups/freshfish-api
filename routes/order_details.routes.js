@@ -918,9 +918,12 @@ router.post("/payment-link", async (req, res) => {
 
   const user = await userdetailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.userid)});
   var orderdetails =await order_detailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.orderid)});
-
+  var product_price = [];
+  for(let a = 0; a < orderdetails.length ; a++){
+    product_price.push(orderdetails.order_details[a].price);
+  }
   console.log("user",user);
-  console.log("order",orderdetails.order_details[0].price);
+  console.log("product_price",product_price);
   paytmParams.body = {
       "mid"             : credentials.mid,
       "linkType"        : "INVOICE",
