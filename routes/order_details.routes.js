@@ -918,12 +918,9 @@ router.post("/payment-link", async (req, res) => {
 
   const user = await userdetailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.userid)});
   var orderdetails =await order_detailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.orderid)});
-  var product_price = [];
   for(let a = 0; a < orderdetails.length ; a++){
-    product_price.push(orderdetails.order_details[a].price);
-  }
+  console.log("order price",orderdetails.order_details[a].price);
   console.log("user",user);
-  console.log("product_price",product_price);
   paytmParams.body = {
       "mid"             : credentials.mid,
       "linkType"        : "INVOICE",
@@ -939,16 +936,16 @@ router.post("/payment-link", async (req, res) => {
         "customerEmail":user.user_email,
         "customerMobile": user.user_phone,
       },
-      // "invoiceDetails":{
+       "invoiceDetails":{
       //   "productName":order_details.,
       //   "noOfUnits":,
-      //   "perUnitAmount":,
-      // },
+        "perUnitAmount":orderdetails.order_details[a].price
+      },
       //"statusCallbackUrl":"https://weknowfreshfish.com/api/order_details/callbackurl",
       "redirectionUrlSuccess":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?success="+req.body.orderid,
       "redirectionUrlFailure":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?failed="+req.body.orderid
   };
-
+}
   console.log("*******************",paytmParams.body);
   
   /*
