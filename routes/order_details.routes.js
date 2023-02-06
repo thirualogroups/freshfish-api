@@ -405,7 +405,7 @@ router.post('/getlist/order_id', async function (req, res) {
    
  });
 
- router.post('/getlist/vendor_id', async function (req, res) {
+ router.get('/getlist/vendor_id', async function (req, res) {
   if(req.body.user_type==3){
 
  
