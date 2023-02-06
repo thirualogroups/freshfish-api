@@ -410,7 +410,7 @@ router.post('/getlist/order_id', async function (req, res) {
 
  
   var a = {
-    user_type:req.body.user_type
+    user_type: 3
   }
 
 
