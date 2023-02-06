@@ -942,12 +942,13 @@ router.post("/payment-link", async (req, res) => {
         "customerEmail":user.user_email,
         "customerMobile": user.user_phone,
       },
+      "invoicePhoneNo":user.user_phone,
       //  "invoiceDetails":{
       //   "productName":order_details.,
       //   "noOfUnits":,
       //   "perUnitAmount":orderdetails.order_details[a].price
       // },
-      //"statusCallbackUrl":"https://weknowfreshfish.com/api/order_details/callbackurl",
+      "statusCallbackUrl":"https://securegw.paytm.in/theia/paytmCallback?ORDER_ID="+req.body.orderid,
       "redirectionUrlSuccess":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?success="+req.body.orderid,
       "redirectionUrlFailure":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?failed="+req.body.orderid
   };
