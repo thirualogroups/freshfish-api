@@ -412,7 +412,7 @@ router.post('/getlist/order_id', async function (req, res) {
   }
 
 
-  let your_order= await order_detailsModel.find({vendor_id:req.body.vendor_id},a);
+  let your_order= await order_detailsModel.find({vendor_id:req.body.vendor_id,a});
 
   // .populate([{ path: "user_id", select: ["first_name", "middle_name", "last_name", "user_email", "user_phone", "user_address"] },{path: "store", select: ["name","phoneno","email","location","type","address","code"] },
   // { path: "vendor_id", select: ["business_name", "code", "store"], populate: [{ path: "store", select: ["name", "phoneno", "email"] }] },
