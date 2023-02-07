@@ -917,14 +917,8 @@ router.post("/payment-link", async (req, res) => {
 
 
   const user = await userdetailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.userid)});
-  var orderdetails =await order_detailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.orderid)});
-  let myorderprice=[];
-  for(let a = 0; a < orderdetails.length ; a++){
-
-     myorderprice.push({"order_price":orderdetails.order_details[a].price});
-     console.log("order price",myorderprice);
-     
-  }
+  
+ 
   
   console.log("user",user);
   paytmParams.body = {
@@ -937,18 +931,14 @@ router.post("/payment-link", async (req, res) => {
       "expiryDate"      : value1,
       "sendSms"         : true,
       "sendEmail"       : true,
-      "customerContact":{
+      "customerContact":
+      {
         "customerName":user.first_name,
         "customerEmail":user.user_email,
         "customerMobile": user.user_phone,
       },
       "invoicePhoneNo":user.user_phone,
-      //  "invoiceDetails":{
-      //   "productName":order_details.,
-      //   "noOfUnits":,
-      //   "perUnitAmount":orderdetails.order_details[a].price
-      // },
-      "statusCallbackUrl":"https://securegw.paytm.in/theia/paytmCallback?ORDER_ID="+req.body.orderid,
+      //"statusCallbackUrl":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl_link",
       "redirectionUrlSuccess":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?success="+req.body.orderid,
       "redirectionUrlFailure":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?failed="+req.body.orderid
   };
@@ -1026,8 +1016,8 @@ router.post('/callbackurl_link',async function (req, res) {
             console.log(err);
              console.log("********transaction_logsModel***********",info);
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
-                var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
-              //var  url = "http://localhost:4500/#/cart-page/"+""+req.body.ORDERID;
+                //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
+              var  url = "http://localhost:4500/#/cart-page/"+""+req.body.ORDERID;
                 res.write(
                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
                     "'" +
