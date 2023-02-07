@@ -22,8 +22,9 @@ router.post('/create', async function (req, res) {
     for(let item of req.body.order_details){
       let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(req.body.store), status: true, delete_status: false, soldout: false,  gross_weight: {$gte: item.gross_weight} };
       let stock = await stockModel.findOne(stock_params);
+      console.log("stock_params",stock_params);
       if(stock == null){
-        return res.json({Status:"Fail", Message: req.body.product_name + " has less/no stock.", Code: 400}); 
+        return res.status(400).json({Status:"Fail", Message: req.body.product_name + " has less/no stock.", Code: 400}); 
       }
     }
 
@@ -938,7 +939,7 @@ router.post("/payment-link", async (req, res) => {
         "customerMobile": user.user_phone,
       },
       "invoicePhoneNo":user.user_phone,
-      //"statusCallbackUrl":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl_link",
+      "statusCallbackUrl":"http://ec2-44-208-166-141.compute-1.amazonaws.com:3000/api/order_details/callbackurl_link",
       "redirectionUrlSuccess":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?success="+req.body.orderid,
       "redirectionUrlFailure":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?failed="+req.body.orderid
   };
