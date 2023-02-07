@@ -407,9 +407,6 @@ router.post('/getlist/order_id', async function (req, res) {
  });
 
  router.get('/getlist/vendor_id', async function (req, res) {
-  if(user_type == 3){
-
- 
   var a = {
     user_type: 3
   }
@@ -426,11 +423,7 @@ router.post('/getlist/order_id', async function (req, res) {
  
    res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
  
- }
-}else{
-  res.status(400).json({ Status: "Failed", Message: "Vendor Type Not Found", Data: {}, Code: 400 });
-
-}   
+ } 
    
  });
 
