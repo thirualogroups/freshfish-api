@@ -293,9 +293,9 @@ router.post('/mobile/product_list', async function (req, res) {
               "product_img": product_list[f].product_img,
               "product_title": product_list[f].fish_combo_id.product_name,
               'thumbnail_image': product_list[f].thumbnail_image || 'https://weknowfreshfish.com/api/uploads/Pic_empty.jpg',
-              "product_price": +product_list[f].cost?.toFixed(0),
+              "product_price": +product_list[f].cost.toFixed(0),
               "product_discount": product_list[f].discount,
-              "product_discount_price": +product_list[f].discount_amount?.toFixed(0) || 0,
+              "product_discount_price": +product_list[f].discount_amount.toFixed(0) || 0,
               "product_fav": temp_fav,
               "product_rating": product_list[f].product_rating || 5,
               "product_review": product_list[f].product_review || 0,
@@ -315,7 +315,7 @@ router.post('/mobile/product_list', async function (req, res) {
               "category": product_list[f].cat_id
             }
             if(product_list[f].cat_id){
-            product_list.push(k);
+            Product_details.product_list[f].cat_id._id.toString()[0]?.product_list.push(k);
             }
           }
       }
@@ -327,7 +327,7 @@ router.post('/mobile/product_list', async function (req, res) {
       res.json({
         Status: "Success", Message: "Product_details List", 
         Data: {
-          "Product_details": product_list,
+          "Product_details": Product_details,
           "vendor":vendor
       }, Code: 200
       });
