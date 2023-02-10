@@ -315,7 +315,7 @@ router.post('/mobile/product_list', async function (req, res) {
               "category": product_list[f].cat_id
             }
             if(product_list[f].cat_id){
-            product_list[f].push(k);
+            product_list.push(k);
             }
           }
       }
