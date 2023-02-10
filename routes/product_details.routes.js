@@ -229,7 +229,7 @@ router.post('/delete', function (req, res) {
   });
 });
 
-router.post('/mobile/product_list', async function (req, res) {
+router.post('/mobile/product_list1', async function (req, res) {
 
   var product_cate = await product_categoriesModel.find({ delete_status: false, show_status: true }, { createdAt: 0, updatedAt: 0, __v: 0, delete_status: 0 }).sort({ _id: 1 });
   var Product_details = [];
@@ -239,7 +239,6 @@ router.post('/mobile/product_list', async function (req, res) {
     if (vendors.length === 0) {
       let a = {
         "Product_details": Product_details,
-        "product_cate": product_cate
       }
       res.status(400).json({ Status: "Failed", Message: "Request Failed", Code: 400});
       return;
@@ -257,13 +256,6 @@ router.post('/mobile/product_list', async function (req, res) {
     params.soldout=false;
 
     var product_list = await product_detailsModel.find(params).sort({ _id: -1 }).populate([{ path: "fish_combo_id", select: ["product_name", "code"] }, { path: "cat_id", select: ["product_cate"] }]);
-    for (let a = 0; a < product_cate.length; a++) {
-      Product_details.push({
-        "cat_id": product_cate[a]._id,
-        "cat_name": product_cate[a].product_cate,
-        "product_list": []
-      });
-    }
       for (let f = 0; f < product_list.length; f++) {
             var pro_fav = await Product_favModel.findOne({ user_id: req.body.user_id, product_id: product_list[f]._id, delete_status: false });
 
@@ -335,7 +327,7 @@ router.post('/mobile/product_list', async function (req, res) {
       res.json({
         Status: "Success", Message: "Product_details List", 
         Data: {
-          "Product_details": Product_details,
+          "Product_details": product_list,
           "vendor":vendor
       }, Code: 200
       });
@@ -522,22 +514,143 @@ router.post('/mobile/recommendation', async function (req, res) {
   }
     });
 
+router.post('/mobile/product_list', async function (req, res) {
+  try {   
+    var product_cate = await product_categoriesModel.find({ delete_status: false, show_status: true }, { createdAt: 0, updatedAt: 0, __v: 0, delete_status: 0 }).sort({ _id: 1 });
+
+    if(req.body.user_id && req.body.user_id !== ""){
+      const product_cart_pincodes = await product_cart_detailsModel.find({ delete_status: false, user_id: req.body.user_id, pincode: { $exists: true } }, { pincode: 1 });
+      pincodes_list = product_cart_pincodes.filter((item, pos) => product_cart_pincodes.indexOf(item) == pos);
+    }
+    var Product_details = [];
+    let params = { delete_status: false };
+    if (req.body.pincode && req.body.pincode !== "") {
+      var vendors = await product_vendorModel.find({ pincodes: { $elemMatch: { $eq: req.body.pincode } }, status: true }, { _id: 1, store: 1 });
+      
+
+      if (vendors.length === 0) {
+        let a = {
+          "Product_details": Product_details,
+        }
+        res.json({ Status: "Success", Message: "product list", Data: a, Code: 200 });
+	      return;
+      }
+      
+
+
+
+      let stock_params = { delete_status: false, status: true, soldout: false, store: { $in: vendors.map(x => x.store) }, gross_weight: { $gte: 0 }, fish_combo_id: {$ne: null} };
+      let stocks = await stockModel.find(stock_params, { fish_combo_id: 1, gross_weight: 1, unit: 1, price: 1 });
+      let fish_combo_ids = [];
+      for (let stock of stocks) {
+        fish_combo_ids.push(stock.fish_combo_id);
+      }
+      params.fish_combo_id = { $in: fish_combo_ids };
+      params.store = { $in: vendors.map(x => x.store) };
+      params.status=true;
+      params.soldout=false;
+      params.cat_id=req.body.cat_id;
+      
 
 
 
 
+      var product_list = await product_detailsModel.find(params).sort({ _id: -1 }).populate([{ path: "fish_combo_id", select: ["product_name", "code"] }, { path: "cat_id", select: ["product_cate"] }]);
+      for (let a = 0; a < product_cate.length; a++) {
+        Product_details.push({
+          "cat_id": product_cate[a]._id,
+          "cat_name": product_cate[a].product_cate,
+          "product_list": []
+        });
+      }
+if(product_list.length !== []){
+
+        for (let f = 0; f < product_list.length; f++) {
+                var stock = [];
+                 stocks.forEach(element => {
+                  // console.log(element);
+                 if(""+element.fish_combo_id == ""+product_list[f].fish_combo_id._id){
+                  stock.push(element);
+                  // console.log(stock);
+                 }
+                 });  
+
+                 let variation_list = [];
+                 product_list[f].variation_list.forEach(element => {
+                  // console.log(element.gross_weight,stock[0].gross_weight,product_list[f].fish_combo_id.product_name)
+                 if(element.gross_weight <= stock[0].gross_weight){
+                  variation_list.push(element);
+                  // console.log(stock);
+                 }
+                 }); 
+                 
+                 if(variation_list.length == 0){
+                   console.log("********",stock[0].gross_weight,product_list[f].fish_combo_id.product_name)
+                 }
+                
+              if(variation_list.length !== 0){
+
+              let k = {
+                "_id": product_list[f]._id,
+                "fish_combo_id": product_list[f].fish_combo_id,
+                "product_img": product_list[f].product_img,
+                "product_title": product_list[f].fish_combo_id.product_name,
+                'thumbnail_image': product_list[f].thumbnail_image || 'https://weknowfreshfish.com/api/uploads/Pic_empty.jpg',
+                "product_price": +product_list[f].cost.toFixed(0),
+                "product_discount": product_list[f].discount,
+                "product_discount_price": +product_list[f].discount_amount.toFixed(0) || 0,
+                "product_rating": product_list[f].product_rating || 5,
+                "product_review": product_list[f].product_review || 0,
+                "product_quantity": 0,
+                "net_weight": product_list[f].net_weight,
+                "gross_weight": product_list[f].gross_weight,
+                "addition_detail": product_list[f].addition_detail,
+                "discription": product_list[f].product_discription,
+                "condition": product_list[f].condition,
+                "unit": product_list[f].unit,
+                "variation_list": variation_list,
+                "customer_information": product_list[f].customer_information,
+                "price_type": product_list[f].price_type,
+                "stock_gross_weight": stock[0]?.gross_weight,
+                "stock_unit": stock[0]?.unit,
+                "stock_price": stock[0]?.price,
+                "category": product_list[f].cat_id
+              }
 
 
+              
+            if(product_list[f].cat_id){
+              Product_details.filter(x=>x.cat_id.toString()==product_list[f].cat_id._id.toString())[0]?.product_list.push(k)
+            }
+
+            }
 
 
+        }
 
+}else{
+  res.status(400).json({ Status: "Failure", Message: "product empty", Code: 400 });
 
+}  
+        
+    }
 
+    let vendor;
+    if (req.body.pincode && req.body.pincode !== "") {
+      vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: req.body.pincode } }, status: true, delete_status: false }, { _id: 1, store: 1 });
+    }
 
-
-
-
-
-
+    res.json({
+      Status: "Success", Message: "product list", Data: {
+        "Product_details": Product_details.product_list,
+        "vendor": vendor
+      }, Code: 200
+    });
+  }
+  catch (ex) {
+    console.log(ex);
+    res.status(500).json({ Status: "Fail", Message: ex.message, Code: 500 });
+  }
+});
 
 module.exports = router;
