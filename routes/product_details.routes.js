@@ -287,7 +287,6 @@ router.post('/mobile/product_list', async function (req, res) {
             }
            
          if(variation_list.length !== 0){
-          console.log("bhbbjhjhjyhgvjhjhgjhgjhjhgghjjjjjjjjjjjjjjjjjjjg-variationlist",variation_list.length);
             let k = {
               "_id": product_list[f]._id,
               "fish_combo_id": product_list[f].fish_combo_id,
@@ -316,7 +315,6 @@ router.post('/mobile/product_list', async function (req, res) {
               "category": product_list[f].cat_id
             }
             if(product_list[f].cat_id){
-              console.log(00000000000000000000000000000000000000000000000000);
             Product_details.push(k);
             }
           }
