@@ -315,19 +315,21 @@ router.post('/mobile/product_list1', async function (req, res) {
               "category": product_list[f].cat_id
             }
             if(product_list[f].cat_id){
-            Product_details.filter(x=>x.cat_id.toString()==product_list[f].cat_id._id.toString())[0]?.product_list.push(k)
+
+              product_details.push(k);
+        
             }
           }
       }
       if(product_list.length !== 0){
         let vendor;
-    if (req.body.pincode && req.body.pincode !== "") {
+    if (req.body.pincode && req.body.pincode !== "") {  
       vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: req.body.pincode } }, status: true, delete_status: false }, { _id: 1, store: 1 });
     }
       res.json({
         Status: "Success", Message: "Product_details List", 
         Data: {
-          "Product_details": product_list,
+          "Product_details": product_details,
           "vendor":vendor
       }, Code: 200
       });
@@ -518,10 +520,6 @@ router.post('/mobile/product_list', async function (req, res) {
   try {   
     var product_cate = await product_categoriesModel.find({ delete_status: false, show_status: true }, { createdAt: 0, updatedAt: 0, __v: 0, delete_status: 0 }).sort({ _id: 1 });
 
-    if(req.body.user_id && req.body.user_id !== ""){
-      const product_cart_pincodes = await product_cart_detailsModel.find({ delete_status: false, user_id: req.body.user_id, pincode: { $exists: true } }, { pincode: 1 });
-      pincodes_list = product_cart_pincodes.filter((item, pos) => product_cart_pincodes.indexOf(item) == pos);
-    }
     var Product_details = [];
     let params = { delete_status: false };
     if (req.body.pincode && req.body.pincode !== "") {
@@ -563,7 +561,7 @@ router.post('/mobile/product_list', async function (req, res) {
           "product_list": []
         });
       }
-if(product_list.length !== []){
+     if(product_list.length !== []){
 
         for (let f = 0; f < product_list.length; f++) {
                 var stock = [];
@@ -642,7 +640,7 @@ if(product_list.length !== []){
 
     res.json({
       Status: "Success", Message: "product list", Data: {
-        "Product_details": Product_details.product_list,
+        "Product_details": Product_details,
         "vendor": vendor
       }, Code: 200
     });
