@@ -239,6 +239,7 @@ router.post('/mobile/product_list', async function (req, res) {
     if (vendors.length === 0) {
       let a = {
         "Product_details": Product_details,
+        "product_cate": product_cate
       }
       res.status(400).json({ Status: "Failed", Message: "Request Failed", Code: 400});
       return;
@@ -256,6 +257,13 @@ router.post('/mobile/product_list', async function (req, res) {
     params.soldout=false;
 
     var product_list = await product_detailsModel.find(params).sort({ _id: -1 }).populate([{ path: "fish_combo_id", select: ["product_name", "code"] }, { path: "cat_id", select: ["product_cate"] }]);
+    for (let a = 0; a < product_cate.length; a++) {
+      Product_details.push({
+        "cat_id": product_cate[a]._id,
+        "cat_name": product_cate[a].product_cate,
+        "product_list": []
+      });
+    }
       for (let f = 0; f < product_list.length; f++) {
             var pro_fav = await Product_favModel.findOne({ user_id: req.body.user_id, product_id: product_list[f]._id, delete_status: false });
 
@@ -513,4 +521,23 @@ router.post('/mobile/recommendation', async function (req, res) {
     });
   }
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = router;
