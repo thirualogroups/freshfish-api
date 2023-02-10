@@ -315,7 +315,7 @@ router.post('/mobile/product_list', async function (req, res) {
               "category": product_list[f].cat_id
             }
             if(product_list[f].cat_id){
-            Product_details.filter(x=>x.cat_id.toString()==product_list[f].cat_id._id.toString())[0]?.product_list.push(k)
+            product_list[f].push(k);
             }
           }
       }
