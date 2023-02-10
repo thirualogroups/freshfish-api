@@ -315,12 +315,13 @@ router.post('/mobile/product_list', async function (req, res) {
               "category": product_list[f].cat_id
             }
             if(product_list[f].cat_id){
-              
+              console.log(00000000000000000000000000000000000000000000000000);
             Product_details.push(k);
             }
           }
+
       }
-      if(product_list.length !== 0){
+      if(Product_details.length !== 0){
         let vendor;
     if (req.body.pincode && req.body.pincode !== "") {
       vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: req.body.pincode } }, status: true, delete_status: false }, { _id: 1, store: 1 });
