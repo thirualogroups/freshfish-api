@@ -315,7 +315,8 @@ router.post('/mobile/product_list', async function (req, res) {
               "category": product_list[f].cat_id
             }
             if(product_list[f].cat_id){
-            Product_details.product_list.push(k);
+              
+            Product_details.push(k);
             }
           }
       }
@@ -327,7 +328,7 @@ router.post('/mobile/product_list', async function (req, res) {
       res.json({
         Status: "Success", Message: "Product_details List", 
         Data: {
-          "Product_details": product_list,
+          "Product_details": Product_details,
           "vendor":vendor
       }, Code: 200
       });
