@@ -149,7 +149,7 @@ console.log("stock_values",stock_values);
 
           order_detailsModel.findByIdAndUpdate(req.body._id,final_order, {new: true}, function (err, UpdatedDetails) {
             if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
-              res.json({Status:"Success",Message:"order  Updated", Data : UpdatedDetails ,Code:200});
+              res.json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200});
             });
 
         //   const user = await userdetailsModel.findOne({_id: req.body.user_id });
@@ -161,7 +161,7 @@ console.log("stock_values",stock_values);
         //     console.error(err,"sms not sent");
         //   });
         // }
-          res.json({ Status: "Success", Message: "Order Added successfully", Data: order, Code: 200 });
+          //res.json({ Status: "Success", Message: "Order Added successfully", Data: order, Code: 200 });
       }
   catch (e) {
     console.log(e);
