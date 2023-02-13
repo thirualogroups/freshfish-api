@@ -163,10 +163,10 @@ router.post('/cancel_order', async function (req, res) {
     let live_orders= await order_detailsModel.findOne({_id:req.body.order_id});
 
     console.log("live_orders",live_orders);
-    
+
           for (let item of live_orders.order_details) {
 
-             var stock_values = await stockModel.find({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(pending_order.store)});
+             var stock_values = await stockModel.find({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(live_orders.store)});
 
              let datas =  {
                 gross_weight : (stock_values[0].gross_weight + (parseFloat(item.gross_weight))).toFixed(2)
@@ -443,7 +443,7 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
 });
 
 router.post('/getlist/pendingorders', async function (req, res) {
-  let filter_params = { delete_status: false,user_type:1,payment_status:"pending"};
+  let filter_params = { delete_status: false,user_type:1,payment_status:req.body.payment_status};
   
   if (req.body.userid && req.body.userid !== "") {
     filter_params.user_id = new mongoose.Types.ObjectId(req.body.userid);
