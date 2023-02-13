@@ -114,7 +114,8 @@ router.post('/create', async function (req, res) {
 
 router.post('/update_order', async function (req, res) {
   try {
-    let pending_order=order_detailsModel.find({_id:req.body.orderid});
+    let pending_order=order_detailsModel.find({_id:new mongoose.Types.ObjectId(req.body.orderid)});
+     console.log("pending orders",pending_order);
     for(let item of pending_order.order_details){
       let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(pending_order.store), status: true, delete_status: false, soldout: false,  gross_weight: {$gte: item.gross_weight} };
       let stock = await stockModel.findOne(stock_params);
@@ -147,7 +148,7 @@ router.post('/update_order', async function (req, res) {
 
           order_detailsModel.findByIdAndUpdate(req.body._id,final_order, {new: true}, function (err, UpdatedDetails) {
             if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
-              res.json({Status:"Success",Message:"product categories screen  Updated", Data : UpdatedDetails ,Code:200});
+              res.json({Status:"Success",Message:"order  Updated", Data : UpdatedDetails ,Code:200});
             });
 
         //   const user = await userdetailsModel.findOne({_id: req.body.user_id });
