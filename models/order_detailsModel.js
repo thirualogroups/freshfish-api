@@ -22,7 +22,7 @@ var order_detailSchema = new mongoose.Schema({
       required: [true, "product_id field is mandatory"]
     },
     product_name:{
-      type:Number,
+      type:String,
       required:[true,"product name is mandatory"]
     },
     fish_combo_id: {
