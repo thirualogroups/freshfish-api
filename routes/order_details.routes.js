@@ -114,7 +114,7 @@ router.post('/create', async function (req, res) {
 
 router.post('/update_order', async function (req, res) {
   try {
-    let pending_order= await order_detailsModel.find({_id:req.body.orderid});
+    let pending_order= await order_detailsModel.findOne({_id:req.body.orderid});
     console.log("pending orders",pending_order);
     for(let item of pending_order.order_details){
       let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(pending_order.store), status: true, delete_status: false, soldout: false,  gross_weight: {$gte: item.gross_weight} };
