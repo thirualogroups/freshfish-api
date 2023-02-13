@@ -124,7 +124,8 @@ router.post('/update_order', async function (req, res) {
         return res.status(400).json({Status:"Fail", Message: req.body.product_name + " has less/no stock.", Code: 400}); 
       }
     }
-        
+    
+    console.log("order_details",pending_order.order_details);
    
           for (let item of pending_order.order_details) {
 
