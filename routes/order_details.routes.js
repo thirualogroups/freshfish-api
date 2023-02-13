@@ -161,6 +161,9 @@ router.post('/cancel_order', async function (req, res) {
 
   try {
     let live_orders= await order_detailsModel.findOne({_id:req.body.order_id});
+
+    console.log("live_orders",live_orders);
+    
           for (let item of live_orders.order_details) {
 
              var stock_values = await stockModel.find({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(pending_order.store)});
@@ -180,8 +183,8 @@ router.post('/cancel_order', async function (req, res) {
           }
           console.log("updated stocks",UpdatedDetails);
           if(UpdatedDetails !==[]){
-            let status_params={order_status:req.body.order_status,payment_status:req.body.payment_status}
-            await order_detailsModel.findByIdAndUpdate(req.body.order_id,status_params,{new: true}, function (err, UpdatedDetails) {
+            
+            await order_detailsModel.findByIdAndUpdate(req.body.order_id,req.body,{new: true}, function (err, UpdatedDetails) {
               if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
               else return res.status(200).json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200})
               });
