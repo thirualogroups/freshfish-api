@@ -147,7 +147,7 @@ console.log("stock_values",stock_values);
 
           let final_order={payment_id: req.body.payment_id,payment_status:req.body.payment_status};
 
-          order_detailsModel.findByIdAndUpdate(req.body._id,final_order, {new: true}, function (err, UpdatedDetails) {
+          order_detailsModel.findByIdAndUpdate(req.body.orderid,final_order, {new: true}, function (err, UpdatedDetails) {
             if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
               res.json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200});
             });
