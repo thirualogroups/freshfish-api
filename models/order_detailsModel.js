@@ -21,6 +21,10 @@ var order_detailSchema = new mongoose.Schema({
       ref: "product_details",
       required: [true, "product_id field is mandatory"]
     },
+    product_name:{
+      type:Number,
+      required:[true,"product name is mandatory"]
+    },
     fish_combo_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "fish_combo_master",
