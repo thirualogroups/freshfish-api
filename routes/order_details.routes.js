@@ -124,13 +124,13 @@ router.post('/update_order', async function (req, res) {
         return res.status(400).json({Status:"Fail", Message: req.body.product_name + " has less/no stock.", Code: 400}); 
       }
     }
-    
+
     console.log("order_details",pending_order.order_details);
    
           for (let item of pending_order.order_details) {
 
              var stock_values = await stockModel.find({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(item.store)});
-
+console.log("stock_values",stock_values);
              let datas =  {
                 gross_weight : (stock_values[0].gross_weight - (parseFloat(item.gross_weight))).toFixed(2)
              }
