@@ -75,7 +75,7 @@ app.use((req, res, next) => {
 
 
 
-app.post('/api/upload', function (req, res) {
+app.post('/upload', function (req, res) {
   let sampleFile;
   let uploadPath;
   if (!req.files || Object.keys(req.files).length === 0) {
