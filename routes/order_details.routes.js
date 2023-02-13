@@ -181,15 +181,12 @@ router.post('/cancel_order', async function (req, res) {
 
             // await stockModel.updateOne({ _id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(item.store) }, { gross_weight: { $inc: - (parseFloat(item.gross_weight)) } });
           }
-          console.log("updated stocks",UpdatedDetails);
-          if(UpdatedDetails !==[]){
+
             
             await order_detailsModel.findByIdAndUpdate(req.body.order_id,req.body,{new: true}, function (err, UpdatedDetails) {
               if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
               else return res.status(200).json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200})
               });
-          
-          }
 
       }
   catch (e) {
