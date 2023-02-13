@@ -119,10 +119,10 @@ router.post('/update_order', async function (req, res) {
       let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(pending_order.store), status: true, delete_status: false, soldout: false,  gross_weight: {$gte: item.gross_weight} };
       let stock = await stockModel.findOne(stock_params);
       if(stock == null){
-        return res.status(400).json({Status:"Fail", Message: req.body.product_name + " has less/no stock.", Code: 400}); 
+        return res.status(400).json({Status:"Fail", Message: item.product_name + " has less/no stock.", Code: 400}); 
       }
     }
-
+ 
    
           for (let item of pending_order.order_details) {
 
