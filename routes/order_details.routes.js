@@ -72,7 +72,60 @@ router.post('/create', async function (req, res) {
         if (err) res.json({ Status: "Fail", Message: err.message, Code: 400 });
          
         else {
-          for (let item of req.body.order_details) {
+          res.json({ Status: "Success", Message: "Order Added successfully", Data: order, Code: 200 });
+        //   for (let item of req.body.order_details) {
+
+        //      var stock_values = await stockModel.find({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(item.store)});
+
+        //      let datas =  {
+        //         gross_weight : (stock_values[0].gross_weight - (parseFloat(item.gross_weight))).toFixed(2)
+        //      }
+
+        //      stockModel.findByIdAndUpdate(stock_values[0]._id, datas, {new: true}, function (err, UpdatedDetails) {
+        //     if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
+        //      // res.json({Status:"Success",Message:"product categories screen  Updated", Data : UpdatedDetails ,Code:200});
+        //     });
+
+
+
+        //     // await stockModel.updateOne({ _id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(item.store) }, { gross_weight: { $inc: - (parseFloat(item.gross_weight)) } });
+        //   }
+        //   var carts = await product_cart_detailsModel.find({ user_id: req.body.user_id, product_id: { $in: req.body.order_details.map(x => x.product_id) } });
+        //   if (carts !== null) carts.forEach(async cart => { console.log("cart-id", cart._id); await product_cart_detailsModel.findByIdAndRemove(cart._id, (err, res) => { console.log(err); console.log(res); }) });
+
+        // //   const user = await userdetailsModel.findOne({_id: req.body.user_id });
+        // //   if(user!=null){
+        // //   const message = `Dear ${user.first_name+ " "+user.last_name}, Thank you for your order. Your Inv.# ${order_id}, Amt Rs.${req.body.order_final_amount}. -We Know How To Choose Fresh Fish`;
+        // //   await global.send_sms(user.user_phone, message,"1607100000000220475").then(response=>{
+        // //     console.log("order sms sent")
+        // //   }).catch(err=>{
+        // //     console.error(err,"sms not sent");
+        // //   });
+        // // }
+        //   res.json({ Status: "Success", Message: "Order Added successfully", Data: order, Code: 200 });
+        }
+      });
+  }
+  catch (e) {
+    console.log(e);
+    res.status(500).json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
+  }
+});
+
+router.post('/update_order', async function (req, res) {
+  try {
+    let pending_order=order_detailsModel.find({_id:req.body.orderid});
+    for(let item of pending_order.order_details){
+      let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(pending_order.store), status: true, delete_status: false, soldout: false,  gross_weight: {$gte: item.gross_weight} };
+      let stock = await stockModel.findOne(stock_params);
+      console.log("stock_params",stock_params);
+      if(stock == null){
+        return res.status(400).json({Status:"Fail", Message: req.body.product_name + " has less/no stock.", Code: 400}); 
+      }
+    }
+        
+   
+          for (let item of pending_order.order_details) {
 
              var stock_values = await stockModel.find({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(item.store)});
 
@@ -89,8 +142,13 @@ router.post('/create', async function (req, res) {
 
             // await stockModel.updateOne({ _id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(item.store) }, { gross_weight: { $inc: - (parseFloat(item.gross_weight)) } });
           }
-          var carts = await product_cart_detailsModel.find({ user_id: req.body.user_id, product_id: { $in: req.body.order_details.map(x => x.product_id) } });
-          if (carts !== null) carts.forEach(async cart => { console.log("cart-id", cart._id); await product_cart_detailsModel.findByIdAndRemove(cart._id, (err, res) => { console.log(err); console.log(res); }) });
+
+          let final_order={payment_id: req.body.payment_id,payment_status:req.body.payment_status};
+
+          order_detailsModel.findByIdAndUpdate(req.body._id,final_order, {new: true}, function (err, UpdatedDetails) {
+            if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
+              res.json({Status:"Success",Message:"product categories screen  Updated", Data : UpdatedDetails ,Code:200});
+            });
 
         //   const user = await userdetailsModel.findOne({_id: req.body.user_id });
         //   if(user!=null){
@@ -102,62 +160,12 @@ router.post('/create', async function (req, res) {
         //   });
         // }
           res.json({ Status: "Success", Message: "Order Added successfully", Data: order, Code: 200 });
-        }
-      });
-  }
+      }
   catch (e) {
     console.log(e);
     res.status(500).json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
   }
 });
-// router.post('/update_order', async function (req, res) {
-//   try {
-//     for(let item of req.body.order_details){
-//       let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(req.body.store), status: true, delete_status: false, soldout: false,  gross_weight: {$gte: item.gross_weight} };
-//       let stock = await stockModel.findOne(stock_params);
-//       console.log("stock_params",stock_params);
-//       if(stock == null){
-//         return res.status(400).json({Status:"Fail", Message: req.body.product_name + " has less/no stock.", Code: 400}); 
-//       }
-//     }
-
-   
-//           for (let item of req.body.order_details) {
-
-//              var stock_values = await stockModel.find({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(item.store)});
-
-//              let datas =  {
-//                 gross_weight : (stock_values[0].gross_weight - (parseFloat(item.gross_weight))).toFixed(2)
-//              }
-
-//              stockModel.findByIdAndUpdate(stock_values[0]._id, datas, {new: true}, function (err, UpdatedDetails) {
-//             if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
-//              // res.json({Status:"Success",Message:"product categories screen  Updated", Data : UpdatedDetails ,Code:200});
-//             });
-
-
-
-//             // await stockModel.updateOne({ _id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(item.store) }, { gross_weight: { $inc: - (parseFloat(item.gross_weight)) } });
-//           }
-//           var carts = await product_cart_detailsModel.find({ user_id: req.body.user_id, product_id: { $in: req.body.order_details.map(x => x.product_id) } });
-//           if (carts !== null) carts.forEach(async cart => { console.log("cart-id", cart._id); await product_cart_detailsModel.findByIdAndRemove(cart._id, (err, res) => { console.log(err); console.log(res); }) });
-
-//         //   const user = await userdetailsModel.findOne({_id: req.body.user_id });
-//         //   if(user!=null){
-//         //   const message = `Dear ${user.first_name+ " "+user.last_name}, Thank you for your order. Your Inv.# ${order_id}, Amt Rs.${req.body.order_final_amount}. -We Know How To Choose Fresh Fish`;
-//         //   await global.send_sms(user.user_phone, message,"1607100000000220475").then(response=>{
-//         //     console.log("order sms sent")
-//         //   }).catch(err=>{
-//         //     console.error(err,"sms not sent");
-//         //   });
-//         // }
-//           res.json({ Status: "Success", Message: "Order Added successfully", Data: order, Code: 200 });
-//       }
-//   catch (e) {
-//     console.log(e);
-//     res.status(500).json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
-//   }
-// });
 
 
 
