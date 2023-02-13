@@ -24,7 +24,7 @@ router.post('/create', async function (req, res) {
       let stock = await stockModel.findOne(stock_params);
       console.log("stock_params",stock_params);
       if(stock == null){
-        return res.status(400).json({Status:"Fail", Message: req.body.product_name + " has less/no stock.", Code: 400}); 
+        return res.status(400).json({Status:"Fail", Message:item.product_name + " has less/no stock.", Code: 400}); 
       }
     }
 
