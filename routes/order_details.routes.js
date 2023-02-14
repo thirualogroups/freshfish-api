@@ -174,7 +174,7 @@ router.post('/update_order', async function (req, res) {
 router.post('/cancel_order', async function (req, res) {
 
   try {
-    let live_orders= await order_detailsModel.findOne({_id:req.body.order_id});
+    let live_orders= await order_detailsModel.findOne({_id:req.body.orderid});
 
     console.log("live_orders",live_orders);
 
@@ -197,7 +197,7 @@ router.post('/cancel_order', async function (req, res) {
           }
 
             
-            await order_detailsModel.findByIdAndUpdate(req.body.order_id,req.body,{new: true}, function (err, UpdatedDetails) {
+            await order_detailsModel.findByIdAndUpdate(req.body.orderid,req.body,{new: true}, function (err, UpdatedDetails) {
               if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
               else return res.status(200).json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200})
               });
