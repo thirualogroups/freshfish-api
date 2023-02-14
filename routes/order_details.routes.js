@@ -119,10 +119,8 @@ router.post('/post_order', async function (req, res) {
           if(user!=null){
           const message = `Dear ${user.first_name+ " "+user.last_name}, Thank you for your order. Your Inv.# ${req.body.order_detials}, Amt Rs.${req.body.order_final_amount}. -We Know How To Choose Fresh Fish`;
           await global.send_sms(user.user_phone, message,"1607100000000220475").then(response=>{
-            
+            res.json({Status:"Success",Message:"order updated", Data : response ,Code:200});
             console.log("order sms sent")
-            res.json({Status:"Success",Message:"order updated",Code:200});
-
           }).catch(err=>{
             console.error(err,"sms not sent");
           });
