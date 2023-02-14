@@ -113,6 +113,19 @@ router.post('/create', async function (req, res) {
   }
 });
 
+
+router.post('/post_order', async function (req, res) {
+  const user = await userdetailsModel.findOne({_id: req.body.user_id });
+          if(user!=null){
+          const message = `Dear ${user.first_name+ " "+user.last_name}, Thank you for your order. Your Inv.# ${req.body.order_detials}, Amt Rs.${req.body.order_final_amount}. -We Know How To Choose Fresh Fish`;
+          await global.send_sms(user.user_phone, message,"1607100000000220475").then(response=>{
+            console.log("order sms sent")
+          }).catch(err=>{
+            console.error(err,"sms not sent");
+          });
+        }
+});
+
 router.post('/update_order', async function (req, res) {
   try {
     let pending_order= await order_detailsModel.findOne({_id:req.body.orderid});
