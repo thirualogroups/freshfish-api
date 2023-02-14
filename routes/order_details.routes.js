@@ -270,6 +270,9 @@ if (params.limit) {
 if(params.order_status){
   filter_params.order_status=params.order_status;
 }
+if(params.payment_status){
+  filter_params.payment_status=params.payment_status;
+}
 if (params.status) {
   filter_params.order_status = { $in: params.status.split(",") };
 }
@@ -1251,6 +1254,28 @@ router.get("/paytm_fail", (req, res)=>{
 
 });
 
+router.post('/whatsapp', function (req, res) {
+
+  try {
+    const accountSid = 'AC980808aecd5f5ae9dee31100d9631995'; 
+    const authToken = 'c33ea99c768280c8b99d5ad73418ee58'; 
+    const client = require('twilio')(accountSid, authToken); 
+     
+    client.messages 
+          .create({ 
+             body: 'Your appointment is coming up on July 21 at 3PM', 
+             from: 'whatsapp:+917448415683',       
+             to: 'whatsapp:+919025357041' 
+           }) 
+          .then(message => console.log(message.sid)) 
+    }
+    catch (ex) {
+        console.log(ex);
+        res.json({ Status: "Failed", Message: ex.message, Code: 500 });
+    }
+
+
+});
 
 
 ///////////////////
