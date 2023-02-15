@@ -608,8 +608,9 @@ router.post('/getlist/order_id', async function (req, res) {
  });
 
  router.post('/getlist/vendor_id', async function (req, res) {
+  console.log("req.body",req.body);
 
-  let vendor= await product_vendorModel.find({user_id:req.body.user_id});
+  let vendor= await product_vendorModel.findOne({user_id:req.body.user_id});
 
   console.log("vendorrrrrrrrrrrr",vendor);
   
