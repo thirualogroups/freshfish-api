@@ -183,7 +183,20 @@ router.post('/agent/create', async function (req, res){
     res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
   }
 });
+router.post('/agent/update',async function (req, res){
+  let a={
+    agent:req.body.agent
 
+  };
+
+  await userdetailsModel.findByIdAndUpdate(req.body.user_id,a,{new:true},function (err, user) {
+    console.log(err);
+   if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
+   res.json({ Status: "Success", Message: "User Details Added Successfully", Data: user, Code: 200 });
+   });
+
+
+});
 
 
 
