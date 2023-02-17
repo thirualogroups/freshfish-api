@@ -700,8 +700,8 @@ router.post('/callbackurl',async function (req, res) {
              console.log("********transaction_logsModel***********",info);
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
                 //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
-              var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
-              //var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
+              //var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
+              var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
 
                 res.write(
                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
@@ -1201,7 +1201,7 @@ router.post('/callbackurl_link',async function (req, res) {
     console.log("********",req.body);
     console.log("********9999******",req.params);
    try {
-        transaction_logsModel.create({
+        transaction_logsModel.create({  
             order_id: ""+req.body.ORDERID,
             currency: ""+req.body.CURRENCY,
             txnamount: ""+req.body.TXNAMOUNT,
@@ -1263,7 +1263,7 @@ router.post('/whatsapp', function (req, res) {
     const accountSid = 'AC980808aecd5f5ae9dee31100d9631995'; 
     const authToken = 'c33ea99c768280c8b99d5ad73418ee58'; 
     const client = require('twilio')(accountSid, authToken); 
-     
+  
     client.messages 
           .create({ 
              body: 'Your appointment is coming up on July 21 at 3PM', 
@@ -1271,11 +1271,11 @@ router.post('/whatsapp', function (req, res) {
              to: 'whatsapp:+919025357041' 
            }) 
           .then(message => console.log(message.sid)) 
-    }
+  }
     catch (ex) {
         console.log(ex);
         res.json({ Status: "Failed", Message: ex.message, Code: 500 });
-    }
+  }
 
 
 });
