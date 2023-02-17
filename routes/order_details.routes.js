@@ -457,7 +457,7 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
 });
 
 router.post('/getlist/pendingorders', async function (req, res) {
-  let filter_params = { delete_status: false,user_type:1,payment_status:req.body.payment_status};
+  let filter_params = { delete_status: false,payment_status:req.body.payment_status};
   
   if (req.body.userid && req.body.userid !== "") {
     filter_params.user_id = new mongoose.Types.ObjectId(req.body.userid);
