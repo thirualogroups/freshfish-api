@@ -374,6 +374,9 @@ if (req.body.limit) {
 if(req.body.order_status){
   filter_params.order_status=req.body.order_status;
 }
+if(req.body.payment_status){
+  filter_params.payment_status=req.body.payment_status;
+}
 if (req.body.status) {
   filter_params.order_status = { $in: req.body.status.split(",") };
 }
