@@ -607,30 +607,108 @@ router.post('/getlist/order_id', async function (req, res) {
    
  });
 
- router.post('/getlist/vendor_id', async function (req, res) {
-  console.log("req.body",req.body);
+ router.post('/getlist/vendor_id', async function (req,res) {
+  let filter_params = { delete_status: false };
+  filter_params.user_type=3;
+  console.log("params",filter_params);
+  if (req.body.userid && req.body.userid !== "") {
+    filter_params.user_id = new mongoose.Types.ObjectId(req.body.userid);
+  }
+  /*else if(!params.id){
+    return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
+   }*/
+   let vendor= await product_vendorModel.findOne({user_id:req.body.user_id});
+let skip = 0, limit = 50, sort = {_id:-1};
+if (req.body.skip) {
+  skip = req.body.skip;
+}
+if (req.body.limit) {
+  limit = req.body.limit;
+}
+if(req.body.order_status){
+  filter_params.order_status=req.body.order_status;
+}
+if (req.body.status) {
+  filter_params.order_status = { $in: req.body.status.split(",") };
+}
+if (req.body.id) {
+  filter_params._id = req.body.id;
+}
+if(req.body.start_date && req.body.end_date){
+  filter_params.order_booked_at = {$gte: new Date(req.body.start_date), $lte: new Date(req.body.end_date+"T23:59:59") }; 
+}
+else if (req.body.start_date){
+  filter_params.order_booked_at = {$gte: new Date(req.body.start_date) }; 
+}
+else if (req.body.end_date){
+  filter_params.order_booked_at = {$lte: new Date(req.body.end_date+"T23:59:59") }; 
+}
+if(req.body.order_date){
+  filter_params.order_booked_at = {$gte: new Date(req.body.order_date), $lte: new Date(req.body.order_date+"T23:59:59") }; 
+}
+if(req.body.order_id){
+  filter_params.order_id = req.body.order_id;
+}
+if(req.body.store){
+  filter_params.store =  req.body.store;
+}
+if(vendor._id){
+  filter_params.vendor_id =vendor._id;
+}
+if(req.body.delivery_date){
+  filter_params.slot_date = req.body.delivery_date;
+}
+if(req.body.delivery_slot){
+  filter_params.slot_time = req.body.slot_time;
+}
+if(req.body.delivery_status){
+  filter_params.order_deliver_status = req.body.delivery_status;
+}
+if(req.body.payment_method){
+  filter_params.payment_method = req.body.payment_method;
+}
+if(req.body.user_id){
+  filter_params.user_id = req.body.user_id;
+}
+let count = 0;
+if (skip == 0) {
+ count = await order_detailsModel.countDocuments({ params: filter_params });
+}
 
-  let vendor= await product_vendorModel.findOne({user_id:req.body.user_id});
 
-  console.log("vendorrrrrrrrrrrr",vendor);
-  let sort={ _id:1 };
-  
-  let your_order= await order_detailsModel.find({vendor_id:vendor._id,user_type: 3},{sort: sort}).populate([{ path: "user_id", select: ["first_name", "middle_name", "last_name", "user_email", "user_phone", "user_address"] },{path: "store", select: ["name","phoneno","email","location","type","address","code"] },
-  { path: "vendor_id", select: ["business_name", "code", "store"], populate: [{ path: "store", select: ["name", "phoneno", "email"] }] },
-  { path: "order_details.product_id", select: ["fish_combo_id", "unit", "price_type", "min_net_weight", "max_net_weight", "gross_weight", "cost", "discount_amount", "cat_id", "thumbnail_image", "product_img"], populate: [{ path: "fish_combo_id", select: ["product_name"] }, { path: "cat_id", select: ["product_cate"] }] }, { path: "shippingid" }]);
+console.log("filter_params",filter_params);
 
- if(your_order!==null){
- 
-   res.json({ Status: "Success", Message: "vendor order details", Data: your_order, Code: 200 });
- 
- }else{
- 
-   res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
- 
- } 
-   
+order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, skip: skip, limit: limit }, function (err, list) {
+  if (err) res.json({ Status: "Fail", Message: "Some internal error", Data: err.message, Code: 500 });
+  if (req.body.id) {
+    res.json({ Status: "Success", Message: " type Details", Data: list.length > 0 ? list[0] : {}, Count: count, Code: 200 });
+  } else {
+
+
+
+    if(req.body.phone){
+      list = list.filter(x=>x.user_id.user_phone.match(new RegExp(req.body.phone,"gi")));
+    }
+    if(req.body.username){
+      list = list.filter(x=>x.user_id.first_name.match(new RegExp(req.body.username,"gi")));
+    }
+    if(req.body.productname){
+      list = list.filter(x=>x.order_detials.filter(x1=>x1.product_id.fish_combo_id.product_name.match(new RegExp(req.body.productname,"gi")).length>0));
+    }
+    if(req.body.store){
+      list = list.filter(x=>x.store.name.match(new RegExp(req.body.store,"gi")));
+    }
+    if(req.body.agentname){
+      list = list.filter(x=>x.vendor_id.user_name.match(new RegExp(req.body.agentname,"gi")));
+    }
+
+    res.json({ Status: "Success", Message: " type Details", Data: list, Count: count, Code: 200 });
+  }
+}).populate([{ path: "user_id", select: ["first_name", "middle_name", "last_name", "user_email", "user_phone", "user_address"] },{path: "store", select: ["name","phoneno","email","location","type","address","code"] },
+{ path: "vendor_id", select: ["business_name", "code","user_name",], populate: [{ path: "store", select: ["name", "phoneno", "email"] }]  },
+{ path: "order_details.product_id", select: ["fish_combo_id", "unit", "price_type", "min_net_weight", "max_net_weight", "gross_weight", "cost", "discount_amount", "cat_id", "thumbnail_image", "product_img"], populate: [{ path: "fish_combo_id", select: ["product_name"] }, { path: "cat_id", select: ["product_cate"] }] }, { path: "shippingid" }]);
  });
-
+  
  router.post('/mobile/completed_order', async function (req, res) {
 
   completed_order= await order_detailsModel.find({ user_id: req.body.user_id,order_status: "Delivered",delete_status:false});
