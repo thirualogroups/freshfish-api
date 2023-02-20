@@ -11,7 +11,12 @@ const stockModel = require("./../models/stockModel");
 const fav_listModel=require("./../models/fav_listModel");
 const cart_detailsModel = require('../models/cart_detailsModel');
 const product_vendorModel = require('./../models/product_vendorModel');
+var admin= require("firebase-admin");
+var fcm =require("fcm-notification");
 
+var serviceAccount = require("../config/push-notification-key.json");
+const certpath =admin.credential.cert(serviceAccount);
+var FCM = new fcm(certpath);
 
 
 ////////////////// Admin User /////////////////////////
@@ -352,10 +357,39 @@ router.post('/check_checkout_stock',async function (req, res) {
   }
 });
 
+router.post('/mobile/push-notification',async function (req, res) {
+try{
 
+  let message = {
+      notification:{
+          title:"test notification",
+          body:"Notification Message"
+      },
+      data:{
+          orderId:"123456",
+          order_date:"20.20.20"
+      },
+      token:req.body.fcm_token,
+  };
+  FCM.send(message,function(err,resp){
 
+      if(err){
+          return res.status(500).send({message: err});
+      }else{
+          return res.status(200).send({
+              message: "Notification sent"
 
+          });
+      }
+  });
 
+}
+catch(err){
+  throw(err);
+
+}
+
+});
 
 
 
