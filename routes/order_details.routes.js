@@ -667,9 +667,6 @@ if(req.body.delivery_status){
 if(req.body.payment_method){
   filter_params.payment_method = req.body.payment_method;
 }
-if(req.body.user_id){
-  filter_params.user_id = req.body.user_id;
-}
 let count = 0;
 if (skip == 0) {
  count = await order_detailsModel.countDocuments({ params: filter_params });
