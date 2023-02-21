@@ -11,6 +11,7 @@ const stockModel = require("./../models/stockModel");
 const fav_listModel=require("./../models/fav_listModel");
 const cart_detailsModel = require('../models/cart_detailsModel');
 const product_vendorModel = require('./../models/product_vendorModel');
+const userdetailsModel=require('./../models/userdetailsModel');
 var admin= require("firebase-admin");
 var fcm =require("fcm-notification");
 
@@ -357,7 +358,16 @@ router.post('/check_checkout_stock',async function (req, res) {
    }
   }
 });
-
+router.post('/mobile/fcm_update',async function (req, res) {
+    if (req.body.user_id) {
+    userdetailsModel.findByIdAndUpdate(req.body.user_id, req.body, { new: true }, function (err, UpdatedDetails) {
+      if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
+      res.json({ Status: "Success", Message: "User Details Updated Successfully", Data: UpdatedDetails, Code: 200 });
+    });
+  }else{
+    return res.status(400).json({ Status: "Failed", Message: "User Details Not Fount", Data: {}, Code: 400 });
+  }
+});
 router.post('/mobile/push-notification',async function (req, res) {
 try{
 
