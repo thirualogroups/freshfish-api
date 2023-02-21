@@ -766,9 +766,12 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
 //////Payment & Call back funcation /////
 
 router.post('/callbackurl',async function (req, res) {
+  console.log("request",req);
     console.log("********",req.body);
     console.log("********9999******",req.params);
    try {
+    const order_id = app.get("orderid");
+    console.log("================order_id=========================",order_id);
         transaction_logsModel.create({
             order_id: ""+req.body.ORDERID,
             currency: ""+req.body.CURRENCY,
@@ -910,6 +913,7 @@ router.post("/payment_initiate", async function (req, res) {
  router.post("/payment_initiate_one", async function (req, res) {
    try {
     req.body.amount = 1;
+    app.set("orderid",req.body.orderid);
        const https = require('https');
        const PaytmChecksum = require('paytmchecksum');
        let credentials = paytm_credentials();
