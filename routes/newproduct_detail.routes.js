@@ -158,6 +158,7 @@ router.get('/mobile/get_favlist', async function (req, res) {
   let params = {user_id:req.query.user_id,fav_status:true};
   let fav_list= await fav_listModel.find(params).populate('product_details_id');
   var stock_list=[];
+  console.log("favlist",fav_list);
   for(let item of fav_list){  
   let stock_params = {store:new mongoose.Types.ObjectId(req.query.store),fish_combo_id: new mongoose.Types.ObjectId(item.product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false };
   console.log("stock_params",stock_params);
