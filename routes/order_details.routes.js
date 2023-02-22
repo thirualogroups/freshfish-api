@@ -770,7 +770,6 @@ router.post('/callbackurl',async function (req, res) {
     console.log("********",req.body);
     console.log("********9999******",req.params);
    try {
-    const order_id = app.get("orderid");
     console.log("================order_id=========================",order_id);
         transaction_logsModel.create({
             order_id: ""+req.body.ORDERID,
@@ -913,7 +912,6 @@ router.post("/payment_initiate", async function (req, res) {
  router.post("/payment_initiate_one", async function (req, res) {
    try {
     req.body.amount = 1;
-    app.set("orderid",req.body.orderid);
        const https = require('https');
        const PaytmChecksum = require('paytmchecksum');
        let credentials = paytm_credentials();
@@ -1343,20 +1341,17 @@ router.get("/paytm_fail", (req, res)=>{
 
 });
 
-router.post('/whatsapp', function (req, res) {
+router.post('/pendingupdate', function (req, res) {
 
   try {
-    const accountSid = 'AC980808aecd5f5ae9dee31100d9631995'; 
-    const authToken = 'c33ea99c768280c8b99d5ad73418ee58'; 
-    const client = require('twilio')(accountSid, authToken); 
-  
-    client.messages 
-          .create({ 
-             body: 'Your appointment is coming up on July 21 at 3PM', 
-             from: 'whatsapp:+14155238886',       
-             to: 'whatsapp:+919025357041' 
-           }) 
-          .then(message => console.log(message.sid)) 
+    let dt = new Date();
+     dt = new Date(dt.setHours(dt.getHours()+(24)));
+     const date = require('date-and-time');
+     const now1  =  new Date(dt);
+     now1.setDate(now1.getDate());
+     const value1 = date.format(now1,'DD/MM/YYYY HH:MM')
+     console.log(value1);
+
   }
     catch (ex) {
         console.log(ex);
