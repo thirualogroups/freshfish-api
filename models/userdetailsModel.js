@@ -15,7 +15,6 @@ var userdetailsSchema = new mongoose.Schema({
   user_type: Number,
   user_status: String,
   fb_token: String,
-  fcm_token:String,
   device_id: String,
   device_type: String,
   mobile_type: String,
