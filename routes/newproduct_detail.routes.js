@@ -379,8 +379,6 @@ if(req.body.order_status='Booked'){
           body:"Hi"+req.body.username+",your order"+req.body.order_id+"is placed successfully"
       },
       data:{
-          orderId:req.body.order_id,
-          order_details:req.body.order_details
       },
       token:req.body.fcm_token,
   };
@@ -395,100 +393,101 @@ if(req.body.order_status='Booked'){
           });
       }
   });
-}else if(req.body.order_status='accepted'){
-  let message = {
-      notification:{
-          title:"Order Accepted",
-          body:"Hi"+req.body.username+",your order"+req.body.order_id+"has been Accepted"
-      },
-      data:{
-          orderId:req.body.order_id,
-          order_details:req.body.order_details
-      },
-      token:req.body.fcm_token,
-  };
-  FCM.send(message,function(err,resp){
-
-      if(err){
-          return res.status(500).send({message: err});
-      }else{
-          return res.status(200).send({
-              message: "Notification sent successfully"
-
-          });
-      }
-  });
-}else if(req.body.order_status='delivered'){
-  let message = {
-    notification:{
-        title:"Order Delivered successfully",
-        body:"Hi"+req.body.username+",your order "+req.body.order_id+"has been delivered"
-    },
-    data:{
-        orderId:req.body.order_id,
-        order_details:req.body.order_details
-    },
-    token:req.body.fcm_token,
-};
-FCM.send(message,function(err,resp){
-
-    if(err){
-        return res.status(500).send({message: err});
-    }else{
-        return res.status(200).send({
-            message: "Notification sent successfully"
-
-        });
-    }
-});
-}else if(req.body.order_status='canceled'){
-  let message = {
-    notification:{
-        title:"Order cancelled",
-        body:"Hi"+req.body.username+",your order "+req.body.order_id+"has been cancelled"
-    },
-    data:{
-        orderId:req.body.order_id,
-        order_details:req.body.order_details
-    },
-    token:req.body.fcm_token,
-};
-FCM.send(message,function(err,resp){
-
-    if(err){
-        return res.status(500).send({message: err});
-    }else{
-        return res.status(200).send({
-            message: "Notification sent successfully"
-
-        });
-    }
-});
 }
-else if(req.body.order_status='out for delivery'){
-  let message = {
-    notification:{
-        title:"Out for delivery",
-        body:"Hi"+req.body.username+",your order"+req.body.order_id+" is out for delivery"
-    },
-    data:{
-        orderId:req.body.order_id,
-        order_details:req.body.order_details
-    },
-    token:req.body.fcm_token,
-};
-FCM.send(message,function(err,resp){
+// }else if(req.body.order_status='accepted'){
+//   let message = {
+//       notification:{
+//           title:"Order Accepted",
+//           body:"Hi"+req.body.username+",your order"+req.body.order_id+"has been Accepted"
+//       },
+//       data:{
+//           orderId:req.body.order_id,
+//           order_details:req.body.order_details
+//       },
+//       token:req.body.fcm_token,
+//   };
+//   FCM.send(message,function(err,resp){
 
-    if(err){
-        return res.status(500).send({message: err});
-    }else{
-        return res.status(200).send({
-            message: "Notification sent successfully"
+//       if(err){
+//           return res.status(500).send({message: err});
+//       }else{
+//           return res.status(200).send({
+//               message: "Notification sent successfully"
 
-        });
-    }
-});
-}
+//           });
+//       }
+//   });
+// }else if(req.body.order_status='delivered'){
+//   let message = {
+//     notification:{
+//         title:"Order Delivered successfully",
+//         body:"Hi"+req.body.username+",your order "+req.body.order_id+"has been delivered"
+//     },
+//     data:{
+//         orderId:req.body.order_id,
+//         order_details:req.body.order_details
+//     },
+//     token:req.body.fcm_token,
+// };
+// FCM.send(message,function(err,resp){
+
+//     if(err){
+//         return res.status(500).send({message: err});
+//     }else{
+//         return res.status(200).send({
+//             message: "Notification sent successfully"
+
+//         });
+//     }
+// });
+// }else if(req.body.order_status='canceled'){
+//   let message = {
+//     notification:{
+//         title:"Order cancelled",
+//         body:"Hi"+req.body.username+",your order "+req.body.order_id+"has been cancelled"
+//     },
+//     data:{
+//         orderId:req.body.order_id,
+//         order_details:req.body.order_details
+//     },
+//     token:req.body.fcm_token,
+// };
+// FCM.send(message,function(err,resp){
+
+//     if(err){
+//         return res.status(500).send({message: err});
+//     }else{
+//         return res.status(200).send({
+//             message: "Notification sent successfully"
+
+//         });
+//     }
+// });
+// }
+// else if(req.body.order_status='out for delivery'){
+//   let message = {
+//     notification:{
+//         title:"Out for delivery",
+//         body:"Hi"+req.body.username+",your order"+req.body.order_id+" is out for delivery"
+//     },
+//     data:{
+//         orderId:req.body.order_id,
+//         order_details:req.body.order_details
+//     },
+//     token:req.body.fcm_token,
+// };
+// FCM.send(message,function(err,resp){
+
+//     if(err){
+//         return res.status(500).send({message: err});
+//     }else{
+//         return res.status(200).send({
+//             message: "Notification sent successfully"
+
+//         });
+//     }
+// });
+// }
 }
 catch(err){
   throw(err);
