@@ -187,8 +187,9 @@ router.post('/cancel_order', async function (req, res) {
              }
 
              stockModel.findByIdAndUpdate(stock_values[0]._id, datas, {new: true}, function (err, UpdatedDetails) {
-            if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
-            });
+            if (err) {res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
+          }
+        });
 
 
 
@@ -198,8 +199,9 @@ router.post('/cancel_order', async function (req, res) {
 
             
             await order_detailsModel.findByIdAndUpdate(req.body.orderid,req.body,{new: true}, function (err, UpdatedDetails) {
-              if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
-              else return res.status(200).json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200})
+              if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
+            }else{ res.status(200).json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200})
+          }
               });
 
       }
@@ -1339,20 +1341,20 @@ router.get("/paytm_fail", (req, res)=>{
 
 router.post('/pendingupdate', function (req, res) {
 
-  try {
-    let dt = new Date();
-     dt = new Date(dt.setHours(dt.getHours()+(24)));
-     const date = require('date-and-time');
-     const now1  =  new Date(dt);
-     now1.setDate(now1.getDate());
-     const value1 = date.format(now1,'DD/MM/YYYY HH:MM')
-     console.log(value1);
+  // try {
+  //   let dt = new Date();
+  //    dt = new Date(dt.setHours(dt.getHours()+(24)));
+  //    const date = require('date-and-time');
+  //    const now1  =  new Date(dt);
+  //    now1.setDate(now1.getDate());
+  //    const value1 = date.format(now1,'DD/MM/YYYY HH:MM')
+  //    console.log(value1);
 
-  }
-    catch (ex) {
-        console.log(ex);
-        res.json({ Status: "Failed", Message: ex.message, Code: 500 });
-  }
+  // }
+  //   catch (ex) {
+  //       console.log(ex);
+  //       res.json({ Status: "Failed", Message: ex.message, Code: 500 });
+  // }
 
 
 });
