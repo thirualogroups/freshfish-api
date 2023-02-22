@@ -462,7 +462,7 @@ FCM.send(message,function(err,resp){
     }
 });
 }
-else if(req.body.order_status=='out for delivery'){
+else if(req.body.order_status=='Out for Delivery'){
   let message = {
     notification:{
         title:"Out for delivery",
