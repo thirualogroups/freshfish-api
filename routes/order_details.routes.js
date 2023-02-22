@@ -766,11 +766,7 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
 //////Payment & Call back funcation /////
 
 router.post('/callbackurl',async function (req, res) {
-  console.log("request",req);
-    console.log("********",req.body);
-    console.log("********9999******",req.params);
    try {
-    console.log("================order_id=========================",order_id);
         transaction_logsModel.create({
             order_id: ""+req.body.ORDERID,
             currency: ""+req.body.CURRENCY,
