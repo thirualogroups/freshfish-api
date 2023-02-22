@@ -186,7 +186,7 @@ router.post('/cancel_order', async function (req, res) {
                 gross_weight : (stock_values[0].gross_weight + (parseFloat(item.gross_weight))).toFixed(2)
              }
 
-             stockModel.findByIdAndUpdate(stock_values[0]._id, datas, {new: true}, function (err, UpdatedDetails) {
+             await stockModel.findByIdAndUpdate(stock_values[0]._id, datas, {new: true}, function (err, UpdatedDetails) {
             if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
           }});
 
