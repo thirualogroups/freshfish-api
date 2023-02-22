@@ -375,7 +375,6 @@ try{
   let user_params={_id:new mongoose.Types.ObjectId(req.body.user_id)};
 
   let user= await userdetailsModel.findOne(user_params);
-console.log(user);
 if((user.fb_token!="") || (user.fb_token)){
 if(req.body.order_status=='Booked'){
   let message = {
