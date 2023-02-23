@@ -180,13 +180,13 @@ router.post('/cancel_order', async function (req, res) {
 
           for (let item of live_orders.order_details) {
 
-             var stock_values = await stockModel.find({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(live_orders.store)});
+             var stock_values = await stockModel.findOne({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(live_orders.store)});
 
              let datas =  {
                 gross_weight : (stock_values[0].gross_weight + (parseFloat(item.gross_weight))).toFixed(2)
              }
 
-             await stockModel.findOneAndUpdate({id:stock_values[0]._id}, datas, {new: true}, function (err, UpdatedDetails) {
+             await stockModel.findByIdAndUpdate(stock_values[0]._id, datas, {new: true}, function (err, UpdatedDetails) {
             if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
           }});
 
@@ -197,7 +197,7 @@ router.post('/cancel_order', async function (req, res) {
           }
 
             
-            await order_detailsModel.findOneAndUpdate(req.body.orderid,req.body,{new: true}, function (err, UpdatedDetails) {
+            await order_detailsModel.findByIdAndUpdate(req.body.orderid,req.body,{new: true}, function (err, UpdatedDetails) {
               if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
             }else{ res.status(200).json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200})
    } });
