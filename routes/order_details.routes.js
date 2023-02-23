@@ -197,7 +197,7 @@ router.post('/cancel_order', async function (req, res) {
           }
 
             
-            await order_detailsModel.findOneAndUpdate(req.body.orderid,req.body,{new: true}, function (err, UpdatedDetails) {
+            await order_detailsModel.findByIdAndUpdate(req.body._id,req.body,{new: true}, function (err, UpdatedDetails) {
               if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
             }else{ res.status(200).json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200})
    } });
