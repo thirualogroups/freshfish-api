@@ -177,35 +177,30 @@ router.post('/cancel_order', async function (req, res) {
     let live_orders= await order_detailsModel.findOne({_id:req.body.orderid});
 
     console.log("live_orders",live_orders);
-let stock_arr=[];
+
           for (let item of live_orders.order_details) {
 
-             const stock_values = stockModel.findOne({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(live_orders.store)});
-             await stock_values.exec();
-             stock_arr.push(stock_values);
-             
+             var stock_values = await stockModel.findOne({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(live_orders.store)});
+
+             let datas =  {
+                gross_weight : (stock_values.gross_weight + (parseFloat(item.gross_weight))).toFixed(2)
+             }
+
+             await stockModel.findOneAndUpdate({id:stock_values._id}, datas, {new: true}, function (err, UpdatedDetails) {
+            if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
+          }});
+
+
+
+
             // await stockModel.updateOne({ _id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(item.store) }, { gross_weight: { $inc: - (parseFloat(item.gross_weight)) } });
           }
-          console.log("stock_arr",stock_arr);
 
-for(let stock of stock_arr){
-  let datas =  {
-    gross_weight : (stock.gross_weight + (parseFloat(live_orders.order_details.gross_weight))).toFixed(2)
- }
-  const UpdatedDetails = stockModel.findByIdAndUpdate(stock._id, datas, {new: true});
-  await UpdatedDetails.clone().exec();
-  
-  //if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
-// }});
-
-}
-console.log("UpdatedDetails",UpdatedDetails);
-      
-  //           await order_detailsModel.findOneAndUpdate(req.body.orderid,req.body,{new: true}, function (err, UpdatedDetails) {
-  //             if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
-  //           }else{
-  //              res.status(200).json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200})
-  //  } });
+            
+            await order_detailsModel.findOneAndUpdate(req.body.orderid,req.body,{new: true}, function (err, UpdatedDetails) {
+              if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
+            }else{ res.status(200).json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200})
+   } });
 
       }
   catch (e) {
