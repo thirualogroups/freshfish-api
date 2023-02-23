@@ -71,13 +71,6 @@ app.use((req, res, next) => {
 });
 
 
-const intervalObj = setInterval(() => {
-  console.log('interviewing the interval');
-}, 500);
-
-
-clearInterval(intervalObj);
-
 
 
 app.post('/upload', function (req, res) {
