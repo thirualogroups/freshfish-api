@@ -175,6 +175,7 @@ router.post('/cancel_order', async function (req, res) {
 
   try {
     let live_orders= await order_detailsModel.find({_id:req.body.orderid});
+    console.log("live_orders",live_orders);
     var stock_values = await stockModel.find({fish_combo_id: new mongoose.Types.ObjectId(live_orders.order_details.fish_combo_id),store: new mongoose.Types.ObjectId(live_orders.store)});
 
     console.log("ggggggggggg",stock_values);
