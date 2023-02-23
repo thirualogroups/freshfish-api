@@ -174,7 +174,7 @@ router.post('/update_order', async function (req, res) {
 router.post('/cancel_order', async function (req, res) {
 
   try {
-    let live_orders= await order_detailsModel.find({_id:req.body.orderid});
+    let live_orders= await order_detailsModel.findOne({_id:req.body.orderid});
 
     console.log("live_orders",live_orders);
 
