@@ -1,4 +1,5 @@
 var express = require('express');
+var app = express();
 var router = express.Router();
 var bodyParser = require('body-parser');
 const mongoose = require("mongoose");
@@ -1336,26 +1337,53 @@ router.get("/paytm_fail", (req, res)=>{
 
 
 });
+setInterval(async(req,res)=>{
+  
+    
+    try {
+let pending_params={delete_status:false,payment_status:"pending",order_status:"Booked"};
+      let pending_order= await order_detailsModel.find(pending_params);
 
-router.post('/pendingupdate', function (req, res) {
+if(pending_order[0]){
+  let time=[];
+   for(let a = 0; a < pending_order.length; a ++){
+       let dt=pending_order[a].createdAt;
+       dt = new Date(dt.setHours(dt.getHours()+(12)));
+       time.push(dt);
+}
+//console.log(time);
+let time1=[];
+for(let a = 0; a < time.length; a ++){
 
-  try {
-    let dt = new Date();
-     dt = new Date(dt.setHours(dt.getHours()+(24)));
-     const date = require('date-and-time');
-     const now1  =  new Date(dt);
-     now1.setDate(now1.getDate());
-     const value1 = date.format(now1,'DD/MM/YYYY HH:MM')
-     console.log(value1);
+const anyTime = new Date(time[a]);
+const currentTime = new Date();
+if(currentTime > anyTime){
+       let dt1=anyTime;
+       dt1 = new Date(dt1.setHours(dt1.getHours()-(12)));
+       time1.push(dt1);
+}
+}
+let canceled_order=[];
+for(let a = 0; a < time1.length; a ++){
+    let params={order_status:"Cancelled"};
+  
+  let experiy_order=await order_detailsModel.findOneAndUpdate({createdAt:time1[a]},params,{new:true});
+  canceled_order.push(experiy_order);
+}
 
-  }
-    catch (ex) {
-        console.log(ex);
-        res.json({ Status: "Failed", Message: ex.message, Code: 500 });
-  }
+if(canceled_order[0]){
+console.log(".............................canceled_order......................................",canceled_order)
+}
+}
+}
+      catch (ex) {
+          console.log(ex);
+          res.json({ Status: "Failed", Message: ex.message, Code: 500 });
+    } 
+}, 500);
 
 
-});
+
 
 
 ///////////////////
