@@ -181,9 +181,9 @@ router.post('/cancel_order', async function (req, res) {
           for (let item of live_orders.order_details) {
 
              var stock_values = await stockModel.findOne({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(live_orders.store)});
-
+console.log(stock_values);
              let datas =  {
-                gross_weight : (stock_values[0].gross_weight + (parseFloat(item.order_details.gross_weight))).toFixed(2)
+                gross_weight : (stock_values.gross_weight + (parseFloat(item.gross_weight))).toFixed(2)
              }
 
              await stockModel.findByIdAndUpdate(stock_values[0]._id, datas, {new: true}, function (err, UpdatedDetails) {
