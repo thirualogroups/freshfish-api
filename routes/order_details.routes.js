@@ -187,17 +187,21 @@ router.post('/cancel_order', async function (req, res) {
           }
           console.log("stock_values",stock_values);
 
-          let datas =  {
-            gross_weight : (stock_values.gross_weight + (parseFloat(live_orders.order_details.gross_weight))).toFixed(2)
-         }
-console.log("datas",datas)
-      //    await stockModel.findByIdAndUpdate(stock_values._id, datas, {new: true}, function (err, UpdatedDetails) {
-      //   if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
-      // }});
-  //           await order_detailsModel.findOneAndUpdate(req.body.orderid,req.body,{new: true}, function (err, UpdatedDetails) {
-  //             if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
-  //           }else{ res.status(200).json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200})
-  //  } });
+for(let stock of stock_values){
+  let datas =  {
+    gross_weight : (stock.gross_weight + (parseFloat(live_orders.order_details.gross_weight))).toFixed(2)
+ }
+  await stockModel.findByIdAndUpdate(stock._id, datas, {new: true}, function (err, UpdatedDetails) {
+  if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
+}});
+
+}
+console.log("UpdatedDetails",UpdatedDetails);
+      
+            await order_detailsModel.findOneAndUpdate(req.body.orderid,req.body,{new: true}, function (err, UpdatedDetails) {
+              if (err) { res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
+            }else{ res.status(200).json({Status:"Success",Message:"order Updated", Data : UpdatedDetails ,Code:200})
+   } });
 
       }
   catch (e) {
