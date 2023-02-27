@@ -365,77 +365,19 @@ router.post('/getlist/myorders', async function (req, res) {
   /*else if(!params.id){
     return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
    }*/
-let skip = 0, limit = 50, sort = {order_id:-1};
-if (req.body.skip) {
-  skip = req.body.skip;
-}
-if (req.body.limit) {
-  limit = req.body.limit;
-}
-if(req.body.order_status){
-  filter_params.order_status=req.body.order_status;
-}
-if(req.body.payment_status){
-  filter_params.payment_status=req.body.payment_status;
-}
-if (req.body.status) {
-  filter_params.order_status = { $in: req.body.status.split(",") };
-}
-if (req.body.id) {
-  filter_params._id = req.body.id;
-}
-if(req.body.start_date && req.body.end_date){
-  filter_params.order_booked_at = {$gte: new Date(req.body.start_date), $lte: new Date(req.body.end_date+"T23:59:59") }; 
-}
-else if (req.body.start_date){
-  filter_params.order_booked_at = {$gte: new Date(req.body.start_date) }; 
-}
-else if (req.body.end_date){
-  filter_params.order_booked_at = {$lte: new Date(req.body.end_date+"T23:59:59") }; 
-}
-if(req.body.order_date){
-  filter_params.order_booked_at = {$gte: new Date(req.body.order_date), $lte: new Date(req.body.order_date+"T23:59:59") }; 
-}
-if(req.body.order_id){
-  filter_params.order_id = req.body.order_id;
-}
-if(req.body.store){
-  filter_params.store =  req.body.store;
-}
-if(req.body.vendor_id){
-  filter_params.vendor_id = req.body.vendor_id;
-}
-if(req.body.delivery_date){
-  filter_params.slot_date = req.body.delivery_date;
-}
-if(req.body.delivery_slot){
-  filter_params.slot_time = req.body.slot_time;
-}
-if(req.body.delivery_status){
-  filter_params.order_deliver_status = req.body.delivery_status;
-}
-if(req.body.payment_method){
-  filter_params.payment_method = req.body.payment_method;
-}
-if(req.body.user_id){
+ let skip = 0, sort = {order_id:-1};
+ if(req.body.user_id){
   filter_params.user_id = req.body.user_id;
-}
-let count = 0;
-if (skip == 0) {
+ }
+  let count = 0;
+ if (skip == 0) {
  count = await order_detailsModel.countDocuments({ params: filter_params });
-}
-
-
-
-
-order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, skip: skip, limit: limit }, function (err, list) {
+ }
+  order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, skip: skip }, function (err, list) {
   if (err) res.json({ Status: "Fail", Message: "Some internal error", Data: err.message, Code: 500 });
   if (req.body.id) {
     res.json({ Status: "Success", Message: " type Details", Data: list.length > 0 ? list[0] : {}, Count: count, Code: 200 });
   } else {
-
-
-
     if(req.body.phone){
       list = list.filter(x=>x.user_id.user_phone.match(new RegExp(req.body.phone,"gi")));
     }
@@ -469,74 +411,19 @@ router.post('/getlist/pendingorders', async function (req, res) {
   /*else if(!params.id){
     return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
    }*/
-let skip = 0, limit = 50, sort = {_id:-1};
-if (req.body.skip) {
-  skip = req.body.skip;
-}
-if (req.body.limit) {
-  limit = req.body.limit;
-}
+let skip = 0, sort = {_id:-1};
 if(req.body.order_status){
   filter_params.order_status=req.body.order_status;
-}
-if (req.body.status) {
-  filter_params.order_status = { $in: req.body.status.split(",") };
-}
-if (req.body.id) {
-  filter_params._id = req.body.id;
-}
-if(req.body.start_date && req.body.end_date){
-  filter_params.order_booked_at = {$gte: new Date(req.body.start_date), $lte: new Date(req.body.end_date+"T23:59:59") }; 
-}
-else if (req.body.start_date){
-  filter_params.order_booked_at = {$gte: new Date(req.body.start_date) }; 
-}
-else if (req.body.end_date){
-  filter_params.order_booked_at = {$lte: new Date(req.body.end_date+"T23:59:59") }; 
-}
-if(req.body.order_date){
-  filter_params.order_booked_at = {$gte: new Date(req.body.order_date), $lte: new Date(req.body.order_date+"T23:59:59") }; 
-}
-if(req.body.order_id){
-  filter_params.order_id = req.body.order_id;
-}
-if(req.body.store){
-  filter_params.store =  req.body.store;
-}
-if(req.body.vendor_id){
-  filter_params.vendor_id = req.body.vendor_id;
-}
-if(req.body.delivery_date){
-  filter_params.slot_date = req.body.delivery_date;
-}
-if(req.body.delivery_slot){
-  filter_params.slot_time = req.body.slot_time;
-}
-if(req.body.delivery_status){
-  filter_params.order_deliver_status = req.body.delivery_status;
-}
-if(req.body.payment_method){
-  filter_params.payment_method = req.body.payment_method;
-}
-if(req.body.user_id){
-  filter_params.user_id = req.body.user_id;
 }
 let count = 0;
 if (skip == 0) {
  count = await order_detailsModel.countDocuments({ params: filter_params });
 }
-
-
-
-
-order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, skip: skip, limit: limit }, function (err, list) {
+order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, skip: skip }, function (err, list) {
   if (err) res.json({ Status: "Fail", Message: "Some internal error", Data: err.message, Code: 500 });
   if (req.body.id) {
     res.json({ Status: "Success", Message: " type Details", Data: list.length > 0 ? list[0] : {}, Count: count, Code: 200 });
   } else {
-
-
-
     if(req.body.phone){
       list = list.filter(x=>x.user_id.user_phone.match(new RegExp(req.body.phone,"gi")));
     }
@@ -622,58 +509,7 @@ router.post('/getlist/order_id', async function (req, res) {
     return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
    }*/
    let vendor= await product_vendorModel.findOne({user_id:req.body.user_id});
-let skip = 0, limit = 50, sort = {_id:-1};
-if (req.body.skip) {
-  skip = req.body.skip;
-}
-if (req.body.limit) {
-  limit = req.body.limit;
-}
-if(req.body.order_status){
-  filter_params.order_status=req.body.order_status;
-}
-if(req.body.payment_status){
-  filter_params.payment_status=req.body.payment_status;
-}
-if (req.body.status) {
-  filter_params.order_status = { $in: req.body.status.split(",") };
-}
-if (req.body.id) {
-  filter_params._id = req.body.id;
-}
-if(req.body.start_date && req.body.end_date){
-  filter_params.order_booked_at = {$gte: new Date(req.body.start_date), $lte: new Date(req.body.end_date+"T23:59:59") }; 
-}
-else if (req.body.start_date){
-  filter_params.order_booked_at = {$gte: new Date(req.body.start_date) }; 
-}
-else if (req.body.end_date){
-  filter_params.order_booked_at = {$lte: new Date(req.body.end_date+"T23:59:59") }; 
-}
-if(req.body.order_date){
-  filter_params.order_booked_at = {$gte: new Date(req.body.order_date), $lte: new Date(req.body.order_date+"T23:59:59") }; 
-}
-if(req.body.order_id){
-  filter_params.order_id = req.body.order_id;
-}
-if(req.body.store){
-  filter_params.store =  req.body.store;
-}
-if(vendor._id){
-  filter_params.vendor_id =vendor._id;
-}
-if(req.body.delivery_date){
-  filter_params.slot_date = req.body.delivery_date;
-}
-if(req.body.delivery_slot){
-  filter_params.slot_time = req.body.slot_time;
-}
-if(req.body.delivery_status){
-  filter_params.order_deliver_status = req.body.delivery_status;
-}
-if(req.body.payment_method){
-  filter_params.payment_method = req.body.payment_method;
-}
+let skip = 0, sort = {order_id:-1};
 let count = 0;
 if (skip == 0) {
  count = await order_detailsModel.countDocuments({ params: filter_params });
@@ -682,7 +518,7 @@ if (skip == 0) {
 
 console.log("filter_params",filter_params);
 
-order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, skip: skip, limit: limit }, function (err, list) {
+order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, skip: skip }, function (err, list) {
   if (err) res.json({ Status: "Fail", Message: "Some internal error", Data: err.message, Code: 500 });
   if (req.body.id) {
     res.json({ Status: "Success", Message: " type Details", Data: list.length > 0 ? list[0] : {}, Count: count, Code: 200 });
