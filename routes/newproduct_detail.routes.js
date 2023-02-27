@@ -16,6 +16,7 @@ var admin= require("firebase-admin");
 var fcm =require("fcm-notification");
 
 var serviceAccount = require("../config/push-notification-key.json");
+const shipping_addressModel = require('../models/shipping_addressModel');
 const certpath =admin.credential.cert(serviceAccount);
 var FCM = new fcm(certpath);
 
@@ -493,6 +494,22 @@ catch(err){
   throw(err);
 
 }
+
+});
+
+router.post('/mobile/slot-alert',async function (req, res) {
+
+  let shipping_params={ default_status : true};   
+
+  let default_add= await shipping_addressModel.find(shipping_params);
+
+  console.log("default_addddddddddddddddd",default_add);
+
+
+
+
+
+
 
 });
 
