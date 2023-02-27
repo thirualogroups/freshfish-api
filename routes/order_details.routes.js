@@ -1303,7 +1303,7 @@ router.post('/callbackurl_link',async function (req, res) {
                     "'" +
                     url +
                     "'" +
-                    '"><h1>Payment Success</h1></body></html>'
+                    '"></body></html>'
                 );
                 res.end();
         });
