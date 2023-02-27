@@ -86,7 +86,7 @@ app.post('/upload', function (req, res) {
   console.log(exten[exten.length - 1]);
   var filetype = exten[exten.length - 1];
   uploadPath = __dirname + '/public/uploads/' + new Date().getTime() + "." + filetype;
-  var Finalpath = BaseUrl + '/uploads/' + new Date().getTime() + "." + filetype;
+  var Finalpath = BaseUrl + '/upload/' + new Date().getTime() + "." + filetype;
   console.log("uploaded path", uploadPath)
   sampleFile.mv(uploadPath, function (err) {
     if (err) {
