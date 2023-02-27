@@ -505,10 +505,10 @@ router.post('/mobile/slot-alert',async function (req, res) {
   let vendorlist=[];
   for(i=0; i < default_add.length; i++){
 
-    var customer = default_add[i].pincode;
+    var customer = default_add[0].pincode;
     default_user.push(customer);
-    let vendor = await product_vendorModel.findOne({pincodes:{$elemMatch:{$eq: default_user[i]}}, status: true, delete_status: false });
-    vendorlist.push(vendor);
+    let vendor = await product_vendorModel.findOne({pincodes:{$elemMatch:{$eq: default_user[0]}}, status: true, delete_status: false });
+    vendorlist.push(vendor[0].deliveryslots);
 
   }
 
