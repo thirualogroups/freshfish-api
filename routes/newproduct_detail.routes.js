@@ -517,7 +517,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
     user_details.push(users);
     }
   }
-   console.log(user_details);
+   console.log("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu}---",user_details.length,user_details);
 // for(j=0; j<default_user.length;j++){
 
 //   
