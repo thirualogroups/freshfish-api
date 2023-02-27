@@ -503,7 +503,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
 
   let default_add= await shipping_addressModel.find(shipping_params);
 
-  console.log("default_addddddddddddddddd",default_add);
+  console.log("default_addddddddddddddddd",default_add.user_id);
 
 
 
