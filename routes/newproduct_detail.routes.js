@@ -500,12 +500,13 @@ catch(err){
 router.post('/mobile/slot-alert',async function (req, res) {
 
   let shipping_params={ default_status : true};   
-
   let default_add= await shipping_addressModel.find(shipping_params);
-
-  console.log("default_addddddddddddddddd",default_add.user_id);
-
-
+  let default_user=[];
+  for(i=0; i < default_add.length; i++){
+    var customer = default_add[i].user_id;
+    default_user.push(customer);
+  }
+  console.log("default_addddddddddddddddd",default_user);
 
 
 
