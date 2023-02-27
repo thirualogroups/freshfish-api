@@ -512,9 +512,9 @@ router.post('/mobile/slot-alert',async function (req, res) {
     let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: default_pincodes.pincode } }, status: true, delete_status: false });
      vendorlist.push(vendor);
   }
-  console.log("default_addddddddddddddddddddddddddddddddd",default_add);
-  console.log("default_userrrrrrrrrrrrrrrrrr",default_user);
-   console.log("vendorlisttttttt",vendorlist);
+  console.log("default_addddddddddddddddddddddddddddddddd",default_add.length);
+  console.log("default_userrrrrrrrrrrrrrrrrr",default_user.length);
+   console.log("vendorlisttttttt",vendorlist.length);
 
 // for(j=0; j<default_user.length;j++){
 
