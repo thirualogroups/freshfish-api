@@ -365,7 +365,7 @@ router.post('/getlist/myorders', async function (req, res) {
   /*else if(!params.id){
     return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
    }*/
-let skip = 0, limit = 50, sort = {order_date:1};
+let skip = 0, limit = 50, sort = {order_date:-1};
 if (req.body.skip) {
   skip = req.body.skip;
 }
