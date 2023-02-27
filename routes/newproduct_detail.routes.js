@@ -507,13 +507,15 @@ router.post('/mobile/slot-alert',async function (req, res) {
     default_user.push(customer);
   }
   console.log("default_addddddddddddddddd",default_user);
+
 for(j=0; j<default_user.length;j++){
-  let pincode_params={user_id:default_user[j].user_id}
+
+  let pincode_params={user_id:default_user[j]}
 
   let default_pincodes= await shipping_addressModel.findOne(pincode_params);
 
   console.log(default_pincodes);
-  
+
   let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: default_pincodes.pincode } }, status: true, delete_status: false });
 console.log("vendorrrrrrrrrrrrrrrrrrrrrrr",vendor);
 
