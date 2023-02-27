@@ -502,24 +502,32 @@ router.post('/mobile/slot-alert',async function (req, res) {
   let shipping_params={ default_status : true,delete_status : false};   
   let default_add= await shipping_addressModel.find(shipping_params);
   let default_user=[];
+  let vendorlist=[];
   for(i=0; i < default_add.length; i++){
-    var customer = default_add[i].user_id;
+
+    var customer = default_add[i].pincode;
     default_user.push(customer);
+    let vendor = await product_vendorModel.findOne({pincodes:{$elemMatch:{$eq: default_user[i]}}, status: true, delete_status: false });
+    vendorlist.push(vendor.delivery_slots);
+
   }
-  console.log("default_addddddddddddddddd",default_user);
 
-for(j=0; j<default_user.length;j++){
+  console.log("vendorlisttttttttttttttt",vendorlist);
 
-  let pincode_params={user_id:default_user[j]}
+//   console.log("default_addddddddddddddddd",default_user);
 
-  let default_pincodes= await shipping_addressModel.findOne(pincode_params);
+// for(j=0; j<default_user.length;j++){
 
-  console.log(default_pincodes);
+//   let pincode_params={user_id:default_user[j]}
 
-  let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: default_pincodes.pincode } }, status: true, delete_status: false });
-console.log("vendorrrrrrrrrrrrrrrrrrrrrrr",vendor);
+//   let default_pincodes= await shipping_addressModel.findOne(pincode_params);
 
-}
+//   console.log(default_pincodes);
+
+//   let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: default_pincodes.pincode } }, status: true, delete_status: false });
+//     vendorlist.push(vendor);
+
+// }
 
 
 
