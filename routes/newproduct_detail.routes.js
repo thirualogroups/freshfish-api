@@ -519,7 +519,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
         var res = element.delivery_slots.map(function(o) {
                  return o;
              });
-             delivery_slots.push(res);
+             delivery_slots.push(res.delivery_days);
       }
   
     });
