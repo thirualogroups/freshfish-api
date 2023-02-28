@@ -519,7 +519,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
     }
   }
   console.log("default_user------",default_user.length,default_user);
-  console.log("vendorlist------",vendorlist[i].delivery_slots.length,vendorlist[i].delivery_slots);
+  console.log("vendorlist------",vendorlist.length,vendorlist);
   console.log("user_details------",user_details.length,user_details);
 
 });
