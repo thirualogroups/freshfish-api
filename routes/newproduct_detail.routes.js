@@ -518,7 +518,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
 
     for(let slots of vendorlist){
 
-         console.log(slots.delivery_days);
+         console.log(slots);
 
         }
       
