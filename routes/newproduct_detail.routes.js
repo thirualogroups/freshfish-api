@@ -504,6 +504,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
   let default_user=[];
   let vendorlist=[];
   let user_details=[];
+  let delivery_slots=[];
   for(i=0; i < default_add.length; i++){
     var customer = default_add[i].user_id;
     default_user.push(customer);
@@ -518,7 +519,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
         var res = element.delivery_slots.map(function(o) {
                  return o;
              });
-             console.log(res[i]);
+             delivery_slots.push(res);
       }
   
     });
@@ -528,7 +529,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
     user_details.push(users);
     }
   }
- 
+ console.log(delivery_slots);
   // console.log("vendorlist------",vendorlist.length,vendorlist);
   // console.log("default_user------",default_user.length,default_user);
   // console.log("user_details------",user_details.length,user_details);
