@@ -72,10 +72,7 @@ var order_detailSchema = new mongoose.Schema({
   order_coupon_code: String,
   order_coupon_code_value: Number,
   order_final_amount: Number,
-  order_status: {
-    type: String,
-    default: "Booked"
-  },
+  order_status: String,
   out_for_delivery: {
     type: Boolean,
     default:false

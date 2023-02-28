@@ -43,6 +43,7 @@ router.post('/create', async function (req, res) {
       order_details: req.body.order_details,
       order_item_count: req.body.order_details.length,
       order_booked_at: new Date(),
+      order_status:req.body.order_status,
       //order_deliver_date: req.body.order_deliver_date,
       order_deliver_status: "Booked",
       order_final_amount: req.body.order_final_amount,
