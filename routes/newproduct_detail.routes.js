@@ -512,9 +512,11 @@ router.post('/mobile/slot-alert',async function (req, res) {
     let default_pincodes= await shipping_addressModel.findOne(pincode_params);
     let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: default_pincodes.pincode } }, status: true, delete_status: false });
     vendorlist.push(vendor);
-    if(vendorlist[i].delivery_slots != null){
+    if(vendorlist[i] != null){
     vendorlist.forEach(element => {
-      console.log("elementsssssssssssssss",element.delivery_slots);
+      element.delivery_solts.forEach(function(entry) { // was missing a )
+        console.log("entryyyyyyyyyyyyy",entry);
+      });
 
     });
   }
@@ -524,7 +526,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
     }
   }
  
-  // console.log("vendorlist------",vendorlist.length,vendorlist.delivery_slots);
+  // console.log("vendorlist------",vendorlist.length,vendorlist);
   // console.log("default_user------",default_user.length,default_user);
   // console.log("user_details------",user_details.length,user_details);
 
