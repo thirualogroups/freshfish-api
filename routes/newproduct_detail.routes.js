@@ -515,6 +515,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
     if(vendor !== null){
     let vendor1=vendor.toJSON();
     console.log(vendor1.delivery_slots);
+    console.log("one");
     }
   }
   
