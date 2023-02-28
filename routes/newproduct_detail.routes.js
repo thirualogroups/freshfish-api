@@ -516,7 +516,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
     if(vendorlist[i] != null){
     vendorlist.forEach(element => {
       if(element != null){
-        var res = element.delivery_slots.map(function(o) {
+        var res = element.map(function(o) {
                  return o;
              });
              delivery_slots.push(res);
