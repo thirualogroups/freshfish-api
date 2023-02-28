@@ -512,11 +512,12 @@ router.post('/mobile/slot-alert',async function (req, res) {
     let default_pincodes= await shipping_addressModel.findOne(pincode_params);
     let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: default_pincodes.pincode } }, status: true, delete_status: false });
     vendorlist.push(vendor);
-    vendorlist.forEach(element => {
+    if(vendorlist[i] != null){
+    vendorlist[i].forEach(element => {
       console.log("elementsssssssssssssss",element.delivery_slots);
 
     });
-
+  }
     if(vendorlist[i] != null){
     let users=await userdetailsModel.findOne({_id:default_user[i]});
     user_details.push(users);
