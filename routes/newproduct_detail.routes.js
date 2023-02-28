@@ -516,7 +516,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
     if(vendorlist[i] != null){
     vendorlist.forEach(element => {
       if(element != null){
-        var res = element.map(function(o) {
+        var res = element.delivery_slots.map(function(o) {
                  return o;
              });
              delivery_slots.push(res);
@@ -530,7 +530,6 @@ router.post('/mobile/slot-alert',async function (req, res) {
     }
   }
  console.log(delivery_slots);
-
   // console.log("vendorlist------",vendorlist.length,vendorlist);
   // console.log("default_user------",default_user.length,default_user);
   // console.log("user_details------",user_details.length,user_details);
