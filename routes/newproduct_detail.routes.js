@@ -512,7 +512,8 @@ router.post('/mobile/slot-alert',async function (req, res) {
     let pincode_params={user_id:default_user[i]};
     let default_pincodes= await shipping_addressModel.findOne(pincode_params);
     let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: default_pincodes.pincode } }, status: true, delete_status: false });
-    vendorlist.push(vendor);
+    let vendor1=vendor.toJSON();
+    vendorlist.push(vendor1);
     if(vendorlist[i] != null){
     vendorlist.forEach(element => {
       if(element != null){
@@ -529,11 +530,11 @@ router.post('/mobile/slot-alert',async function (req, res) {
     user_details.push(users);
     }
   }
- //console.log(delivery_slots);
+ console.log(delivery_slots);
  
- for(let slots of delivery_slots){
-  console.log(slots.delivery_days);
- }
+//  for(let slots of delivery_slots){
+//   console.log(slots.delivery_days);
+//  }
 
   // console.log("vendorlist------",vendorlist.length,vendorlist);
   // console.log("default_user------",default_user.length,default_user);
