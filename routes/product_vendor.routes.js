@@ -16,7 +16,7 @@ var product_vendorModel = require('./../models/product_vendorModel');
 var locationdetailsModel = require('./../models/locationdetailsModel');
 var counterMasterModel = require("../models/counterModel");
 var userdetailsModel = require('./../models/userdetailsModel');
-
+var shipping_addressModel=require('./../models/shipping_addressModel');
 
 
 
