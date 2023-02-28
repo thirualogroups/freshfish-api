@@ -529,10 +529,11 @@ router.post('/mobile/slot-alert',async function (req, res) {
     user_details.push(users);
     }
   }
- 
- for(let slots of delivery_slots){
-  console.log(slots.delivery_days);
- }
+  let delivery_days=delivery_slots.toJSON();
+  console.log(delivery_days.delivery_days);
+//  for(let slots of delivery_slots){
+//   console.log(slots.delivery_days);
+//  }
 
   // console.log("vendorlist------",vendorlist.length,vendorlist);
   // console.log("default_user------",default_user.length,default_user);
