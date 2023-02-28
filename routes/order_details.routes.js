@@ -158,7 +158,7 @@ router.post('/update_order', async function (req, res) {
             // await stockModel.updateOne({ _id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(item.store) }, { gross_weight: { $inc: - (parseFloat(item.gross_weight)) } });
           }
 
-          let final_order={payment_id: req.body.payment_id,payment_status:req.body.payment_status};
+          let final_order={payment_id: req.body.payment_id,payment_status:req.body.payment_status,order_status:req.body.order_status};
 
           order_detailsModel.findByIdAndUpdate(req.body.orderid,final_order, {new: true}, function (err, UpdatedDetails) {
             if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
