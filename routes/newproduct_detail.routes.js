@@ -515,13 +515,13 @@ router.post('/mobile/slot-alert',async function (req, res) {
     
     vendorlist.forEach(element => {
 
-      var res = element.dataModels.map(function(o) {
+      var res = element.map(function(o) {
         return o.delivery_slots;
     });
     console.log(res[0]);
 
     });
-    
+
     if(vendorlist[i] != null){
     let users=await userdetailsModel.findOne({_id:default_user[i]});
     user_details.push(users);
