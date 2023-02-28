@@ -519,7 +519,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
   
     }
   }
-  for (let slot of delivery_slots.delivery_slots) {
+  for (let slot of delivery_slots) {
       console.log("ddddddddddddd",slot);
   }
 
