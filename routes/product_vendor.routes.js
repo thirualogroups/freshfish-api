@@ -237,7 +237,6 @@ router.get("/delivery_slots/:agentid", (req, res) => {
       if (err) return res.json({ Status: "Failed", Message: err.message, Code: 500 });
       let agent = rec.toJSON();
       let delivery_slots = [];
-      console.log("reccccc",rec);
       for (let slot of agent.delivery_slots) {
         let days = [{ day: "Sunday", date: null }, { day: "Monday", date: null }, { day: "Tuesday", date: null }, { day: "Wednesday", date: null }, { day: "Thursday", date: null }, { day: "Friday", date: null }, { day: "Saturday", date: null }];
         let curdate = new Date(moment().tz("Asia/Kolkata").format("YYYY/MM/DD HH:mm"));

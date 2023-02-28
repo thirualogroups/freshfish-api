@@ -515,6 +515,14 @@ router.post('/mobile/slot-alert',async function (req, res) {
     if(vendor !== null){
     let vendor1=vendor.toJSON();
     vendorlist.push(vendor1.delivery_slots);
+
+    for(let slots of vendorlist){
+
+         console.log(slots.delivery_days);
+         
+        }
+      
+
     }
     // vendorlist.forEach(element => {
     //   if(element != null){
@@ -531,12 +539,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
     user_details.push(users);
     }
   }
-  //console.log(delivery_slots);
- 
-//  for(let slots of delivery_slots){
-//   console.log(slots.delivery_days);
-//  }
-
+  //console.log(delivery_slots);  
    console.log("vendorlist------",vendorlist.length,vendorlist);
   // console.log("default_user------",default_user.length,default_user);
   // console.log("user_details------",user_details.length,user_details);
