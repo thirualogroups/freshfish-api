@@ -513,13 +513,13 @@ router.post('/mobile/slot-alert',async function (req, res) {
     let default_pincodes= await shipping_addressModel.findOne(pincode_params);
     let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: default_pincodes.pincode } }, status: true, delete_status: false });
     if(vendor !== null){
-    let vendor1=vendor.toJSON();
+    let vendor1=JSON.parse(vendor);
     vendorlist.push(vendor1.delivery_slots);
 
     for(let slots of vendorlist){
 
          console.log(slots.delivery_days);
-         
+
         }
       
 
