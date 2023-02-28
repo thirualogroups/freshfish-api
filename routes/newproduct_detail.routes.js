@@ -506,22 +506,22 @@ router.post('/mobile/slot-alert',async function (req, res) {
   let user_details=[];
   let delivery_slots=[];
   for(i=0; i < default_add.length; i++){
-    var customer = default_add[0].user_id;
+    var customer = default_add[i].user_id;
     default_user.push(customer);
 
-    let pincode_params={user_id:default_user[0]};
+    let pincode_params={user_id:default_user[i]};
     let default_pincodes= await shipping_addressModel.findOne(pincode_params);
     let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: default_pincodes.pincode } }, status: true, delete_status: false });
     if(vendor !== null){
     let vendor1=vendor.toJSON();
-    delivery_slots.push(vendor1);
-    
+
+    for (let slot of vendor1.delivery_slots) {
+      console.log("slotssssssssss",slot);
+    }
   
     }
   }
-  for (let slot of delivery_slots) {
-      console.log("ddddddddddddd",slot);
-  }
+  
 
 });
 
