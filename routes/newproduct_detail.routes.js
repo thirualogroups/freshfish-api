@@ -515,9 +515,9 @@ router.post('/mobile/slot-alert',async function (req, res) {
     if(vendor !== null){
     let vendor1=vendor.toJSON();
 
-    for (let slot of vendor1.delivery_slots) {
-      console.log("slotssssssssss",slot);
-    }
+    vendor1.forEach(number => console.log(number));
+
+    
   
     }
   }
