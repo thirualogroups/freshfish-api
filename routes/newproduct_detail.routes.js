@@ -520,7 +520,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
       let today_date = moment(new Date()).tz("Asia/Kolkata").format("YYYY-MM-DD");
       let tomorrow_date = moment(new Date(new Date().setDate(new Date().getDate() + 1))).tz("Asia/Kolkata").format("YYYY-MM-DD");
       for (let day1 of slot.delivery_days) {
-        let delivery_day = days.filter(x => x.day === day1)[0];
+        let delivery_day = days.filter(x => x.day === day1)[1];
         if(delivery_day?.date === today_date || delivery_day?.date === tomorrow_date ){
           console.log("delivery date",delivery_day?.date);
         }
