@@ -505,7 +505,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
   let vendorlist=[];
   let user_details=[];
   let delivery_slots=[];
-  for(i=0; i <= default_add[1].length; i++){
+  for(i=0; i <= 1; i++){
     var customer = default_add[0].user_id;
     default_user.push(customer);
 
