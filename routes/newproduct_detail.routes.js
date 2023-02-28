@@ -514,12 +514,13 @@ router.post('/mobile/slot-alert',async function (req, res) {
     let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: default_pincodes.pincode } }, status: true, delete_status: false });
     vendorlist.push(vendor);
     if(vendorlist[i] != null){
-    vendorlist.forEach(element => {
+      let vendorlist1=vendorlist.toJSON();
+    vendorlist1.forEach(element => {
       if(element != null){
         var res = element.delivery_slots.map(function(o) {
                  return o;
              });
-             delivery_slots.push(res.toJSON());
+             delivery_slots.push(res);
       }
   
     });
