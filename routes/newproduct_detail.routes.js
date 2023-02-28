@@ -518,8 +518,11 @@ router.post('/mobile/slot-alert',async function (req, res) {
     user_details.push(users);
     }
   }
+  if(vendorlist != null){
+    console.log("vendorlist------",vendorlist.length,vendorlist.delivery_slots);
+  }
   console.log("default_user------",default_user.length,default_user);
-  console.log("vendorlist------",vendorlist.length,vendorlist);
+  
   console.log("user_details------",user_details.length,user_details);
 
 });
