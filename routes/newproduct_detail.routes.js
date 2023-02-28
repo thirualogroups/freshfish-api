@@ -519,7 +519,7 @@ router.post('/mobile/slot-alert',async function (req, res) {
   
     }
   }
-  
+  console.log("userrrrrrrrrr",default_user);
 
 });
 
