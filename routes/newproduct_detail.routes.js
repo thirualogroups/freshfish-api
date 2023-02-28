@@ -514,12 +514,13 @@ router.post('/mobile/slot-alert',async function (req, res) {
     vendorlist.push(vendor);
     if(vendorlist[i] != null){
     vendorlist.forEach(element => {
-      if(element.delivery_slots !=  null){
-      var res = element.delivery_slots.map(function(o) {
-        return o;
-    });
-    console.log(res[i]);
-  }
+      console.log("elementssssssssssssssss",element);
+  //     if(element.delivery_slots !=  null){
+  //     var res = element.delivery_slots.map(function(o) {
+  //       return o;
+  //   });
+  //   console.log(res[i]);
+  // }
     });
   }
     if(vendorlist[i] != null){
