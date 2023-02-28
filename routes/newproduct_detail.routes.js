@@ -515,13 +515,13 @@ router.post('/mobile/slot-alert',async function (req, res) {
     if(vendor !== null){
     let vendor1=vendor.toJSON();
 
-    vendor1.forEach(number => console.log(number));
-
     
   
     }
   }
-  
+  for (let slot of vendor1.delivery_slots) {
+      console.log("ddddddddddddd",slot);
+  }
 
 });
 
