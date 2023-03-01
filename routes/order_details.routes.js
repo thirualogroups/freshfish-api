@@ -50,7 +50,7 @@ router.post('/create', async function (req, res) {
       order_deliver_status: "Booked",
       order_final_amount: req?.body?.order_final_amount ? req.body.order_final_amount : undefined,
       payment_method: req?.body?.payment_method ? req.body.payment_method : "Online",
-      payment_status:req?.body?.payment_status ? eq.body.payment_status : undefined,
+      payment_status:req?.body?.payment_status ? req.body.payment_status : undefined,
       payment_id: req?.body?.payment_id ? req.body.payment_id : "",
       shippingid: req?.body?.shippingid ? req.body.shippingid : "",
       shipping_address: req?.body?.shipping_address ? req.body.shipping_address : undefined,
