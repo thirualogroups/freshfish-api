@@ -1,19 +1,19 @@
-var express = require('express');
-var app = express();
-var router = express.Router();
-var bodyParser = require('body-parser');
+let express = require('express');
+// let app = express();
+let router = express.Router();
+let bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
-var order_detailsModel = require('./../models/order_detailsModel');
-var counterMasterModel = require('./../models/counterModel');
+let order_detailsModel = require('./../models/order_detailsModel');
+let counterMasterModel = require('./../models/counterModel');
 const stockModel = require('../models/stockModel');
 const product_cart_detailsModel = require("../models/product_cart_detailsModel");
 const userdetailsModel = require('../models/userdetailsModel');
 const transaction_logsModel = require("../models/transaction_logsModel");
 const product_vendorModel = require('../models/product_vendorModel');
 
-var ObjectId = require('mongodb').ObjectID;
+let ObjectId = require('mongodb').ObjectID;
 
 ////////////////   Admin User ////////////////
 
@@ -21,41 +21,43 @@ var ObjectId = require('mongodb').ObjectID;
 
 router.post('/create', async function (req, res) {
   try {
-    for(let item of req.body.order_details){
-      let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(req.body.store), status: true, delete_status: false, soldout: false,  gross_weight: {$gte: item.gross_weight} };
-      let stock = await stockModel.findOne(stock_params);
+    console.log("create request", req?.body)
+    for(let item of req?.body?.order_details){
+      let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(item?.fish_combo_id), store: new mongoose.Types.ObjectId(req?.body?.store), status: true, delete_status: false, soldout: false,  gross_weight: {$gte: item?.gross_weight} };
+      let stock = await stockModel.findOne(stock_params).exec();
       console.log("stock_params",stock_params);
-      if(stock == null){
-        return res.status(400).json({Status:"Fail", Message:item.product_name + " has less/no stock.", Code: 400}); 
+      console.log("stock_params123",stock);
+      if(!stock){
+        return res.status(400).json({Status:"Fail", Message:item?.product_name + " has less/no stock.", Code: 400}); 
       }
     }
 
-    const counter = await counterMasterModel.findByIdAndUpdate({ _id: 'order_details' }, { $inc: { seq: 1 } });
+    const counter = await counterMasterModel.findByIdAndUpdate({ _id: 'order_details' }, { $inc: { seq: 1 } }).exec();
 
-    let order_id = "FF-" + new Date().toLocaleDateString("en-IN", { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(new RegExp("/", "g"), "") + "-" + counter.seq.toString().padStart(4, '0');
+    let order_id = "FF-" + new Date().toLocaleDateString("en-IN", { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(new RegExp("/", "g"), "") + "-" + counter?.seq.toString().padStart(4, '0');
         // let order_id = "FF-01" ;
 
     order_detailsModel.create({
-      user_id: req.body.user_id,
-      vendor_id: req.body.vendor_id,
-      store: req.body.store,
-      order_id: order_id,
-      order_details: req.body.order_details,
-      order_item_count: req.body.order_details.length,
+      user_id: req?.body?.user_id ?req.body.user_id : undefined,
+      vendor_id: req?.body?.vendor_id ? req.body.vendor_id : undefined ,
+      store: req?.body?.store ? req.body.store : undefined,
+      order_id: order_id ? order_id : undefined,
+      order_details: req?.body?.order_details ? req.body.order_details : undefined,
+      order_item_count: req?.body?.order_details.length ? req.body.order_details.length: undefined,
       order_booked_at: new Date(),
-      order_status:req.body.order_status,
+      order_status:req?.body?.order_status ? req.body.order_status : undefined,
       //order_deliver_date: req.body.order_deliver_date,
       order_deliver_status: "Booked",
-      order_final_amount: req.body.order_final_amount,
-      payment_method: req.body.payment_method,
-      payment_status:req.body.payment_status,
-      payment_id: req.body.payment_id,
-      shippingid: req.body.shippingid,
-      shipping_address: req.body.shipping_address,
-      device_type: req.body.device_type,
-      user_type:req.body.user_type,
-      slot_date: req.body.slot_date,
-      slot_time: req.body.slot_time,
+      order_final_amount: req?.body?.order_final_amount ? req.body.order_final_amount : undefined,
+      payment_method: req?.body?.payment_method ? req.body.payment_method : "Online",
+      payment_status:req?.body?.payment_status ? eq.body.payment_status : undefined,
+      payment_id: req?.body?.payment_id ? req.body.payment_id : "",
+      shippingid: req?.body?.shippingid ? req.body.shippingid : "",
+      shipping_address: req?.body?.shipping_address ? req.body.shipping_address : undefined,
+      device_type: req?.body?.device_type ? req.body.device_type : undefined,
+      user_type:req?.body?.user_type ? req.body.user_type : undefined,
+      slot_date: req?.body?.slot_date ? req.body.slot_date : undefined,
+      slot_time: req?.body?.slot_time ? req.body.slot_time : undefined,
       logs: [
         {
           "status": "Booked",
@@ -71,10 +73,12 @@ router.post('/create', async function (req, res) {
         }
       ]
     },
+   
       async function (err, order) {
-        if (err) res.json({ Status: "Fail", Message: err.message, Code: 400 });
-         
-        else {
+        console.log("stock_params12345",order);
+        if (err) {
+          res.json({ Status: "Fail", Message: err.message, Code: 400 });
+        } else {
           res.json({ Status: "Success", Message: "Order Added successfully", Data: order, Code: 200 });
         //   for (let item of req.body.order_details) {
 
@@ -131,14 +135,15 @@ router.post('/post_order', async function (req, res) {
 
 router.post('/update_order', async function (req, res) {
   try {
-    let pending_order= await order_detailsModel.findOne({_id:req.body.orderid});
+    console.log("stock_params123",req?.body?.orderid);
+    let pending_order= await order_detailsModel.findOne({_id:req?.body?.orderid}).exec();
     if(!pending_order) {
       return res.status(400).json({status: false,message:"Order_id not exist in database"});
     } 
 
     for(let item of pending_order?.order_details){
       let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(pending_order.store), status: true, delete_status: false, soldout: false,  gross_weight: {$gte: item.gross_weight} };
-      let stock = await stockModel.findOne(stock_params);
+      let stock = await stockModel.findOne(stock_params).exec();
       if(stock == null){
         return res.status(400).json({Status:"Fail", Message: item.product_name + " has less/no stock.", Code: 400}); 
       }
@@ -147,7 +152,7 @@ router.post('/update_order', async function (req, res) {
    
           for (let item of pending_order.order_details) {
 
-             var stock_values = await stockModel.findOne({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(pending_order.store)});
+             var stock_values = await stockModel.findOne({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(pending_order.store)}).exec();
 
              let datas =  {
                 gross_weight : (stock_values.gross_weight - (parseFloat(item.gross_weight))).toFixed(2)
