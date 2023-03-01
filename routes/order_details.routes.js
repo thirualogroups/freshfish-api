@@ -606,7 +606,7 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
 router.post('/callbackurl',async function (req, res) {
    try {
         transaction_logsModel.create({
-            order_id: ""+req.body.ORDERID,
+            order_id: ""+req?.body?.ORDERID,
             currency: ""+req.body.CURRENCY,
             txnamount: ""+req.body.TXNAMOUNT,
             txtnid: ""+req.body.TXNID,
@@ -626,7 +626,7 @@ router.post('/callbackurl',async function (req, res) {
                     "'" +
                     url +
                     "'" +
-                    '"></body></html>'
+                    '"></body><h1>payment success</h1></html>'
                 );
                 res.end();
         });
