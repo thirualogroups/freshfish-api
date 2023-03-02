@@ -615,7 +615,7 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
 router.post('/callbackurl',async function (req, res) {
    try {
         transaction_logsModel.create({
-            order_id: ""+req?.body?.ORDERID,
+            order_id: ""+req.body.ORDERID,
             currency: ""+req.body.CURRENCY,
             txnamount: ""+req.body.TXNAMOUNT,
             txtnid: ""+req.body.TXNID,
@@ -628,15 +628,15 @@ router.post('/callbackurl',async function (req, res) {
              console.log("Payment id check111111",req.body.ORDERID);
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
                 //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
-              //var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
-              var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
+              var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
+              //var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
               console.log("Payment id check",req.body.ORDERID);
                 res.write(
                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
                     "'" +
                     url +
                     "'" +
-                    '"></body><h1>payment success</h1></html>'
+                    '"></body></html>'
                 );
                 res.end();
         });
