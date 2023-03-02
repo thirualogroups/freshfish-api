@@ -16,7 +16,15 @@ const userdetailsModel=require('./../models/userdetailsModel');
 var admin= require("firebase-admin");
 var fcm =require("fcm-notification");
 
+var admin = require("firebase-admin");
+
 var serviceAccount = require("../config/push-notification-key.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+//var serviceAccount = require("../config/push-notification-key.json");
 const shipping_addressModel = require('../models/shipping_addressModel');
 const certpath =admin.credential.cert(serviceAccount);
 var FCM = new fcm(certpath);
