@@ -58,6 +58,7 @@ router.post('/create', async function (req, res) {
       user_type:req?.body?.user_type ? req.body.user_type : undefined,
       slot_date: req?.body?.slot_date ? req.body.slot_date : undefined,
       slot_time: req?.body?.slot_time ? req.body.slot_time : undefined,
+      paytm_orderid:"",
       logs: [
         {
           "status": "Booked",
@@ -167,7 +168,7 @@ router.post('/update_order', async function (req, res) {
             // await stockModel.updateOne({ _id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(item.store) }, { gross_weight: { $inc: - (parseFloat(item.gross_weight)) } });
           }
 
-          let final_order={payment_id: req.body.payment_id,payment_status:req.body.payment_status,order_status:req.body.order_status};
+          let final_order={payment_id: req.body.payment_id,payment_status:req.body.payment_status,order_status:req.body.order_status,paytm_orderid:req.body.paytm_orderid};
 
           order_detailsModel.findByIdAndUpdate(req.body.orderid,final_order, {new: true}, function (err, UpdatedDetails) {
             if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
@@ -623,9 +624,6 @@ router.post('/callbackurl',async function (req, res) {
             respcode: ""+req.body.RESPCODE,
             respmsg: ""+req.body.RESPMSG
         }, function (err, info) {
-            console.log(err);
-             console.log("********transaction_logsModel***********",info);
-             console.log("Payment id check111111",req.body.ORDERID);
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
                 //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
               var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;

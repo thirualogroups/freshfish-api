@@ -96,6 +96,7 @@ var order_detailSchema = new mongoose.Schema({
   addl_phone_no: String,
   device_type: String,
   user_type:Number,
+  paytm_orderid:String,
   logs: [new mongoose.Schema({
     _id: false,
     status: String,
