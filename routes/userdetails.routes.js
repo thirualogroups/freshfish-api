@@ -93,7 +93,8 @@ router.post('/create', async function (req, res){
         agent: default_agent,
         door_no: req.body.door_no,
         apartment: req.body.apartment,
-        address: req.body.address
+        address: req.body.address,
+        latest_orderid:""
       },
         function (err, user) {
           let a = {
@@ -169,7 +170,9 @@ router.post('/agent/create', async function (req, res){
         agent: default_agent,
         door_no: req.body.door_no,
         apartment: req.body.apartment,
-        address: req.body.address
+        address: req.body.address,
+        latest_orderid:""
+
       },
         function (err, user) {
            console.log(err);
@@ -287,8 +290,31 @@ router.get('/getlist_count', function (req, res) {
     });
 });
 
+router.post('/user_update',async function (req, res){
+  let a={
+    latest_orderid:req.body.latest_orderid
+
+  };
+
+  await userdetailsModel.findByIdAndUpdate(req.body.user_id,a,{new:true},function (err, user) {
+    console.log(err);
+   if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
+   res.json({ Status: "Success", Message: "User Details Added Successfully", Data: user, Code: 200 });
+   });
 
 
+});
+
+router.get('/user_getlist', async function (req, res) {
+  let params = { delete_status: false };
+    params._id = req.query.user_id;
+
+  await userdetailsModel.find(params).then(list => {
+    res.json({ Status: "Success", Message: "User Details Details", Data: list, Code: 200 });
+  }).catch(error => {
+    res.json({ Status: "Fail", Message: "User Details Details", Data: error.message, Code: 500 });
+  });
+});
 
 
 
