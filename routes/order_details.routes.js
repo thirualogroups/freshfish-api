@@ -376,7 +376,6 @@ router.post('/getlist/myorders', async function (req, res) {
   /*else if(!params.id){
     return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
    }*/
- let skip = 0, sort = {order_id:-1};
  if(req.body.user_id){
   filter_params.user_id = req.body.user_id;
  }
@@ -384,7 +383,7 @@ router.post('/getlist/myorders', async function (req, res) {
  if (skip == 0) {
  count = await order_detailsModel.countDocuments({ params: filter_params });
  }
-  order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, skip: skip }, function (err, list) {
+  order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, function (err, list) {
   if (err) res.json({ Status: "Fail", Message: "Some internal error", Data: err.message, Code: 500 });
   if (req.body.id) {
     res.json({ Status: "Success", Message: " type Details", Data: list.length > 0 ? list[0] : {}, Count: count, Code: 200 });
@@ -407,7 +406,7 @@ router.post('/getlist/myorders', async function (req, res) {
 
     res.json({ Status: "Success", Message: " type Details", Data: list, Count: count, Code: 200 });
   }
-}).populate([{ path: "user_id", select: ["first_name", "middle_name", "last_name", "user_email", "user_phone", "user_address"] },{path: "store", select: ["name","phoneno","email","location","type","address","code"] },
+}).sort ( { order_booked_at : 1} ).populate([{ path: "user_id", select: ["first_name", "middle_name", "last_name", "user_email", "user_phone", "user_address"] },{path: "store", select: ["name","phoneno","email","location","type","address","code"] },
 { path: "vendor_id", select: ["business_name", "code","user_name",], populate: [{ path: "store", select: ["name", "phoneno", "email"] }]  },
 { path: "order_details.product_id", select: ["fish_combo_id", "unit", "price_type", "min_net_weight", "max_net_weight", "gross_weight", "cost", "discount_amount", "cat_id", "thumbnail_image", "product_img"], populate: [{ path: "fish_combo_id", select: ["product_name"] }, { path: "cat_id", select: ["product_cate"] }] }, { path: "shippingid" }]);
   
