@@ -6,7 +6,6 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var fileUpload = require('express-fileupload');
 var pdf = require('html-pdf');
-const puppeteer = require('puppeteer');
 const { v4: uuidv4 } = require('uuid');
 const moment = require('moment');
 var fs = require('fs');
