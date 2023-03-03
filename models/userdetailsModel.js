@@ -31,10 +31,7 @@ var userdetailsSchema = new mongoose.Schema({
   door_no: String,
   apartment: String,
   address: String,
-  latest_orderid:{
-    type: Schema.Types.ObjectId,
-    ref: "order_detail"
-  }
+  latest_orderid:String
 });
 userdetailsSchema.plugin(timestamps);
 mongoose.model('userdetails', userdetailsSchema);

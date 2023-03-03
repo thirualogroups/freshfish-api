@@ -279,41 +279,7 @@ router.get("/delivery_slots/:agentid", (req, res) => {
 });
 
 
-router.post('/mobile/slot-alert',async function (req, res) {
 
-  let shipping_params={ default_status : true,delete_status : false};   
-  let default_add= await shipping_addressModel.find(shipping_params);
-  let default_user=[];
-  let vendorlist=[];
-  let user_details=[];
-  let delivery_slots=[];
-  for(i=0; i < default_add.length; i++){
-    var customer = default_add[i].user_id;
-    default_user.push(customer);
-
-    let pincode_params={user_id:default_user[i]};
-    let default_pincodes= await shipping_addressModel.findOne(pincode_params);
-    let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: default_pincodes.pincode } }, status: true, delete_status: false });
-    if(vendor !== null){
-    let vendor1=vendor.toJSON();
-    for(let slot of vendor1.delivery_slots){
-      let days = [{ day: "Sunday", date: null }, { day: "Monday", date: null }, { day: "Tuesday", date: null }, { day: "Wednesday", date: null }, { day: "Thursday", date: null }, { day: "Friday", date: null }, { day: "Saturday", date: null }];
-      let today_date =moment(new Date()).tz("Asia/Kolkata").format("YYYY-MM-DD");
-      let tomorrow_date = moment(new Date(new Date().setDate(new Date().getDate() + 1))).tz("Asia/Kolkata").format("YYYY-MM-DD");
-      for (let day1 of slot.delivery_days) {
-        let delivery_day = days.filter(x => x.day === day1);
-        if(delivery_day?.date === today_date || delivery_day?.date === tomorrow_date ){
-          console.log("delivery date",delivery_day?.date);
-        }
-
-      }
-    }
-    }
-  }
-  
-  
-
-});
 
 
 
