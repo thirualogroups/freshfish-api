@@ -139,7 +139,7 @@ router.post('/update_order', async function (req, res) {
     console.log("stock_params123",req?.body?.orderid);
     let pending_order= await order_detailsModel.findOne({_id:req?.body?.orderid}).exec();
     if(!pending_order) {
-      return res.status(400).json({status: false,message:"Order_id not exist in database"});
+      return res.status(400).json({status: false,message:"Order_id not exist in database",Code: 400});
     } 
 
     for(let item of pending_order?.order_details){
