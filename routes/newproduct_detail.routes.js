@@ -249,16 +249,20 @@ router.post('/mobile/cart/getlist', async function (req, res){
   console.log("stock",stock);
 
   if(stock !== null){
-            // let variation_list = [];
+             let variation_list = [];
             cart_details[a].product_details_id.variation_list.forEach(element => {
             if(element.gross_weight <= stock.gross_weight){
-
-              cart_details[a].product_details_id.variation_list=element;
-
+            variation_list.push(element);
             }
             });
 
-            if(stock == null){
+            if(variation_list.length !== 0){
+              cart_details[a].variation_list = variation_list;
+              for(let value of cart_details[a]){
+                value.product_details_id.variation_list=value.variation_list
+              }
+            }
+          }else if(stock == null){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Sold Out";
             }else if(stock.soldout == true){
@@ -277,7 +281,7 @@ router.post('/mobile/cart/getlist', async function (req, res){
               res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
             }
 }
-  }
+
 
       });
 
