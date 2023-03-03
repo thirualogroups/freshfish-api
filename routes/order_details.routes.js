@@ -376,6 +376,7 @@ router.post('/getlist/myorders', async function (req, res) {
   /*else if(!params.id){
     return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
    }*/
+ let skip = 0;
  if(req.body.user_id){
   filter_params.user_id = req.body.user_id;
  }
@@ -383,7 +384,7 @@ router.post('/getlist/myorders', async function (req, res) {
  if (skip == 0) {
  count = await order_detailsModel.countDocuments({ params: filter_params });
  }
-  order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, function (err, list) {
+  order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, {skip: skip }, function (err, list) {
   if (err) res.json({ Status: "Fail", Message: "Some internal error", Data: err.message, Code: 500 });
   if (req.body.id) {
     res.json({ Status: "Success", Message: " type Details", Data: list.length > 0 ? list[0] : {}, Count: count, Code: 200 });
