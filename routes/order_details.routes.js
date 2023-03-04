@@ -614,6 +614,8 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
 //////Payment & Call back funcation /////
 
 router.post('/callbackurl',async function (req, res) {
+  console.log("ressssssssssssssssssss",res);
+  console.log("reqqqqqqqqqqqqqqqqqqqq",req);
    try {
         transaction_logsModel.create({
             order_id: ""+req.body.ORDERID,
@@ -774,6 +776,10 @@ router.post("/payment_initiate", async function (req, res) {
            "custId": req.body.userid,
          },
        };
+       paytmParams.head={
+
+
+       };
  
        console.log("*****777777***",paytmParams.body);
  
@@ -786,6 +792,7 @@ router.post("/payment_initiate", async function (req, res) {
           console.log('checksum',checksum);
  
          paytmParams.head = {
+          "version": req.body.userid,
            "signature": checksum
          };
  
@@ -826,7 +833,7 @@ router.post("/payment_initiate", async function (req, res) {
                 txnToken: response.body.txnToken,
                 amount: parseFloat(req.body.amount).toFixed(2).toString(),
                 callbackurl: callbackurl,
-                //environment: "staging"
+                environment: req.body.userid
               }
               res.send({"Status": response.body, Data: result, Code: 200 });
             });
