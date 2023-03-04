@@ -614,8 +614,13 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
 //////Payment & Call back funcation /////
 
 router.post('/callbackurl',async function (req, res) {
-  console.log("ressssssssssssssssssss",res);
-  console.log("reqqqqqqqqqqqqqqqqqqqq",req);
+  console.log("res,headdddddddddddddddddddddddddddddddddddddd",res.head);
+
+  console.log("req.headddddddddddddddddddddddddddddddddddddddd",req.head);
+
+  console.log("res,bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",res.body);
+
+  console.log("req.headyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",req.head);
    try {
         transaction_logsModel.create({
             order_id: ""+req.body.ORDERID,
@@ -833,7 +838,7 @@ router.post("/payment_initiate", async function (req, res) {
                 txnToken: response.body.txnToken,
                 amount: parseFloat(req.body.amount).toFixed(2).toString(),
                 callbackurl: callbackurl,
-                environment: req.body.userid
+                //environment: req.body.userid
               }
               res.send({"Status": response.body, Data: result, Code: 200 });
             });
