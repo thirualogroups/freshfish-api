@@ -298,7 +298,7 @@ router.post('/mobile/cart/getlist', async function (req, res){
     cart_details1[a].product_details_id.soldout  = false;
     cart_details1[a].product_details_id.related  = "";
   let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(cart_details1[a].product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false, store:req.body.store_id };
-  let stock = await stockModel.findOne(stock_params).lean();
+  let stock = await stockModel.findOne(stock_params)
   console.log("stock",stock);
 
   if(stock !== null){
