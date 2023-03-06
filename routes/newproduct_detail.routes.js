@@ -273,15 +273,14 @@ router.post('/mobile/cart/getlist', async function (req, res){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Stock is less";
             }
-            
-            cart_final_value.push(cart_details[a]);
-
+            //console.log("Stock Value Status",cart_details[a].product_details_id.variation_list);
+            cart_final_value.push(cart_details[a]);           
 }
-for(let value of cart_final_value)  {
-  value.product_details_id.variation_list=value.variation_list;
-}
+   for(let value of cart_final_value){
+   value.product_details_id.variation_list=value.variation_list;
+   }
 
-res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
+   res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
 
       });
 
