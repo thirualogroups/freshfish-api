@@ -290,6 +290,7 @@ router.post('/mobile/cart/getlist', async function (req, res){
   const cart_details = await cart_detailsModel.find({user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false}).lean().populate('product_details_id');
   // var cart_details1=[...cart_details];
   // var cart=cart_details1.lean();
+  console.log("cart_details",cart_details);
   if(cart_details.length == 0){
     res.json({ Status: "Success", Message: "Your Card Details is Empty", Data: [], Code: 200 });
   }
@@ -298,7 +299,7 @@ router.post('/mobile/cart/getlist', async function (req, res){
   cart_details[a].product_details_id.soldout  = false;
   cart_details[a].product_details_id.related  = "";
   let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(cart_details[a].product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false, store:req.body.store_id };
-  let stock = await stockModel.findOne(stock_params);
+  let stock = await stockModel.findOne(stock_params).lean();
   console.log("stock",stock);
 
   if(stock !== null){
