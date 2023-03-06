@@ -330,9 +330,15 @@ router.post('/mobile/cart/getlist', async function (req, res){
             // if(a == cart_details.length - 1){
               
             // }
+            for(let value of cart_final_value)  {
+
+                value.product_details_id.variation_list=value.variation_list;
+                
+              }
 }
 
 res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
+
       });
 
 
