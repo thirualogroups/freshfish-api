@@ -331,7 +331,7 @@ router.post('/mobile/cart/getlist', async function (req, res){
             // if(a == cart_details.length - 1){
               
             // }
-            let test = [... cart_final_value]
+            var test = [... cart_final_value]
             for(let value of test)  {
 
                 value.product_details_id.variation_list=value.variation_list;
