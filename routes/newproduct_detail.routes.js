@@ -327,14 +327,14 @@ router.post('/mobile/cart/getlist', async function (req, res){
             }
             //console.log("Stock Value Status",cart_details[a].product_details_id.variation_list);
             cart_final_value.push(cart_details[a]);
-            if(a == cart_details.length - 1){
-              res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
-            }
+            // if(a == cart_details.length - 1){
+              
+            // }
 }
 
-
+res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
       });
-      
+
 
 router.post('/mobile/cart/removeall', async function (req, res){
 var remove_user_cart={user_id:req.body.user_id};
