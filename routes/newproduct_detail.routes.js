@@ -287,7 +287,7 @@ router.post('/mobile/cart/delete', async function (req, res){
 
 router.post('/mobile/cart/getlist', async function (req, res){
 
-  const cart_details = await cart_detailsModel.find({user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false}).populate('product_details_id');
+  const cart_details = await cart_detailsModel.find({user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false}).populate('product_details_id').lean();
   
   if(cart_details.length == 0){
     res.json({ Status: "Success", Message: "Your Card Details is Empty", Data: [], Code: 200 });
@@ -333,7 +333,7 @@ router.post('/mobile/cart/getlist', async function (req, res){
             for(let value of cart_final_value)  {
 
                 value.product_details_id.variation_list=value.variation_list;
-                
+
               }
 }
 
