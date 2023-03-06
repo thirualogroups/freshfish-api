@@ -331,14 +331,15 @@ router.post('/mobile/cart/getlist', async function (req, res){
             // if(a == cart_details.length - 1){
               
             // }
-            for(let value of cart_final_value)  {
+            let test = [... cart_final_value]
+            for(let value of test)  {
 
                 value.product_details_id.variation_list=value.variation_list;
 
               }
 }
 
-res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
+res.json({ Status: "Success", Message: "Your Card Details", Data: test, Code: 200 });
 
       });
 
