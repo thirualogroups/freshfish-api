@@ -144,7 +144,8 @@ router.post('/getproductdetails_list', async function (req, res) {
             if(product_list[f].cat_id){
               Product_details.filter(x=>x.cat_id.toString()==product_list[f].cat_id._id.toString())[0]?.product_list.push(k)
             }
-              if (product_list[f].today_deal == true && today_deals.length < 5) {
+              if (product_list[f].recommendation == true && today_deals.length < 5) {
+
                 today_deals.push(k);
               }
 
