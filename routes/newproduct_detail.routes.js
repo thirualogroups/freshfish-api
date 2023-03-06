@@ -287,7 +287,7 @@ router.post('/mobile/cart/delete', async function (req, res){
 
 router.post('/mobile/cart/getlist', async function (req, res){
 
-  const cart_details = await cart_detailsModel.find({user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false}).lean().populate('product_details_id');
+  const cart_details = await cart_detailsModel.find({user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false}).populate('product_details_id');
   // var cart_details1=[...cart_details];
   // var cart=cart_details1.lean();
   console.log("cart_details",cart_details);
@@ -332,7 +332,7 @@ router.post('/mobile/cart/getlist', async function (req, res){
             // if(a == cart_details.length - 1){
               
             // }
-            for(let value of cart_final_value)  {
+            for(let value of cart_final_value.lean())  {
 
                 value.product_details_id.variation_list=value.variation_list;
 
