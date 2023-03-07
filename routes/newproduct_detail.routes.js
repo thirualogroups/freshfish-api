@@ -1,28 +1,28 @@
-var express = require('express');
+let express = require('express');
 const moment = require('moment');
-var router = express.Router();
-var bodyParser = require('body-parser');
+let router = express.Router();
+let bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
-var newproduct_detailModel = require('./../models/newproduct_detailModel');
-var product_detailsModel = require('./../models/product_detailsModel');
+let newproduct_detailModel = require('./../models/newproduct_detailModel');
+let product_detailsModel = require('./../models/product_detailsModel');
 const storesModel = require('./../models/storesModel');
 const stockModel = require("./../models/stockModel");
 const fav_listModel=require("./../models/fav_listModel");
 const cart_detailsModel = require('../models/cart_detailsModel');
 const product_vendorModel = require('./../models/product_vendorModel');
 const userdetailsModel=require('./../models/userdetailsModel');
-var admin= require("firebase-admin");
-var fcm =require("fcm-notification");
+let admin= require("firebase-admin");
+let fcm =require("fcm-notification");
 
-var admin = require("firebase-admin");
+let admin = require("firebase-admin");
 
-var serviceAccount = require("../config/push-notification-key.json");
+let serviceAccount = require("../config/push-notification-key.json");
 //var serviceAccount = require("../config/push-notification-key.json");
 const shipping_addressModel = require('../models/shipping_addressModel');
 const certpath =admin.credential.cert(serviceAccount);
-var FCM = new fcm(certpath);
+let FCM = new fcm(certpath);
 
 
 ////////////////// Admin User /////////////////////////
@@ -311,6 +311,9 @@ router.post('/mobile/cart/getlist', async function (req, res){
 
             if(variation_list.length !== 0){
               cart_details[a].variation_list = variation_list;
+            }else if(stock.gross_weight < +cart_details[a].gross_weight){
+              cart_details[a].product_details_id.soldout  = true;
+              cart_details[a].product_details_id.related  = "Stock is less";
             }
           }else if(stock == null){
               cart_details[a].product_details_id.soldout  = true;
@@ -321,9 +324,6 @@ router.post('/mobile/cart/getlist', async function (req, res){
             }else if(stock.gross_weight == 0){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "NO Available";
-            }else if(stock.gross_weight <= +cart_details[a].gross_weight){
-              cart_details[a].product_details_id.soldout  = true;
-              cart_details[a].product_details_id.related  = "Stock is less";
             }
             //console.log("Stock Value Status",cart_details[a].product_details_id.variation_list);
             cart_final_value.push(cart_details[a]);
@@ -519,91 +519,92 @@ catch(err){
 
 });
 
+//slot end date alert:-
 
-  setInterval(async(req,res)=>{
-    try  {
-      let shippingParams={ default_status : true,delete_status : false};   
-      let defaultAdd= await shipping_addressModel.find(shippingParams).exec();
-      if(!defaultAdd)  {
-        res.json({status:"success",Message:"Default Address details Not found", Code: 400});
-      }
-     let today = new Date();
-     let currentDay = 'Sunday';
-     if(today.getDay() == 1)  {
-      currentDay = 'Monday';
-     }  else if(today.getDay() == 2)  {
-      currentDay = 'Tuesday';
-    }  else if(today.getDay() == 3)  {
-      currentDay = 'Wednesday';
-    }  else if(today.getDay() == 4)  {
-      currentDay = 'Thursday';
-    }  else if(today.getDay() == 5)  {
-      currentDay = 'Friday';
-    }  else if(today.getDay() == 6)  {
-      currentDay = 'Saturday';
-    }
+  // setInterval(async(req,res)=>{
+  //   try  {
+  //     let shippingParams={ default_status : true,delete_status : false};   
+  //     let defaultAdd= await shipping_addressModel.find(shippingParams).exec();
+  //     if(!defaultAdd)  {
+  //       res.json({status:"success",Message:"Default Address details Not found", Code: 400});
+  //     }
+  //    let today = new Date();
+  //    let currentDay = 'Sunday';
+  //    if(today.getDay() == 1)  {
+  //     currentDay = 'Monday';
+  //    }  else if(today.getDay() == 2)  {
+  //     currentDay = 'Tuesday';
+  //   }  else if(today.getDay() == 3)  {
+  //     currentDay = 'Wednesday';
+  //   }  else if(today.getDay() == 4)  {
+  //     currentDay = 'Thursday';
+  //   }  else if(today.getDay() == 5)  {
+  //     currentDay = 'Friday';
+  //   }  else if(today.getDay() == 6)  {
+  //     currentDay = 'Saturday';
+  //   }
     
-     let test=[];
-     for(let i=0; i< defaultAdd?.length;i++)  {
-     let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: defaultAdd[i]?.pincode } }, status: true, delete_status: false }).exec();
-     for(let j=0;  j<=vendor?.delivery_slots.length;j++)  {
-     let t=vendor?.delivery_slots[j]?.delivery_days.filter(e=>e==currentDay);
-      if(t?.length) {
-        test.push({delivery_days: vendor?.delivery_slots[j].delivery_days,pincode: defaultAdd[i].pincode,user_id: defaultAdd[i].user_id,order_ends_before:vendor?.delivery_slots[j]?.order_ends_before } );
-      }
-      }
-     }
-    let now = new Date();
-    now.setMinutes(now.getMinutes() + 30); // timestamp
-    now = new Date(now); // Date object
+  //    let test=[];
+  //    for(let i=0; i< defaultAdd?.length;i++)  {
+  //    let vendor = await product_vendorModel.findOne({ pincodes: { $elemMatch: { $eq: defaultAdd[i]?.pincode } }, status: true, delete_status: false }).exec();
+  //    for(let j=0;  j<=vendor?.delivery_slots.length;j++)  {
+  //    let t=vendor?.delivery_slots[j]?.delivery_days.filter(e=>e==currentDay);
+  //     if(t?.length) {
+  //       test.push({delivery_days: vendor?.delivery_slots[j].delivery_days,pincode: defaultAdd[i].pincode,user_id: defaultAdd[i].user_id,order_ends_before:vendor?.delivery_slots[j]?.order_ends_before } );
+  //     }
+  //     }
+  //    }
+  //   let now = new Date();
+  //   now.setMinutes(now.getMinutes() + 30); // timestamp
+  //   now = new Date(now); // Date object
     
-    let currentUpdatedTime=`${now.getHours()}`+':'+ `${now.getMinutes()}`
-    //let tt="09:30";
-    //console.log(typeof(currentUpdatedTime),currentUpdatedTime)
-    let finalArray=[];
-     for(let k=0;k<=test?.length;k++)  {
-      if(test[k]?.user_id)  {
-        let userDetails = await userdetailsModel.findOne({ _id: test[k]?.user_id,user_type:1}).exec();
-        test[k].userDetails = userDetails;
-        //console.log(test[k].order_ends_before,currentUpdatedTime);
-        if(test[k].order_ends_before == (currentUpdatedTime).toString())  {
-          finalArray.push(test[k]);
-        }
-        // if(test[k].order_ends_before == tt)  {
+  //   let currentUpdatedTime=`${now.getHours()}`+':'+ `${now.getMinutes()}`
+  //   //let tt="09:30";
+  //   //console.log(typeof(currentUpdatedTime),currentUpdatedTime)
+  //   let finalArray=[];
+  //    for(let k=0;k<=test?.length;k++)  {
+  //     if(test[k]?.user_id)  {
+  //       let userDetails = await userdetailsModel.findOne({ _id: test[k]?.user_id,user_type:1}).exec();
+  //       test[k].userDetails = userDetails;
+  //       //console.log(test[k].order_ends_before,currentUpdatedTime);
+  //       if(test[k].order_ends_before == (currentUpdatedTime).toString())  {
+  //         finalArray.push(test[k]);
+  //       }
+  //       // if(test[k].order_ends_before == tt)  {
     
-        //   finalArray.push(test[k]);
+  //       //   finalArray.push(test[k]);
     
-        // }
-      }
-     }
-      for(let l=0;l<=finalArray.length;l++){
-              let message = {
-                  notification:{
-                      title:"Order placed successfully",
-                      body:"Hi"
-                  },
-                  data:{
-                  },
-                  token:finalArray[l]?.userDetails?.fb_token,
-              };
-  if(message.token!=null && message.token!=""){
-              FCM.send(message,function(err,resp){
+  //       // }
+  //     }
+  //    }
+  //     for(let l=0;l<=finalArray.length;l++){
+  //             let message = {
+  //                 notification:{
+  //                     title:"Order placed successfully",
+  //                     body:"Hi"
+  //                 },
+  //                 data:{
+  //                 },
+  //                 token:finalArray[l]?.userDetails?.fb_token,
+  //             };
+  // if(message.token!=null && message.token!=""){
+  //             FCM.send(message,function(err,resp){
             
-                  if(err){
+  //                 if(err){
                     
-                  }else{
+  //                 }else{
                     
-                  }
-              });
-            }
-      }
-     //res.send({message:"Notification send successfully"});
-    } catch (e) {
-      console.log(e);
-      res.status(500).json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
-    }
+  //                 }
+  //             });
+  //           }
+  //     }
+  //    //res.send({message:"Notification send successfully"});
+  //   } catch (e) {
+  //     console.log(e);
+  //     res.status(500).json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
+  //   }
     
-  },500);
+  // },500);
 
 
 
