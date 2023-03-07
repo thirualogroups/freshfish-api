@@ -1225,7 +1225,6 @@ if(canceled_order[0]){
 console.log(".............................canceled_order......................................",canceled_order)
 }
 }
-console.log("hii"); 
 }
       catch (ex) {
           console.log(ex);
