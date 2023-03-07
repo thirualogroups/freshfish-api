@@ -311,10 +311,11 @@ router.post('/mobile/cart/getlist', async function (req, res){
 
             if(variation_list.length !== 0){
               cart_details[a].variation_list = variation_list;
-            }else if(stock.gross_weight < +cart_details[a].gross_weight){
+             if(stock.gross_weight < +cart_details[a].gross_weight){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Stock is less";
             }
+          }
           }else if(stock == null){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Sold Out";
