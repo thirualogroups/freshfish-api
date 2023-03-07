@@ -1223,11 +1223,7 @@ for(let a = 0; a < time1.length; a ++){
 
 if(canceled_order[0]){
 console.log(".............................canceled_order......................................",canceled_order)
-}else{
-  console.log("cancel_order not found");
 }
-}else{
-  console.log("pending order not avail");
 }
 }
       catch (ex) {
