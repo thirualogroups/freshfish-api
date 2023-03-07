@@ -1189,8 +1189,7 @@ router.get("/paytm_fail", (req, res)=>{
 
 });
 setInterval(async(req,res)=>{
-  
-    
+ console.log("hii");   
     try {
 let pending_params={delete_status:false,payment_status:"pending",order_status:"Booked"};
       let pending_order= await order_detailsModel.find(pending_params);
