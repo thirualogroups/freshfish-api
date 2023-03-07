@@ -1191,7 +1191,7 @@ router.get("/paytm_fail", (req, res)=>{
  setInterval(async(req,res)=>{
     
     try {
-let pending_params={delete_status:false,payment_status:"pending",order_status:"Booked"};
+let pending_params={delete_status:false,payment_status:"pending",order_status:"Pending"};
       let pending_order= await order_detailsModel.find(pending_params);
 
 if(pending_order[0]){
