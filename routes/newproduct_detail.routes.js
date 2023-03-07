@@ -1,28 +1,28 @@
-let express = require('express');
+var express = require('express');
 const moment = require('moment');
-let router = express.Router();
-let bodyParser = require('body-parser');
+var router = express.Router();
+var bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
-let newproduct_detailModel = require('./../models/newproduct_detailModel');
-let product_detailsModel = require('./../models/product_detailsModel');
+var newproduct_detailModel = require('./../models/newproduct_detailModel');
+var product_detailsModel = require('./../models/product_detailsModel');
 const storesModel = require('./../models/storesModel');
 const stockModel = require("./../models/stockModel");
 const fav_listModel=require("./../models/fav_listModel");
 const cart_detailsModel = require('../models/cart_detailsModel');
 const product_vendorModel = require('./../models/product_vendorModel');
 const userdetailsModel=require('./../models/userdetailsModel');
-let admin= require("firebase-admin");
-let fcm =require("fcm-notification");
+var admin= require("firebase-admin");
+var fcm =require("fcm-notification");
 
-let admin = require("firebase-admin");
+var admin = require("firebase-admin");
 
-let serviceAccount = require("../config/push-notification-key.json");
+var serviceAccount = require("../config/push-notification-key.json");
 //var serviceAccount = require("../config/push-notification-key.json");
 const shipping_addressModel = require('../models/shipping_addressModel');
 const certpath =admin.credential.cert(serviceAccount);
-let FCM = new fcm(certpath);
+var FCM = new fcm(certpath);
 
 
 ////////////////// Admin User /////////////////////////
