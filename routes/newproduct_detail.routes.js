@@ -356,6 +356,7 @@ router.post('/check_checkout_stock',async function (req, res) {
   var temp_value = req.body.check_value[a];
   let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(temp_value.fish_combo_id), status: true, delete_status: false, soldout: false, store:temp_value.store };
   let stock = await stockModel.findOne(stock_params);
+  console.log("stock",stock);
   var soldout  = false;
   var related  = "";
   if(stock == null){
