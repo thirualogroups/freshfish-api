@@ -1188,8 +1188,8 @@ router.get("/paytm_fail", (req, res)=>{
 
 
 });
-setInterval(async(req,res)=>{
-   
+ setInterval(async(req,res)=>{
+    
     try {
 let pending_params={delete_status:false,payment_status:"pending",order_status:"Booked"};
       let pending_order= await order_detailsModel.find(pending_params);
@@ -1197,7 +1197,7 @@ let pending_params={delete_status:false,payment_status:"pending",order_status:"B
 if(pending_order[0]){
   let time=[];
    for(let a = 0; a < pending_order.length; a ++){
-       let dt=pending_order[a].createdAt;
+       let dt=pending_order[a].order_booked_at;
        dt = new Date(dt.setHours(dt.getHours()+(12)));
        time.push(dt);
 }
@@ -1217,20 +1217,24 @@ let canceled_order=[];
 for(let a = 0; a < time1.length; a ++){
     let params={order_status:"Cancelled"};
   
-  let experiy_order=await order_detailsModel.findOneAndUpdate({createdAt:time1[a]},params,{new:true});
+  let experiy_order=await order_detailsModel.findOneAndUpdate({order_booked_at:time1[a]},params,{new:true});
   canceled_order.push(experiy_order);
 }
 
 if(canceled_order[0]){
 console.log(".............................canceled_order......................................",canceled_order)
+}else{
+  console.log("cancel_order not found");
 }
+}else{
+  console.log("pending order not avail");
 }
 }
       catch (ex) {
           console.log(ex);
           res.json({ Status: "Failed", Message: ex.message, Code: 500 });
-    } 
-}, 500);
+    }
+ }, 500);
 
 
 
