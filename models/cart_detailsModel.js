@@ -11,7 +11,11 @@ var cart_detailsSchema = new mongoose.Schema({
         ref: "product_details"
 
     },
-    category:String,
+    category:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "product_categ"
+
+    },
     disamount:Number,
     max_net:String,
     min_net:String,
