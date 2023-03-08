@@ -287,13 +287,7 @@ router.post('/mobile/cart/delete', async function (req, res){
 
 router.post('/mobile/cart/getlist', async function (req, res){
 
-  const cart_details = await cart_detailsModel.find({user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false}).populate([{
-    path: 'product_details_id',
-    model: 'product_details'
-}, {
-    path: 'category',
-    model: 'product_categ'
-}]);
+  const cart_details = await cart_detailsModel.find({user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false}).populate('product_details_id');
   
   if(cart_details.length == 0){
     res.json({ Status: "Success", Message: "Your Card Details is Empty", Data: [], Code: 200 });
