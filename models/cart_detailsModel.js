@@ -12,6 +12,7 @@ var cart_detailsSchema = new mongoose.Schema({
 
     },
     category:String,
+    cat_name:String,
     disamount:Number,
     max_net:String,
     min_net:String,

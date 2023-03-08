@@ -187,7 +187,7 @@ router.post('/mobile/cart/create', async function (req, res){
   const cart_details = await cart_detailsModel.findOne({product_details_id: new mongoose.Types.ObjectId(req.body.product_details_id),user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false});
     console.log(cart_details);
     if(cart_details == null){
-      cart_detailsModel.create({user_id: req.body.user_id,product_details_id:req.body.product_details_id,gross_weight:req.body.gross_weight,customer_info:req.body.customer_info,category:req.body.category,disamount:req.body.disamount,max_net:req.body.max_net,min_net:req.body.min_net,product_price:req.body.product_price,product_quantity:req.body.product_quantity,product_title:req.body.product_title,store:req.body.store,total_amt:req.body.total_amt,unit:req.body.unit,value:req.body.value},
+      cart_detailsModel.create({user_id: req.body.user_id,product_details_id:req.body.product_details_id,gross_weight:req.body.gross_weight,customer_info:req.body.customer_info,category:req.body.category,cat_name:req.body.cat_name,disamount:req.body.disamount,max_net:req.body.max_net,min_net:req.body.min_net,product_price:req.body.product_price,product_quantity:req.body.product_quantity,product_title:req.body.product_title,store:req.body.store,total_amt:req.body.total_amt,unit:req.body.unit,value:req.body.value},
       function (err, user) {
         if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
         res.json({ Status: "Success", Message: "cart product added successfully", Data: user, Code: 200 });
