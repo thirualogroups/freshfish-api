@@ -315,17 +315,17 @@ router.post('/mobile/cart/getlist', async function (req, res){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Stock is less";
              }
-          }else if(stock.soldout == true){
-            cart_details[a].product_details_id.soldout  = true;
-            cart_details[a].product_details_id.related  = "Sold Out";
-           }else if(stock.gross_weight == 0){
+          }else if(stock.gross_weight == 0){
             cart_details[a].product_details_id.soldout  = true;
             cart_details[a].product_details_id.related  = "NOT Available";
            }
           }else if(stock == null){
               cart_details[a].product_details_id.soldout  = true;
               cart_details[a].product_details_id.related  = "Sold Out";
-            }
+          }else if(stock.soldout == true){
+              cart_details[a].product_details_id.soldout  = true;
+              cart_details[a].product_details_id.related  = "Sold Out";
+          }
             //console.log("Stock Value Status",cart_details[a].product_details_id.variation_list);
             cart_final_value.push(cart_details[a]);
             if(a == cart_details.length - 1){
