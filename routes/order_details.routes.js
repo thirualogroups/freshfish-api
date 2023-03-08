@@ -21,12 +21,9 @@ let ObjectId = require('mongodb').ObjectID;
 
 router.post('/create', async function (req, res) {
   try {
-    console.log("create request", req?.body)
     for(let item of req?.body?.order_details){
       let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(item?.fish_combo_id), store: new mongoose.Types.ObjectId(req?.body?.store), status: true, delete_status: false, soldout: false,  gross_weight: {$gte: item?.gross_weight} };
       let stock = await stockModel.findOne(stock_params).exec();
-      console.log("stock_params",stock_params);
-      console.log("stock_params123",stock);
       if(!stock){
         return res.status(400).json({Status:"Fail", Message:item?.product_name + " has less/no stock.", Code: 400}); 
       }
@@ -76,7 +73,6 @@ router.post('/create', async function (req, res) {
     },
    
       async function (err, order) {
-        console.log("stock_params12345",order);
         if (err) {
           res.json({ Status: "Fail", Message: err.message, Code: 400 });
         } else {
@@ -136,7 +132,6 @@ router.post('/post_order', async function (req, res) {
 
 router.post('/update_order', async function (req, res) {
   try {
-    console.log("stock_params123",req?.body?.orderid);
     let pending_order= await order_detailsModel.findOne({_id:req?.body?.orderid}).exec();
     if(!pending_order) {
       return res.status(400).json({status: false,message:"Order_id not exist in database",Code: 400});
@@ -187,8 +182,6 @@ router.post('/cancel_order', async function (req, res) {
 
   try {
     let live_orders= await order_detailsModel.findOne({_id:req.body.orderid});
-
-    console.log("live_orders",live_orders);
 
           for (let item of live_orders.order_details) {
 
@@ -512,7 +505,6 @@ router.post('/getlist/order_id', async function (req, res) {
  router.post('/getlist/vendor_id', async function (req,res) {
   let filter_params = { delete_status: false };
   filter_params.user_type=3;
-  console.log("params",filter_params);
   if (req.body.userid && req.body.userid !== "") {
     filter_params.user_id = new mongoose.Types.ObjectId(req.body.userid);
   }
@@ -527,7 +519,7 @@ if (skip == 0) {
 }
 
 
-console.log("filter_params",filter_params);
+
 
 order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, skip: skip }, function (err, list) {
   if (err) res.json({ Status: "Fail", Message: "Some internal error", Data: err.message, Code: 500 });
@@ -614,6 +606,7 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
 //////Payment & Call back funcation /////
 
 router.post('/callbackurl',async function (req, res) {
+
    try {
         transaction_logsModel.create({
             order_id: ""+req.body.ORDERID,
@@ -625,9 +618,9 @@ router.post('/callbackurl',async function (req, res) {
             respmsg: ""+req.body.RESPMSG
         }, function (err, info) {
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
-                //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
+                var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
               //var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
-              var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
+              //var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
               console.log("Payment id check",req.body.ORDERID);
                 res.write(
                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
@@ -753,7 +746,6 @@ router.post("/payment_initiate", async function (req, res) {
  
  router.post("/payment_initiate_one", async function (req, res) {
    try {
-    req.body.amount = 1;
        const https = require('https');
        const PaytmChecksum = require('paytmchecksum');
        let credentials = paytm_credentials();
@@ -774,10 +766,6 @@ router.post("/payment_initiate", async function (req, res) {
            "custId": req.body.userid,
          },
        };
-       paytmParams.head={
-
-
-       };
  
        console.log("*****777777***",paytmParams.body);
  
@@ -790,7 +778,6 @@ router.post("/payment_initiate", async function (req, res) {
           console.log('checksum',checksum);
  
          paytmParams.head = {
-          "version": req.body.userid,
            "signature": checksum
          };
  
@@ -831,7 +818,7 @@ router.post("/payment_initiate", async function (req, res) {
                 txnToken: response.body.txnToken,
                 amount: parseFloat(req.body.amount).toFixed(2).toString(),
                 callbackurl: callbackurl,
-                //environment: req.body.userid
+                //environment: "staging"
               }
               res.send({"Status": response.body, Data: result, Code: 200 });
             });
@@ -1145,8 +1132,8 @@ router.post('/callbackurl_link',async function (req, res) {
              console.log("********transaction_logsModel***********",info);
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
                 //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
-              var  url = "http://localhost:4500/#/cart-page/"+""+req.body.ORDERID;
-              //var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
+              //var  url = "http://localhost:4500/#/cart-page/"+""+req.body.ORDERID;
+              var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
 
                 res.write(
                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
@@ -1221,7 +1208,6 @@ for(let a = 0; a < time1.length; a ++){
 }
 
 if(canceled_order[0]){
-console.log(".............................canceled_order......................................",canceled_order)
 }
 }
 }

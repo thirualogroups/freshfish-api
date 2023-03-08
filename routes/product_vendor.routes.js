@@ -16,7 +16,7 @@ var product_vendorModel = require('./../models/product_vendorModel');
 var locationdetailsModel = require('./../models/locationdetailsModel');
 var counterMasterModel = require("../models/counterModel");
 var userdetailsModel = require('./../models/userdetailsModel');
-var shipping_addressModel=require('./../models/shipping_addressModel');
+
 
 
 
@@ -277,8 +277,6 @@ router.get("/delivery_slots/:agentid", (req, res) => {
     if (err) return res.json({ Status: "Failed", Message: ex.message, Code: 500 });
   }
 });
-
-
 
 
 

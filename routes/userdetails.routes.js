@@ -20,7 +20,7 @@ const product_vendorModel = require('./../models/product_vendorModel');
 
 ///////////////New Admin Rework//////////////////
 router.post('/create', async function (req, res){
-  console.log("Create",req.body);
+
   let user = await userdetailsModel.findOne({user_type:1,user_phone: req.body.user_phone, delete_status: false});
   if (user == null) {
   try {
@@ -34,7 +34,7 @@ router.post('/create', async function (req, res){
 
     let phone = await userdetailsModel.findOne({user_type:3,user_phone: req.body.user_phone, delete_status: false});
     let random = 123456;
-    console.log(phone);
+    
     if (phone !== null) {
       if (phone.user_status == 'Incomplete') {
         let a = {
@@ -128,7 +128,7 @@ router.post('/create', async function (req, res){
 
 
 router.post('/agent/create', async function (req, res){
-  console.log("Create",req.body);
+
   try {
     let phone = await userdetailsModel.findOne({user_phone:req.body.user_phone, delete_status: false,});
     if (phone !== null) {
@@ -366,7 +366,7 @@ router.get('/user_getlist', async function (req, res) {
         },
       };
 
-      console.log(paytmParams.body);
+      
 
       /*
       * Generate checksum by parameters we have in body
@@ -404,7 +404,7 @@ router.get('/user_getlist', async function (req, res) {
           });
 
           post_res.on('end', function () {
-            console.log(response);
+
             //console.log(typeof response);
             response = JSON.parse(response);
             let result = {
@@ -435,7 +435,7 @@ router.get('/user_getlist', async function (req, res) {
     var order_count = await order_detailsModel.find({createdAt:new Date()});
     var total_order_amount = 0;
      order_count.forEach(element => {
-     console.log(element);
+
      total_order_amount = total_order_amount + element.order_final_amount;
       });
     let datas = {
@@ -459,11 +459,10 @@ router.get('/user_getlist', async function (req, res) {
      }});
      var total_order_amount = 0;
      order_count_to.forEach(element => {
-     console.log(element);
+
      total_order_amount = total_order_amount + element.order_final_amount;
       });
-     console.log(order_count_to);
-     console.log(order_count.length);
+
      let datas = {
        customer_count : user_count.length,
        no_of_agent : agent_count.length,
@@ -480,7 +479,7 @@ router.get('/user_getlist', async function (req, res) {
   router.post('/phone-verification', async (req, res) =>{
   try{
     let phone = await userdetailsModel.findOne({ user_phone: req.body.user_phone, delete_status: false });
-    console.log(phone);
+
     if (phone == null){
     let random = Math.floor(100000 + Math.random()*900000);
     const message = `Dear ${req.body.first_name}, your login One Time Password is ${random}.-We Know How To Choose Fresh Fish`;;

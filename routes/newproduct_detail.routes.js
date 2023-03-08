@@ -138,7 +138,7 @@ router.post('/admin_delete', function (req, res) {
 router.post('/mobile/favlist', async function (req, res) {
   const fav_lists = await fav_listModel.findOne({product_details_id: new mongoose.Types.ObjectId(req.body.product_details_id),user_id: new mongoose.Types.ObjectId(req.body.user_id)});
   try {
-    console.log("Value 1",fav_lists);
+
     if(fav_lists == null){
       fav_listModel.create({user_id: req.body.user_id,product_details_id:req.body.product_details_id,fav_status:true}, function (err, user) {
         if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
@@ -164,12 +164,11 @@ router.get('/mobile/get_favlist', async function (req, res) {
   let params = {user_id:req.query.user_id,fav_status:true};
   let fav_list= await fav_listModel.find(params).populate('product_details_id');
   var stock_list=[];
-  console.log("favlist",fav_list);
   for(let item of fav_list){  
   let stock_params = {store:new mongoose.Types.ObjectId(req.query.store),fish_combo_id: new mongoose.Types.ObjectId(item.product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false };
-  console.log("stock_params",stock_params);
+
   let stock = await stockModel.findOne(stock_params);
-  console.log("stock details",stock);
+  
 
   stock_list.push(stock);
   }
@@ -185,7 +184,7 @@ router.post('/mobile/cart/create', async function (req, res){
   try {
   if((req.body.user_id !== "") && (req.body.product_details_id !== "") && req.body.user_id && req.body.product_details_id){
   const cart_details = await cart_detailsModel.findOne({product_details_id: new mongoose.Types.ObjectId(req.body.product_details_id),user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false});
-    console.log(cart_details);
+
     if(cart_details == null){
       cart_detailsModel.create({user_id: req.body.user_id,product_details_id:req.body.product_details_id,gross_weight:req.body.gross_weight,customer_info:req.body.customer_info,category:req.body.category,cat_name:req.body.cat_name,disamount:req.body.disamount,max_net:req.body.max_net,min_net:req.body.min_net,product_price:req.body.product_price,product_quantity:req.body.product_quantity,product_title:req.body.product_title,store:req.body.store,total_amt:req.body.total_amt,unit:req.body.unit,value:req.body.value},
       function (err, user) {
@@ -233,58 +232,6 @@ router.post('/mobile/cart/delete', async function (req, res){
     });
 });
 
-// router.post('/mobile/cart/getlist', async function (req, res){
-
-//   const cart_details = await cart_detailsModel.find({user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false}).populate('product_details_id');
-  
-//   if(cart_details.length == 0){
-//     res.json({ Status: "Success", Message: "Your Card Details is Empty", Data: [], Code: 200 });
-//   }
-//   var cart_final_value = [];
-//   for(let a = 0; a < cart_details.length ; a++){ 
-//   cart_details[a].product_details_id.soldout  = false;
-//   cart_details[a].product_details_id.related  = "";
-//   let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(cart_details[a].product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false, store:req.body.store_id };
-//   let stock = await stockModel.findOne(stock_params);
-//   console.log("stock",stock);
-
-//   if(stock !== null){
-//             let variation_list = [];
-//             cart_details[a].product_details_id.variation_list.forEach(element => {
-//             if(element.gross_weight <= stock.gross_weight){
-//             variation_list.push(element);
-//             }
-//             });
-//              console.log("variation",variation_list);
-
-//             if(variation_list.length !== 0){
-//               cart_details[a].variation_list = variation_list;
-//             }
-//           }else if(stock == null){
-//               cart_details[a].product_details_id.soldout  = true;
-//               cart_details[a].product_details_id.related  = "Sold Out";
-//             }else if(stock.soldout == true){
-//               cart_details[a].product_details_id.soldout  = true;
-//               cart_details[a].product_details_id.related  = "Sold Out";
-//             }else if(stock.gross_weight == 0){
-//               cart_details[a].product_details_id.soldout  = true;
-//               cart_details[a].product_details_id.related  = "NO Available";
-//             }else if(stock.gross_weight <= +cart_details[a].gross_weight){
-//               cart_details[a].product_details_id.soldout  = true;
-//               cart_details[a].product_details_id.related  = "Stock is less";
-//             }
-            
-//             cart_final_value.push(cart_details[a]);
-
-// }
-// for(let value of cart_final_value)  {
-//   value.product_details_id.variation_list=value.variation_list;
-// }
-// res.json({ Status: "Success", Message: "Your Card Details", Data: cart_final_value, Code: 200 });
-
-//       });
-
-
 router.post('/mobile/cart/getlist', async function (req, res){
 
   const cart_details = await cart_detailsModel.find({user_id: new mongoose.Types.ObjectId(req.body.user_id),delete_status:false}).populate('product_details_id');
@@ -298,7 +245,7 @@ router.post('/mobile/cart/getlist', async function (req, res){
   cart_details[a].product_details_id.related  = "";
   let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(cart_details[a].product_details_id.fish_combo_id), status: true, delete_status: false, soldout: false, store:req.body.store_id };
   let stock = await stockModel.findOne(stock_params);
-  console.log("stock",stock);
+
 
   if(stock !== null){
      if(stock.soldout == true){
@@ -314,7 +261,6 @@ router.post('/mobile/cart/getlist', async function (req, res){
             variation_list.push(element);
             }
             });
-             console.log("variation",variation_list);
 
             if(variation_list.length !== 0){
               cart_details[a].variation_list = variation_list;
@@ -356,7 +302,6 @@ router.post('/check_checkout_stock',async function (req, res) {
   var temp_value = req.body.check_value[a];
   let stock_params = {fish_combo_id: new mongoose.Types.ObjectId(temp_value.fish_combo_id), status: true, delete_status: false, soldout: false, store:temp_value.store };
   let stock = await stockModel.findOne(stock_params);
-
   var soldout  = false;
   var related  = "";
   if(stock == null){
