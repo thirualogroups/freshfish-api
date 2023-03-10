@@ -18,7 +18,7 @@ const Product_favModel = require('./../models/Product_favModel');
 router.post('/getproductdetails_list', async function(req, res) {
   try {
     var Banner_details = [];
-    var test_banner_details = await vendor_banner_detailModel.find({ delete_status: false }).sort({ _id: -1 });
+    var test_banner_details = await vendor_banner_detailModel.find({ delete_status: false }).sort({ _id: -1 }).limit(3);
     for (let b = 0; b < test_banner_details.length; b++) {
       Banner_details.push({
         "banner_img": test_banner_details[b].img_path,
@@ -182,7 +182,7 @@ router.post('/getproductdetails_list', async function(req, res) {
 router.post('/mobile/getproductdetails_list', async function (req, res) {
   try {
     var Banner_details = [];
-    var test_banner_details = await vendor_banner_detailModel.find({ delete_status: false }).sort({ _id: -1 });
+    var test_banner_details = await vendor_banner_detailModel.find({ delete_status: false }).sort({ _id: -1 }).limit(3);
     for (let b = 0; b < test_banner_details.length; b++) {
       Banner_details.push({
         "banner_img": test_banner_details[b].img_path,
@@ -503,7 +503,7 @@ router.post('/mobile/product_list', async function (req, res) {
 router.get('/mobile/banner', async function (req, res) {
 try{
   var Banner_details = [];
-    var test_banner_details = await vendor_banner_detailModel.find({ delete_status: false }).sort({ _id: -1 });
+    var test_banner_details = await vendor_banner_detailModel.find({ delete_status: false }).sort({ _id: -1 }).limit(3);
     for (let b = 0; b < test_banner_details.length; b++) {
       Banner_details.push({
         "banner_img": test_banner_details[b].img_path,
