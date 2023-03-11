@@ -1,4 +1,5 @@
 let express = require('express');
+const axios = require("axios");
 // let app = express();
 let router = express.Router();
 let bodyParser = require('body-parser');
@@ -619,8 +620,8 @@ router.post('/callbackurl',async function (req, res) {
         }, function (err, info) {
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
                 //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
-              //var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
-              var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
+              var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
+              //var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
               console.log("Payment id check",req.body.ORDERID);
                 res.write(
                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
@@ -1217,8 +1218,63 @@ if(canceled_order[0]){
           res.json({ Status: "Failed", Message: ex.message, Code: 500 });
     }
  }, 500);
+ 
+ router.post('/whatsapp_api',async function(req,res){
+        const apikey="1413eec28e2c2c76db12401bf8f3123a275a9c57";
+        const instance="DNikZW48xI6hsRb";
+        var mobileNo=req.body.mobileno;
+        var textMessage=req.body.message;
+
+    let url = `https://app.whatzapi.com/api/send-text.php?number=91${mobileNo}&msg=${textMessage}&apikey=${apikey}&instance=${instance}`;
+
+    axios({
+        method:'post',
+        url,
+        
+    })
+    .then(function (response) {
+      console.log(response);
+        res.send(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+});
 
 
+
+
+
+
+    // try {
+    //     const apikey="1413eec28e2c2c76db12401bf8f3123a275a9c57";
+    //     const instance="DNikZW48xI6hsRb";
+    //     var mobileNo=req.body.mobileno;
+    //     var textMessage=req.body.message
+
+
+    //     const endpoint = `https://app.whatzapi.com/api/send-text.php`;
+    //     let options = {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         "apikey":`${apikey}`,
+    //         "instance": `${instance}`,
+    //         "number":`${mobileNo}`,
+    //         "msg":`${textMessage}`,
+    //       }
+    //     };
+    //   let serviceResponseObject = await curlRequest.sendRequest("post",endpoint,options,{},true);
+    //   console.log(serviceResponseObject,"whatsappMessageSent")
+    //   if (!serviceResponseObject.isError) {
+    //     return { status: true, data: serviceResponseObject.body };
+    //   }
+    //   console.log("failed to verify authentication token", serviceResponseObject.body)
+    //   return { status: false, data: serviceResponseObject.body };
+    // } catch (error) {
+    //   console.error("error @ catch block", error)
+    //   return { status: false, data: error.message ? error.message : error };
+    // }
+  // });
 
 
 
