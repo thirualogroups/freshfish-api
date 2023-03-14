@@ -464,6 +464,39 @@ catch(err){
 }
 
 });
+router.post('/mobile/add_product_alert',async function (req, res) {
+  try{
+  
+      let user_params={user_type:1,delete_status:false};
+  
+      let user=await userdetailsModel.find(user_params);
+      
+     
+for(let i=0;i<=user.length;i++){
+  if((user[i].fb_token!="") || (user[i].fb_token)){
+      let message = {
+        notification:{
+            title:"Alert!!",
+            body:req.body.product_name+" is now available.Order now before it's sold out"
+        },
+        data:{
+        },
+        token:user[i].fb_token,
+        };
+       FCM.send(message,function(err,resp){
+        if(err){
+                    
+                           }else{
+                            
+                           }
+   });
+      
+    }
+      }
+   }catch(err){
+     throw(err); 
+    }
+});
 
 //slot end date alert:-
 
