@@ -467,7 +467,7 @@ router.post('/getlist/order_id', async function (req, res) {
     filter_params.user_id = new mongoose.Types.ObjectId(req.body.userid);
   }
    let vendor= await product_vendorModel.findOne({user_id:req.body.user_id});
-let skip = 0, sort = {order_id:-1};
+let skip = 0, sort = {order_booked_at:-1};
 let count = 0;
 if (skip == 0) {
  count = await order_detailsModel.countDocuments({ params: filter_params });
