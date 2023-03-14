@@ -786,22 +786,7 @@ router.post("/payment-link", async (req, res) => {
   paytmParams.body = {
       "mid"             : credentials.mid,
       "linkType"        : "INVOICE",
-      "linkDescription" : [
-        {
-          "product_name": "Grouper/ Kalavan",
-          "price": 2296,
-          "gross_weight": 5.1,
-          "net_weight": 3,
-          "discount": 391
-        },{
-          "product_name": "Grouper/ Kalavan",
-          "price": 2296,
-          "gross_weight": 5.1,
-          "net_weight": 3,
-          "discount": 391
-
-        }
-      ],
+      "linkDescription" : "Order Payment",
       "linkName"        : "Order",
       "amount"          : parseFloat(req.body.amount),
       "invoiceId"       : new Date().getTime(),
