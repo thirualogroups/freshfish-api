@@ -89,25 +89,17 @@ router.post('/getproductdetails_list', async function(req, res) {
 
                 var stock = [];
                  stocks.forEach(element => {
-                  // console.log(element);
                  if(""+element.fish_combo_id == ""+product_list[f].fish_combo_id._id){
                   stock.push(element);
-                  // console.log(stock);
                  }
                  });  
 
                  let variation_list = [];
                  product_list[f].variation_list.forEach(element => {
-                  // console.log(element.gross_weight,stock[0].gross_weight,product_list[f].fish_combo_id.product_name)
                  if(element.gross_weight <= stock[0].gross_weight){
                   variation_list.push(element);
-                  // console.log(stock);
                  }
-                 }); 
-                 
-                 if(variation_list.length == 0){
-                   console.log("********",stock[0].gross_weight,product_list[f].fish_combo_id.product_name)
-                 }
+                 });
                 
               if(variation_list.length !== 0){
 
@@ -253,25 +245,17 @@ router.post('/mobile/getproductdetails_list', async function (req, res) {
 
                 var stock = [];
                  stocks.forEach(element => {
-                  // console.log(element);
                  if(""+element.fish_combo_id == ""+product_list[f].fish_combo_id._id){
                   stock.push(element);
-                  // console.log(stock);
                  }
                  });  
 
                  let variation_list = [];
                  product_list[f].variation_list.forEach(element => {
-                  // console.log(element.gross_weight,stock[0].gross_weight,product_list[f].fish_combo_id.product_name)
                  if(element.gross_weight <= stock[0].gross_weight){
                   variation_list.push(element);
-                  // console.log(stock);
                  }
                  }); 
-                 
-                 if(variation_list.length == 0){
-                   console.log("********",stock[0].gross_weight,product_list[f].fish_combo_id.product_name)
-                 }
                 
               if(variation_list.length !== 0){
 
@@ -418,31 +402,20 @@ router.post('/mobile/product_list', async function (req, res) {
             var pro_fav = await Product_favModel.findOne({ user_id: req.body.user_id, product_id: product_list[f]._id, delete_status: false });
 
             var temp_fav = (pro_fav !== null);
-            // const stock = stocks.filter(x => x.fish_combo_id === product_list[f].fish_combo_id._id);
-            // let variation_list = product_list[f].variation_list.filter(x => x.gross_weight <= stock[0]?.gross_weight);
-            // const stock = stocks.filter(x => x.fish_combo_id === product_list[f].fish_combo_id._id);
-            // let variation_list = product_list[f].variation_list;
             var stock = [];
             stocks.forEach(element => {
-             // console.log(element);
             if(""+element.fish_combo_id == ""+product_list[f].fish_combo_id._id){
              stock.push(element);
-             // console.log(stock);
             }
             });  
 
             let variation_list = [];
             product_list[f].variation_list.forEach(element => {
-             // console.log(element.gross_weight,stock[0].gross_weight,product_list[f].fish_combo_id.product_name)
             if(element.gross_weight <= stock[0].gross_weight){
              variation_list.push(element);
-             // console.log(stock);
             }
             }); 
             
-            if(variation_list.length == 0){
-              console.log("********",stock[0].gross_weight,product_list[f].fish_combo_id.product_name)
-            }
            
          if(variation_list.length !== 0){
             let k = {

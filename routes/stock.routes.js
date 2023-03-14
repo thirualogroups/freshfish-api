@@ -25,7 +25,6 @@ router.post('/create', async function (req, res) {
     }, { upsert: true, new: true },
       async function (err, stock) {
         if (err) res.json({ Status: "Fail", Message: err.message, Code: 500 });
-        // await fish_combo_masterModel.updateOne({ _id: new mongoose.Types.ObjectId(req.body.fish_combo_id) }, { stock: req.body.gross_weight });
         await product_detailsModel.updateMany({ fish_combo_id: new mongoose.Types.ObjectId(req.body.fish_combo_id) }, { unit: req.body.unit });
         await stockModel.updateMany({ fish_combo_id: new mongoose.Types.ObjectId(req.body.fish_combo_id) }, { unit: req.body.unit });
         await product_detailsModel.updateMany({ fish_combo_id: new mongoose.Types.ObjectId(req.body.fish_combo_id), store: new mongoose.Types.ObjectId(req.body.store) }, { cost: req.body.price });
@@ -72,7 +71,6 @@ router.post('/getlist_id', function (req, res) {
 router.get('/getlist', async function (req, res) {
   let params = { delete_status: false };
   stockModel.find(params, function (err, list) {
-    console.log(list);
     if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: err.message, Code: 500 });
     res.json({ Status: "Success", Message: "product details screen  Details", Data: list, Code: 200 });
   }).populate([{ path: "agent", select: ["bussiness_name", "user_name", "code"] }, { path: "store", select: ["name", "code"], match: { status: true } }, { path: "fish_combo_id", select: ["product_name", "code"] }]);
@@ -175,8 +173,6 @@ router.post('/admin_delete', function (req, res) {
     res.json({ Status: "Success", Message: "product details screen Deleted successfully", Data: {}, Code: 200 });
   });
 });
-
-
 
  router.get('/deletes', function (req, res) {
     stockModel.remove({}, function (err, user) {

@@ -33,7 +33,6 @@ router.post('/create', async function (req, res) {
     const counter = await counterMasterModel.findByIdAndUpdate({ _id: 'order_details' }, { $inc: { seq: 1 } }).exec();
 
     let order_id = "FF-" + new Date().toLocaleDateString("en-IN", { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(new RegExp("/", "g"), "") + "-" + counter?.seq.toString().padStart(4, '0');
-        // let order_id = "FF-01" ;
 
     order_detailsModel.create({
       user_id: req?.body?.user_id ?req.body.user_id : undefined,
@@ -44,7 +43,6 @@ router.post('/create', async function (req, res) {
       order_item_count: req?.body?.order_details.length ? req.body.order_details.length: undefined,
       order_booked_at: new Date(),
       order_status:req?.body?.order_status ? req.body.order_status : undefined,
-      //order_deliver_date: req.body.order_deliver_date,
       order_deliver_status: "Booked",
       order_final_amount: req?.body?.order_final_amount ? req.body.order_final_amount : undefined,
       payment_method: req?.body?.payment_method ? req.body.payment_method : "Online",
@@ -78,36 +76,6 @@ router.post('/create', async function (req, res) {
           res.json({ Status: "Fail", Message: err.message, Code: 400 });
         } else {
           res.json({ Status: "Success", Message: "Order Added successfully", Data: order, Code: 200 });
-        //   for (let item of req.body.order_details) {
-
-        //      var stock_values = await stockModel.find({fish_combo_id: new mongoose.Types.ObjectId(item.fish_combo_id),store: new mongoose.Types.ObjectId(item.store)});
-
-        //      let datas =  {
-        //         gross_weight : (stock_values[0].gross_weight - (parseFloat(item.gross_weight))).toFixed(2)
-        //      }
-
-        //      stockModel.findByIdAndUpdate(stock_values[0]._id, datas, {new: true}, function (err, UpdatedDetails) {
-        //     if (err) return res.status(400).json({Status:"Failed",Message:"Internal Server Error", Data : {UpdatedDetails},Code:400});
-        //      // res.json({Status:"Success",Message:"product categories screen  Updated", Data : UpdatedDetails ,Code:200});
-        //     });
-
-
-
-        //     // await stockModel.updateOne({ _id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(item.store) }, { gross_weight: { $inc: - (parseFloat(item.gross_weight)) } });
-        //   }
-        //   var carts = await product_cart_detailsModel.find({ user_id: req.body.user_id, product_id: { $in: req.body.order_details.map(x => x.product_id) } });
-        //   if (carts !== null) carts.forEach(async cart => { console.log("cart-id", cart._id); await product_cart_detailsModel.findByIdAndRemove(cart._id, (err, res) => { console.log(err); console.log(res); }) });
-
-        // //   const user = await userdetailsModel.findOne({_id: req.body.user_id });
-        // //   if(user!=null){
-        // //   const message = `Dear ${user.first_name+ " "+user.last_name}, Thank you for your order. Your Inv.# ${order_id}, Amt Rs.${req.body.order_final_amount}. -We Know How To Choose Fresh Fish`;
-        // //   await global.send_sms(user.user_phone, message,"1607100000000220475").then(response=>{
-        // //     console.log("order sms sent")
-        // //   }).catch(err=>{
-        // //     console.error(err,"sms not sent");
-        // //   });
-        // // }
-        //   res.json({ Status: "Success", Message: "Order Added successfully", Data: order, Code: 200 });
         }
       });
   }
@@ -161,7 +129,6 @@ router.post('/update_order', async function (req, res) {
 
 
 
-            // await stockModel.updateOne({ _id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(item.store) }, { gross_weight: { $inc: - (parseFloat(item.gross_weight)) } });
           }
 
           let final_order={payment_id: req.body.payment_id,payment_status:req.body.payment_status,order_status:req.body.order_status,paytm_orderid:req.body.paytm_orderid};
@@ -199,7 +166,6 @@ router.post('/cancel_order', async function (req, res) {
 
 
 
-            // await stockModel.updateOne({ _id: new mongoose.Types.ObjectId(item.fish_combo_id), store: new mongoose.Types.ObjectId(item.store) }, { gross_weight: { $inc: - (parseFloat(item.gross_weight)) } });
           }
 
             
@@ -263,9 +229,6 @@ async function orders_filter_api(params,res){
   if (params.userid && params.userid !== "") {
     filter_params.user_id = new mongoose.Types.ObjectId(params.userid);
   }
-  /*else if(!params.id){
-    return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
-   }*/
 let skip = 0, sort = {slot_date:1,slot_time:1};
 if (params.skip) {
   skip = params.skip;
@@ -367,9 +330,6 @@ router.post('/getlist/myorders', async function (req, res) {
   if (req.body.userid && req.body.userid !== "") {
     filter_params.user_id = new mongoose.Types.ObjectId(req.body.userid);
   }
-  /*else if(!params.id){
-    return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
-   }*/
  let skip = 0;
  if(req.body.user_id){
   filter_params.user_id = req.body.user_id;
@@ -413,9 +373,6 @@ router.post('/getlist/pendingorders', async function (req, res) {
   if (req.body.userid && req.body.userid !== "") {
     filter_params.user_id = new mongoose.Types.ObjectId(req.body.userid);
   }
-  /*else if(!params.id){
-    return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
-   }*/
 let skip = 0, sort = {_id:-1};
 if(req.body.order_status){
   filter_params.order_status=req.body.order_status;
@@ -509,9 +466,6 @@ router.post('/getlist/order_id', async function (req, res) {
   if (req.body.userid && req.body.userid !== "") {
     filter_params.user_id = new mongoose.Types.ObjectId(req.body.userid);
   }
-  /*else if(!params.id){
-    return res.json({Status:"Failed",Message:"userid is mandatory", Code:400});
-   }*/
    let vendor= await product_vendorModel.findOne({user_id:req.body.user_id});
 let skip = 0, sort = {order_id:-1};
 let count = 0;
@@ -622,7 +576,6 @@ router.post('/callbackurl',async function (req, res) {
                 //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
                //var  url = "http://localhost:4200/#/cart-page/"+""+req.body.ORDERID;
               var url = "http://ec2-44-208-166-141.compute-1.amazonaws.com/#/cart-page/"+""+req.body.ORDERID;
-              console.log("Payment id check",req.body.ORDERID);
                 res.write(
                   '<!DOCTYPE html><html lang="en"><body onload="window.location.href=' +
                     "'" +
@@ -653,95 +606,7 @@ router.get("/paytm_credentials", function (req, res) {
   res.send(paytm_credentials());
 })
 
-router.post("/payment_initiate", async function (req, res) {
 
-  req.body.amount = 1;
-  try {
-      const https = require('https');
-      const PaytmChecksum = require('paytmchecksum');
-      const { v4: uuidv4 } = require('uuid');
-      let credentials = paytm_credentials();
-      let orderid = uuidv4();
-      let callbackurl = "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=" + orderid;
-      var paytmParams = {};
-      paytmParams.body = {
-        "requestType": "Payment",
-        "mid": credentials.mid,
-        "websiteName": credentials.website,
-        "orderId": orderid,
-        "callbackUrl": callbackurl,
-        "txnAmount": {
-          "value": parseFloat(req.body.amount).toFixed(2).toString(),
-          "currency": "INR",
-        },
-        "userInfo": {
-          "custId": req.body.userid,
-        },
-      };
-
-
-      console.log(paytmParams.body);
-      /*
-      * Generate checksum by parameters we have in body
-      * Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
-      */
-      PaytmChecksum.generateSignature(JSON.stringify(paytmParams.body), credentials.mkey).then(function (checksum) {
-
-        console.log('checksum',checksum);
-
-       paytmParams.head = {
-         "signature": checksum
-       };
-
- var post_data = JSON.stringify(paytmParams);
-
-       var options = {
-
-         /* for Staging */
-         hostname: 'securegw.paytm.in',
-
-         /* for Production */
-         // hostname: 'securegw.paytm.in',
-
-         port: 443,
-         path: '/theia/api/v1/initiateTransaction?mid=' + credentials.mid + '&orderId=' + orderid,
-         method: 'POST',
-         headers: {
-           'Content-Type': 'application/json',
-           'Content-Length': post_data.length
-         }
- };
-
- var response = "";
-       var post_req = https.request(options, function (post_res) {
-         post_res.on('data', function (chunk) {
-           response += chunk;
-         });
-
-         post_res.on('end', function () {
-           console.log(response);
-           //console.log(typeof response);
-           response = JSON.parse(response);
-           let result = {
-             mid: credentials.mid,
-             orderid: orderid,
-             txnToken: response.body.txnToken,
-             amount: parseFloat(req.body.amount).toFixed(2).toString(),
-             callbackurl: callbackurl,
-             //environment: "staging"
-           }
-           console.log({ "Status": response.body.resultInfo.resultMsg, Data: result, Code: 200 });
-             res.send({ "Status": response.body.resultInfo.resultMsg, Data: result, Code: 200 });
-           });
-   });
- 
-   post_req.write(post_data);
-       });
-   }
-   catch (ex) {
-     res.send({ "Status": "Failed", Message: ex.message, Code: 500 });
-   }
- });
  
  
  
@@ -769,15 +634,11 @@ router.post("/payment_initiate", async function (req, res) {
          },
        };
  
-       console.log("*****777777***",paytmParams.body);
- 
        /*
        * Generate checksum by parameters we have in body
        * Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
        */
        PaytmChecksum.generateSignature(JSON.stringify(paytmParams.body), credentials.mkey).then(function (checksum) {
- 
-          console.log('checksum',checksum);
  
          paytmParams.head = {
            "signature": checksum
@@ -810,10 +671,7 @@ router.post("/payment_initiate", async function (req, res) {
              response += chunk;
             });
             post_res.on('end', function () {
-              console.log("**********",response);
-              // console.log(typeof response);
               response = JSON.parse(response);
-              console.log("*****Token Detail*****",response.body.txnToken);
               let result = {
                 mid: credentials.mid,
                 orderid: orderid,
@@ -833,118 +691,6 @@ router.post("/payment_initiate", async function (req, res) {
       res.send({ "Status": "Failed", Message: ex.message, Code: 500 });
     }
   });
-  
-  
-  
-  router.post("/payment_initiate_value2", async function (req, res) {
-    try {
-        const https = require('https');
-        const PaytmChecksum = require('paytmchecksum');
-        const { v4: uuidv4 } = require('uuid');
-        let credentials = paytm_credentials();
-        let orderid = uuidv4();
-  var paytm = {
-    MID: "zlgxwg60312032385233", // paytm provide
-    WEBSITE: "WEBSTAGING", // paytm provide
-    INDUSTRY_TYPE_ID: "Retail", // paytm provide
-    CHANNEL_ID: "WEB", // paytm provide
-    ORDER_ID: orderid, // unique id
-    CUST_ID: req.body.CUST_ID, // customer id
-    MOBILE_NO: req.body.MOBILE_NO, // customer mobile number
-    EMAIL: req.body.EMAIL, // customer email
-    TXN_AMOUNT: req.body.TXN_AMOUNT, // transaction amount
-    CALLBACK_URL: req.body.CALLBACK_URL, // Call back URL that i want to redirect after payment fail or success
-  }
-        /*
-        * Generate checksum by parameters we have in body
-      * Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
-      */
-
-
-        PaytmChecksum.generateSignature(JSON.stringify(paytm), credentials.mkey).then(function (checksum) {
-          console.log('checksum',checksum);
-          let checksums = {
-           checksu : checksum,
-           order_id : orderid,
-           paytm : paytm
-          }
-          res.send({ "Status": 'checksum', Data: checksums, Code: 200 });
-   
-   
-         });
-     }
-     catch (ex) {
-       res.send({ "Status": "Failed", Message: ex.message, Code: 500 });
-     }
-   });
-   
-   
-   
-   router.post("/payment_initiate_value3", async function (req, res) {
-     try {
-         const https = require('https');
-         const PaytmChecksum = require('paytmchecksum');
-         const { v4: uuidv4 } = require('uuid');
-         let credentials = paytm_credentials();
-         let orderid = uuidv4();
-   var paytmParams = {};
-   paytmParams.body = {
-       "mid"             : "zlgxwg60312032385233",
-       "linkType"        : "GENERIC",
-       "linkDescription" : "Test Payment",
-       "linkName"        : "Test",
-   };
-   
-   /*
-   * Generate checksum by parameters we have in body
-   * Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
-   */
-   PaytmChecksum.generateSignature(JSON.stringify(paytmParams.body), "YOUR_MERCHANT_KEY").then(function(checksum){
-   
-       paytmParams.head = {
-           "tokenType"   : "AES",
-           "signature"   : checksum
-       };
-   
-       var post_data = JSON.stringify(paytmParams);
-       var options = {
-
-        /* for Staging */
-        hostname: 'securegw.paytm.in',
-
-        /* for Production */
-        // hostname: 'securegw.paytm.in',
-
-        port: 443,
-        path: '/link/create',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': post_data.length
-        }
-    };
-
-    var response = "";
-    var post_req = https.request(options, function(post_res) {
-        post_res.on('data', function (chunk) {
-            response += chunk;
-        });
-
- 	post_res.on('end', function(){
-            console.log('Response: ', response);
-        });
-    });
-
-    post_req.write(post_data);
-    post_req.end();
-
-
-  });
-  }
-  catch (ex) {
-    res.send({ "Status": "Failed", Message: ex.message, Code: 500 });
-  }
-});
 
 router.post("/payout", (req, res) =>{
   const credentials = paytm_credentials();
@@ -1037,11 +783,25 @@ router.post("/payment-link", async (req, res) => {
   
  
   
-  console.log("user",user);
   paytmParams.body = {
       "mid"             : credentials.mid,
       "linkType"        : "INVOICE",
-      "linkDescription" : "Order Payment",
+      "linkDescription" : [
+        {
+          "product_name": "Grouper/ Kalavan",
+          "price": 2296,
+          "gross_weight": 5.1,
+          "net_weight": 3,
+          "discount": 391
+        },{
+          "product_name": "Grouper/ Kalavan",
+          "price": 2296,
+          "gross_weight": 5.1,
+          "net_weight": 3,
+          "discount": 391
+
+        }
+      ],
       "linkName"        : "Order",
       "amount"          : parseFloat(req.body.amount),
       "invoiceId"       : new Date().getTime(),
@@ -1059,7 +819,6 @@ router.post("/payment-link", async (req, res) => {
       "redirectionUrlSuccess":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?success="+req.body.orderid,
       "redirectionUrlFailure":"http://ec2-44-208-166-141.compute-1.amazonaws.com/#/billing-details?failed="+req.body.orderid
   };
-  console.log("*******************",paytmParams.body);
   
   /*
   * Generate checksum by parameters we have in body
@@ -1118,8 +877,7 @@ router.get('/paytm_success',async function (req, res) {
 
 
 router.post('/callbackurl_link',async function (req, res) {
-    console.log("********",req.body);
-    console.log("********9999******",req.params);
+
    try {
         transaction_logsModel.create({  
             order_id: ""+req.body.ORDERID,
@@ -1131,7 +889,6 @@ router.post('/callbackurl_link',async function (req, res) {
             respmsg: ""+req.body.RESPMSG
         }, function (err, info) {
             console.log(err);
-             console.log("********transaction_logsModel***********",info);
             if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });
                 //var url = "https://weknowfreshfish.com/#/cart-page/"+""+req.body.ORDERID;
               //var  url = "http://localhost:4500/#/cart-page/"+""+req.body.ORDERID;
@@ -1156,26 +913,9 @@ router.post('/callbackurl_link',async function (req, res) {
 
 
 
- router.get('/paytm_success_one',async function (req, res) {
-      console.log(req.cookies);
-});
 
 
-router.get("/paytm_fail", (req, res)=>{
-  // console.log(req.query);
-    // console.log(req.cookies);
-    // console.log(req.body);
-     console.log(req.param);
-     console.log(req.params);
-     console.log(req.query);
-     const url = require('url');
-   const query = (url.parse(req.url, true)).query; // get query string data
-   console.log(query);
-        // console.log(req.app.response);
-        // console.log(req.body);
 
-
-});
  setInterval(async(req,res)=>{
     
     try {
@@ -1189,7 +929,6 @@ if(pending_order[0]){
        dt = new Date(dt.setHours(dt.getHours()+(12)));
        time.push(dt);
 }
-//console.log(time);
 let time1=[];
 for(let a = 0; a < time.length; a ++){
 
@@ -1219,7 +958,7 @@ if(canceled_order[0]){
     }
  }, 500);
  
- router.post('/whatsapp_api',async function(req,res){
+router.post('/whatsapp_api',async function(req,res){
         const apikey="1413eec28e2c2c76db12401bf8f3123a275a9c57";
         const instance="DNikZW48xI6hsRb";
         var mobileNo=req.body.mobileno;
@@ -1240,44 +979,5 @@ if(canceled_order[0]){
         console.log(error);
     });
 });
-
-
-
-
-
-
-    // try {
-    //     const apikey="1413eec28e2c2c76db12401bf8f3123a275a9c57";
-    //     const instance="DNikZW48xI6hsRb";
-    //     var mobileNo=req.body.mobileno;
-    //     var textMessage=req.body.message
-
-
-    //     const endpoint = `https://app.whatzapi.com/api/send-text.php`;
-    //     let options = {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         "apikey":`${apikey}`,
-    //         "instance": `${instance}`,
-    //         "number":`${mobileNo}`,
-    //         "msg":`${textMessage}`,
-    //       }
-    //     };
-    //   let serviceResponseObject = await curlRequest.sendRequest("post",endpoint,options,{},true);
-    //   console.log(serviceResponseObject,"whatsappMessageSent")
-    //   if (!serviceResponseObject.isError) {
-    //     return { status: true, data: serviceResponseObject.body };
-    //   }
-    //   console.log("failed to verify authentication token", serviceResponseObject.body)
-    //   return { status: false, data: serviceResponseObject.body };
-    // } catch (error) {
-    //   console.error("error @ catch block", error)
-    //   return { status: false, data: error.message ? error.message : error };
-    // }
-  // });
-
-
-
-///////////////////
 
 module.exports = router;

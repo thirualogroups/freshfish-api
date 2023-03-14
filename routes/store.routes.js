@@ -89,13 +89,6 @@ router.post("/create", async function (req, res) {
 });
 
 
-
-
-
-
-
-
-
 router.get('/getlist_store', function (req, res) {
     storesModel.find({delete_status: false }, function (err, storesList) {
         res.json({ Status: "Success", Message: "Store Details", Data: storesList, Code: 200 });
@@ -120,7 +113,6 @@ router.get('/getlist_counter', function (req, res) {
 });
 
 router.post('/edit', async function (req, res) {
-         console.log(req.body);
          let store  =  await storesModel.findOne({name:req.body.name,delete_status:false});
          if(store == null){
     storesModel.findByIdAndUpdate(req.body._id, req.body, { new: true }, function (err, UpdatedDetails) {
@@ -168,10 +160,8 @@ router.post('/getlist_id', function (req, res) {
 router.post('/store_product_delete', function (req, res) {
     product_detailsModel.find({"store": req.body.store_id}, function (err, StateList) {
                 StateList.forEach(element => {
-                  console.log(element._id);
      product_detailsModel.findByIdAndRemove(element._id, function (err, user) {
         if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
-        // res.json({ Status: "Success", Message: "Store Deleted successfully", Data: {}, Code: 200 });
     });
                 });
         res.json({ Status: "Success", Message: "Vendor List", Data: StateList, Code: 200 });

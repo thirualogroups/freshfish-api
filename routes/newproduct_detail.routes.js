@@ -19,7 +19,6 @@ var fcm =require("fcm-notification");
 var admin = require("firebase-admin");
 
 var serviceAccount = require("../config/push-notification-key.json");
-//var serviceAccount = require("../config/push-notification-key.json");
 const shipping_addressModel = require('../models/shipping_addressModel');
 const certpath =admin.credential.cert(serviceAccount);
 var FCM = new fcm(certpath);
@@ -78,7 +77,6 @@ router.post('/vendor_product_create', async function (req, res) {
   }
     product_detailsModel.create(params,
       function (err, user) {
-        console.log(user)
         console.log(err);
         console.log("Product_details***********1", user);
         if (err) res.json({ Status: "Failed", Message: err.message, Code: 500 });

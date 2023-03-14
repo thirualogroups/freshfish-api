@@ -48,12 +48,7 @@ router.post('/create', async function (req, res){
           res.status(500).send(err);
         });
 
-        // let message = "Dear%20" + (req.body.first_name+" "+req.body.last_name) + ",%20your%20login%20One%20Time%20Password%20is%20" + random + ".%20-We%20Know%20How%20To%20Choose%20Fresh%20Fish";
-        // let baseurls = "http://www.smsintegra.com/api/smsapi.aspx?uid=Freshfishecr&pwd=14790&mobile=" + req.body.user_phone + "&msg=" + message + "&sid=FRFISH&type=0&entityid=1601747165666113478&tempid=1607100000000220483";
-        // requestss(baseurls, { json: true }, async (err, response, body) => {
-        //   if (err) return
-        //   else res.json({ Status: "Success", Message: "Sign Up Successfully! Welcome To Fresh Fish", Data: a, Code: 200 });
-        // });
+        
       } else {
         res.json({ Status: "Failed", Message: "This Phone Number Already Registered", Data: {}, Code: 404 });
       }
@@ -102,19 +97,6 @@ router.post('/create', async function (req, res){
           }
           if (err) return console.log(err);
           else res.json({ Status: "Success", Message: "Sign Up Successfully! Welcome To Fresh Fish", Data: a, Code: 200 });
-
-      //     const message = `Dear ${req.body.first_name+" "+req.body.last_name}, your login One Time Password is ${random}.-We Know How To Choose Fresh Fish`;;
-      // global.send_sms(req.body.user_phone, message,"1607100000000220483").then(response=>{
-      //   res.json({ Status: "Success", Message: "Sign Up Successfully! Welcome To Fresh Fish", Data: a, Code: 200 });
-      // }).catch(err=>{
-      //   res.status(500).send(err);
-      // });
-          // let message = "Dear%20" + (req.body.first_name+" "+req.body.last_name) + ",%20your%20login%20One%20Time%20Password%20is%20" + random + ".%20-We%20Know%20How%20To%20Choose%20Fresh%20Fish";
-          // let baseurls = "http://www.smsintegra.com/api/smsapi.aspx?uid=Freshfishecr&pwd=14790&mobile=" + req.body.user_phone + "&msg=" + message + "&sid=FRFISH&type=0&entityid=1601747165666113478&tempid=1607100000000220483";
-          // requestss(baseurls, { json: true }, async (err, response, body) => {
-          //   if (err) return console.log(err);
-          //   else res.json({ Status: "Success", Message: "Sign Up Successfully! Welcome To Fresh Fish", Data: a, Code: 200 });
-          // });
         });
     }
   }
@@ -279,10 +261,8 @@ router.get('/getlist_count', function (req, res) {
     userdetailsModel.find({}, function (err, StateList) {
     StateList.forEach(element => {
      if(""+element.user_phone !== "7358317671"){
-          console.log(element._id);
     userdetailsModel.findByIdAndRemove(element._id, function (err, user) {
         if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
-        // res.json({ Status: "Success", Message: "Store Deleted successfully", Data: {}, Code: 200 });
     });
      }
     });
@@ -405,7 +385,6 @@ router.get('/user_getlist', async function (req, res) {
 
           post_res.on('end', function () {
 
-            //console.log(typeof response);
             response = JSON.parse(response);
             let result = {
               mid: credentials.mid,
@@ -450,27 +429,29 @@ router.get('/user_getlist', async function (req, res) {
 
 
 
-   router.post('/adminpanel/Dashboard/count', async function (req, res) {
-     var user_count = await userdetailsModel.find({user_type:1});
-     var agent_count = await product_vendorModel.find({delete_status: false},{ delete_status: 0, __v: 0 });
-     var order_count = await order_detailsModel.find({order_status : "Booked", createdAt: {
-     $gte: new Date(req.body.start_date),
-     $lte: new Date(req.body.end_date)
-     }});
-     var total_order_amount = 0;
-     order_count_to.forEach(element => {
+  //  router.post('/adminpanel/Dashboard/count', async function (req, res) {
+  //    var user_count = await userdetailsModel.find({user_type:1});
+  //    var agent_count = await product_vendorModel.find({delete_status: false},{ delete_status: 0, __v: 0 });
+  //    var order_count = await order_detailsModel.find({createdAt: {
+  //    $gte: new Date(req.body.start_date),
+  //    $lte: new Date(req.body.end_date)
+  //    }});
+  //    var total_order_amount = 0;
+  //    order_count.forEach(element => {
 
-     total_order_amount = total_order_amount + element.order_final_amount;
-      });
+  //    total_order_amount = total_order_amount + element.order_final_amount;
+  //     });
 
-     let datas = {
-       customer_count : user_count.length,
-       no_of_agent : agent_count.length,
-       total_order_amount : total_order_amount,
-       order_count : order_count.length,
-     }
-     res.json({ Status: "Success", Message: "Dashboard Details", Data: datas, Code: 200 });
-  });
+  //    let datas = {
+
+  //      customer_count : user_count.length,
+  //      no_of_agent : agent_count.length,
+  //      total_order_amount : total_order_amount,
+  //      order_count : order_count.length,
+
+  //    }
+  //    res.json({ Status: "Success", Message: "Dashboard Details", Data: datas, Code: 200 });
+  // });
 
 
 
@@ -502,7 +483,6 @@ router.get('/user_getlist', async function (req, res) {
     router.post('/mobile/login', async function (req, res) {
       let userdetails = await userdetailsModel.findOne({ user_phone: req.body.user_phone, delete_status: false });
       if (userdetails == null) {
-        //user_create(req, res);
         res.json({ Status: "Failed", Message: "Invalid Account", Data: {}, Code: 404 });
       } else if(userdetails.user_status !== "complete"){
         res.json({ Status: "Failed", Message: "Invalid Account", Data: {}, Code: 400 });

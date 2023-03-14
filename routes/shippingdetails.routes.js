@@ -7,59 +7,12 @@ var shipping_addressModel = require('./../models/shipping_addressModel');
 var locationdetailsModel = require('./../models/locationdetailsModel');
 var mongoose = require('mongoose');
 
-// router.post('/create', async function(req, res) {
-// let insert = true;
-//   if(req.body.address_type.toLowerCase() === 'home' || req.body.address_type.toLowerCase() === 'office'){
-//     let address = await shipping_addressModel.findOne({address_type:req.body.address_type});
-//     if(address !== null){
-//       edit(address._id, req.body);
-//       insert = false;
-//     }
-//   }
-//   if(insert){
-// var address_stauts = '';
-// var shipping_addres = await shipping_addressModel.findOne({user_id:req.body.user_id,address_stauts:"Last Used"});
-//           if(shipping_addres == null){
-//              address_stauts = "Last Used";
-//           }
-//   try{
-//     await shipping_addressModel.create({
-//            user_id : req.body.user_id,
-//            first_name :  req.body.first_name,
-//            last_name : req.body.last_name,
-//            flat_no : req.body.flat_no,
-//            street : req.body.street,
-//            landmark : req.body.landmark,
-//            pincode :req.body.pincode,
-//            state : req.body.state,
-//            city : req.body.city || "",
-//            mobile : req.body.mobile,
-//            alter_mobile : req.body.alter_mobile,
-//            // address_status : address_status,
-//            address_status : "Last Used",
-//            address_type : req.body.address_type,
-//            address: req.body.address,
-//            display_date : req.body.display_date
-//         }, 
-//         function (err, user) {
-//            console.log(err);
-//           console.log(user)
-//         res.json({Status:"Success",Message:"Shipping address successfully", Data : user ,Code:200}); 
-//         });     
-// }
-// catch(e){
-//     console.log(e);
-//       res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
-// }
-//   }
-// });
-
 
 
 router.post('/create', async function(req, res) {
-console.log("shippling Address creae",req.body)
+
 var shipping_addres = await shipping_addressModel.findOne({user_id:req.body.user_id,address:req.body.address,delete_status : false});
-console.log("shippling Address creae_one",shipping_addres)
+
 if(shipping_addres == null){    
   try{
     await shipping_addressModel.create({
@@ -83,7 +36,6 @@ if(shipping_addres == null){
         }, 
         function (err, user) {
            console.log(err);
-          console.log(user)
         res.json({Status:"Success",Message:"Shipping address successfully", Data : user ,Code:200}); 
         });     
 }
@@ -141,8 +93,6 @@ router.post('/mark_used_address',async function (req, res) {
           }
           shipping_addressModel.findByIdAndUpdate(shipping_addres._id, a, {new: true}, function (err, UpdatedDetails) {
             if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
-            console.log("UpdatedDetails",UpdatedDetails);
-              // res.json({Status:"Success",Message:"Shipping address Updated", Data : UpdatedDetails ,Code:200});
           });
           shipping_addressModel.findByIdAndUpdate(req.body._id, req.body, {new: true}, function (err, UpdatedDetails) {
             if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
@@ -151,17 +101,13 @@ router.post('/mark_used_address',async function (req, res) {
 });
 
 router.post('/mark_as_default',async function (req, res) {
-  //console.log(req.body);
    var shipping_addres = await shipping_addressModel.findOne({user_id:req.body.user_id,default_status:true});
    let a  = {
     default_status : false
    }
-   console.log("shipping_addres",shipping_addres);
    if(shipping_addres !== null){
    shipping_addressModel.findByIdAndUpdate(shipping_addres._id, a, {new: true}, function (err, UpdatedDetails) {
      if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
-     //console.log("UpdatedDetails",UpdatedDetails);
-       // res.json({Status:"Success",Message:"Shipping address Updated", Data : UpdatedDetails ,Code:200});
    });
    shipping_addressModel.findByIdAndUpdate(req.body._id,req.body, {new: true}, function (err, UpdatedDetails) {
      if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
@@ -195,7 +141,6 @@ router.post('/filter_date', function (req, res) {
             var fromdate = new Date(req.body.fromdate);
             var todate = new Date(req.body.todate);
             var checkdate = new Date(StateList[a].createdAt);
-            console.log(fromdate,todate,checkdate);
             if(checkdate >= fromdate && checkdate <= todate){
               final_Date.push(StateList[a]);
             }

@@ -72,7 +72,6 @@ router.post('/create', async function (req, res) {
 
 router.get('/getlist', function (req, res) {
    let params = { delete_status: false };
-  // let params = {};
   if (req.query.store) {
     params.store = new mongoose.Types.ObjectId(req.query.store);
   }
@@ -88,7 +87,6 @@ router.get('/getlist', function (req, res) {
   }).populate([{ path: 'user_id', select: { first_name: 1, last_name: 1, user_email: 1, user_phone: 1,user_type: 1} }, { path: 'store', select: { name: 1, code: 1 }}]);
 });
 
-  // }).populate([{ path: 'user_id', select: { first_name: 1, last_name: 1, user_email: 1, user_phone: 1 } }, { path: 'store', select: { name: 1, code: 1 }, match: { status: true } }]);
 
 
 router.get('/getlist_list', function (req, res) {
@@ -132,9 +130,7 @@ router.post('/edit',async function (req, res) {
 
 router.post('/delete',async function (req, res) {
   const vendor_detail = await product_vendorModel.findOne({_id: req.body._id});
-  console.log(vendor_detail.user_id);
   let phone = await userdetailsModel.findOne({_id:vendor_detail.user_id});
-  console.log(phone);
 
   userdetailsModel.findByIdAndUpdate(phone._id, { user_phone: phone.user_phone+"0"}, { new: true }, function (err, UpdatedDetails) {
       if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
@@ -201,22 +197,12 @@ router.get("/pincodes_web", (req, res) => {
 
 
 
-// router.post("/pincodes_active", (req, res) => {
-//   product_vendorModel.findOne({  delete_status: false ,status:true}, { pincodes: 1 }, function (err, list) {
-//     if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
-//     res.json({ Status: "Success", Message: "Vendor Deleted successfully", Data: list.reduce((x, y) => (x.push(...y["pincodes"]), x), []), Code: 200 });
-//   });
-// });
-
-
 router.post('/pincodes_activeornot', async function (req, res) {
     product_vendorModel.find({  delete_status: false ,status:true}, { pincodes: 1 }, function (err, list) {
     if (err) return res.json({ Status: "Failed", Message: "Internal Server Error", Data: {}, Code: 500 });
     var list_details = list.reduce((x, y) => (x.push(...y["pincodes"]), x), []);
-    console.log(list_details);
     var status = false;
    list_details.forEach(element => {
-   console.log(element);
    if(element == req.body.pincode){
     status = true;
    }
