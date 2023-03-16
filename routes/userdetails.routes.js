@@ -41,8 +41,8 @@ router.post('/create', async function (req, res){
           user_details: phone
         }
 
-        const message = `Dear ${req.body.first_name+" "+req.body.last_name}, your login One Time Password is ${random}.-We Know How To Choose Fresh Fish`;;
-        global.send_sms(req.body.user_phone, message,"1607100000000220483").then(response=>{
+        const message = `Hi, ${random} is the One Time Password (OTP) for your Signup / Login to the We Know How To Choose Fresh Fish.`;;
+        global.send_sms(req.body.user_phone, message,"1607100000000254725").then(response=>{
           res.json({ Status: "Success", Message: "Sign Up Successfully! Welcome To Fresh Fish", Data: a, Code: 200 });
         }).catch(err=>{
           res.status(500).send(err);
@@ -463,8 +463,8 @@ router.get('/user_getlist', async function (req, res) {
 
     if (phone == null){
     let random = Math.floor(100000 + Math.random()*900000);
-    const message = `Dear ${req.body.first_name}, your login One Time Password is ${random}.-We Know How To Choose Fresh Fish`;;
-    global.send_sms(req.body.user_phone, message,"1607100000000220483").then(response=>{
+    const message = `Hi, ${random} is the One Time Password (OTP) for your Signup / Login to the We Know How To Choose Fresh Fish.`;;
+    global.send_sms(req.body.user_phone, message,"1607100000000254725").then(response=>{
       res.json({ Status: "Success", Data: random,user_phone:req.body.user_phone, Code: 200 });
     }).catch(err=>{
       res.status(500).send(err);
@@ -493,8 +493,8 @@ router.get('/user_getlist', async function (req, res) {
         let random = Math.floor(100000 + Math.random() * 900000);
         const updatedetails = await userdetailsModel.findByIdAndUpdate({ _id: userdetails._id }, { otp: random }, { new: true });
   
-        const message = `Dear ${updatedetails.first_name}, your login One Time Password is ${random}.-We Know How To Choose Fresh Fish`;;
-        global.send_sms(req.body.user_phone, message,"1607100000000220483").then(response=>{
+        const message = `Hi, ${random} is the One Time Password (OTP) for your Signup / Login to the We Know How To Choose Fresh Fish.`;;
+        global.send_sms(req.body.user_phone, message,"1607100000000254725").then(response=>{
           res.json({ Status: "Success", Message: "OTP Sent to Your Mobile No", Data: { user_details: updatedetails }, Code: 200 });
         }).catch(err=>{
           res.status(500).send(err);
