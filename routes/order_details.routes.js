@@ -306,11 +306,8 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
     if(params.username){
       list = list.filter(x=>x.user_id.first_name.match(new RegExp(params.username,"gi")));
     }
-    if(params.productname){
-      list = list.filter(x=>x.order_detials.filter(x1=>x1.product_id.fish_combo_id.product_name.match(new RegExp(params.productname,"gi")).length>0));
-    }
-    if(params.store){
-      list = list.filter(x=>x.store.name.match(new RegExp(params.store,"gi")));
+    if(params.storename){
+      list = list.filter(x=>x.store.name.match(new RegExp(params.storename,"gi")));
     }
     if(params.agentname){
       list = list.filter(x=>x.vendor_id.user_name.match(new RegExp(params.agentname,"gi")));
@@ -780,8 +777,7 @@ router.post("/payment-link", async (req, res) => {
 
 
   const user = await userdetailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.userid)});
-  
- 
+  let order_details = await order_detailsModel.findOne({_id:new mongoose.Types.ObjectId(req.body.orderid)});
   
   paytmParams.body = {
       "mid"             : credentials.mid,
@@ -843,8 +839,16 @@ router.post("/payment-link", async (req, res) => {
           });
   
           post_res.on('end', function(){
-              console.log('Response: ', response);
+               let t=''
+                for(let value of order_details?.order_details){
+
+                t+= ` ${value.product_name} -> ${value.gross_weight} ${value.unit} -> Rs.${value.amount}  \n`;
+                
+                }
+                let order_total = order_details.order_final_amount;
+                let order_id = order_details.order_id;
               var final_data = JSON.parse(response);
+              whatsapp(user?.first_name,t,user?.user_phone,final_data?.body?.shortUrl,order_total,order_id);
               res.json({ Status: "Success", Message: "Lin", Data: final_data, Code: 200 });
           });
       });
@@ -943,26 +947,28 @@ if(canceled_order[0]){
     }
  }, 500);
  
-router.post('/whatsapp_api',async function(req,res){
+async function whatsapp(username,message,no,surl,total,ffid){
         const apikey="1413eec28e2c2c76db12401bf8f3123a275a9c57";
         const instance="DNikZW48xI6hsRb";
-        var mobileNo=req.body.mobileno;
-        var textMessage=req.body.message;
+        var mobileNo=no;
+         var textMessage= username+'\n'
+                          +no+'\n \n_________________________________ \n \n OrderId : '
+                          +ffid+'\n Order Details : \n'
+                          +message+'\n \n Delivery Fee : 30 \n Total Order Amount : ' +total+ '\n \n Please click this link to pay \n'
+                          +surl+'\n \nThank you!! \n -WE KNOW HOW TO CHOOSE FRESH FISH.';
 
     let url = `https://app.whatzapi.com/api/send-text.php?number=91${mobileNo}&msg=${textMessage}&apikey=${apikey}&instance=${instance}`;
 
     axios({
-        method:'post',
+        method:'get',
         url,
         
     })
     .then(function (response) {
-      console.log(response);
-        res.send(JSON.stringify(response.data));
     })
     .catch(function (error) {
         console.log(error);
     });
-});
+  }
 
 module.exports = router;
