@@ -301,10 +301,10 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
 console.log("listtttt",list);
 
     if(params.phone){
-      list = list.filter(x=>x.user_id.user_phone.match(new RegExp(params.phone,"gi")));
+      list = list.filter(x=>x.user_id?.user_phone.match(new RegExp(params.phone,"gi")));
     }
     if(params.username){
-      list = list.filter(x=>x.user_id.first_name.match(new RegExp(params.username,"gi")));
+      list = list.filter(x=>x.user_id?.first_name.match(new RegExp(params.username,"gi")));
     }
     if(params.storename){
       list = list.filter(x=>x.store.name.match(new RegExp(params.storename,"gi")));
