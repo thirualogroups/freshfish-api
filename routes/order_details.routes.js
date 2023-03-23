@@ -273,7 +273,7 @@ if(params.delivery_date){
   filter_params.slot_date = params.delivery_date;
 }
 if(params.delivery_slot){
-  filter_params.slot_time = params.slot_time;
+  filter_params.slot_time = params.delivery_slot;
 }
 if(params.delivery_status){
   filter_params.order_deliver_status = params.delivery_status;
