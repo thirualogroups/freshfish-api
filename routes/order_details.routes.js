@@ -298,7 +298,7 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
     res.json({ Status: "Success", Message: " type Details", Data: list.length > 0 ? list[0] : {}, Count: count, Code: 200 });
   } else {
 
-
+console.log("listtttt",list);
 
     if(params.phone){
       list = list.filter(x=>x.user_id.user_phone.match(new RegExp(params.phone,"gi")));
