@@ -298,8 +298,6 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
     res.json({ Status: "Success", Message: " type Details", Data: list.length > 0 ? list[0] : {}, Count: count, Code: 200 });
   } else {
 
-console.log("listtttt",list);
-
     if(params.phone){
       list = list.filter(x=>x.user_id?.user_phone.match(new RegExp(params.phone,"gi")));
     }
@@ -307,10 +305,10 @@ console.log("listtttt",list);
       list = list.filter(x=>x.user_id?.first_name.match(new RegExp(params.username,"gi")));
     }
     if(params.storename){
-      list = list.filter(x=>x.store.name.match(new RegExp(params.storename,"gi")));
+      list = list.filter(x=>x.store?.name.match(new RegExp(params.storename,"gi")));
     }
     if(params.agentname){
-      list = list.filter(x=>x.vendor_id.user_name.match(new RegExp(params.agentname,"gi")));
+      list = list.filter(x=>x.vendor_id?.user_name.match(new RegExp(params.agentname,"gi")));
     }
 
     res.json({ Status: "Success", Message: " type Details", Data: list, Count: count, Code: 200 });
