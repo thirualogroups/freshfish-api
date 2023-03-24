@@ -313,7 +313,7 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
     if(params.productname){
 
       const filteredCustomers = list.filter(customer => {
-        return customer.order_details.some(order => order.product_name === "Seer / Vanjaram");
+        return customer.order_details.some(order => order.product_name === params.productname);
       });
       
      list = filteredCustomers;
