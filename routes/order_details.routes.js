@@ -310,6 +310,15 @@ order_detailsModel.find(filter_params, { updatedAt: 0, __v: 0 }, { sort: sort, s
     if(params.agentname){
       list = list.filter(x=>x.vendor_id?.user_name.match(new RegExp(params.agentname,"gi")));
     }
+    if(params.productname){
+
+      const filteredCustomers = list.filter(customer => {
+        return customer.order_details.some(order => order.product_name === "Seer / Vanjaram");
+      });
+      
+     list = filteredCustomers;
+
+    }
 
     res.json({ Status: "Success", Message: " type Details", Data: list, Count: count, Code: 200 });
   }
