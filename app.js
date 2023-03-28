@@ -75,6 +75,7 @@ app.use((req, res, next) => {
 app.post('/api/upload', function (req, res) {
   let sampleFile;
   let uploadPath;
+  console.log(req.files);
   if (!req.files || Object.keys(req.files).length === 0) {
     res.error(300, 'No files were uploaded.');
     return;
