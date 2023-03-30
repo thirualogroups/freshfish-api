@@ -849,7 +849,7 @@ router.post("/payment-link", async (req, res) => {
                let t=''
                 for(let value of order_details?.order_details){
 
-                t+= ` ${value.product_name} -> ${value.gross_weight} ${value.unit} -> Rs.${value.amount}  \n`;
+                t+= ` ${value.product_name} -> ${value.net_weight} ${value.unit} -> Rs.${value.amount}  \n`;
                 
                 }
                 let order_total = order_details.order_final_amount;
