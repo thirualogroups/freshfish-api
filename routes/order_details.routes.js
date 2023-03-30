@@ -849,12 +849,12 @@ router.post("/payment-link", async (req, res) => {
                let t=''
                 for(let value of order_details?.order_details){
 
-                t+= ` ${value.product_name} -> ${value.net_weight} ${value.unit} -> Rs.${value.amount}  \n`;
+                t+= ` ${value.product_name} -> ${value.net_weight} ${value.unit} -> Rs.${value.amount.toFixed(2)}  \n`;
                 
                 }
-                let order_total = order_details.order_final_amount;
+                let order_total = order_details.order_final_amount.toFixed(2);
                 let order_id = order_details.order_id;
-              var final_data = JSON.parse(response);
+              let final_data = JSON.parse(response);
               whatsapp(user?.first_name,t,user?.user_phone,final_data?.body?.shortUrl,order_total,order_id);
               res.json({ Status: "Success", Message: "Lin", Data: final_data, Code: 200 });
           });
