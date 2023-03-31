@@ -78,8 +78,7 @@ router.get('/getlist', function (req, res) {
 
 
 router.post('/edit', async function (req, res) {
-  let userdetails  =  await product_categoriesModel.findOne({product_cate:req.body.product_cate,delete_status:false});
-   console.log(userdetails);
+  let userdetails  =  await product_categoriesModel.findOne({product_cate:req.body.product_cate,delete_status:false,_id:{$ne:req.body._id}});
    if(userdetails == null){
         product_categoriesModel.findByIdAndUpdate(req.body._id, req.body, {new: true}, function (err, UpdatedDetails) {
             if (err) return res.json({Status:"Failed",Message:"Internal Server Error", Data : {},Code:500});
